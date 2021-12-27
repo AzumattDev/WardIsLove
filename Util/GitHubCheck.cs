@@ -48,7 +48,7 @@ namespace WardIsLove.Util
         {
             System.Version currentVersion = ParseVersion(version);
             UnityWebRequest unityWebRequest =
-                UnityWebRequest.Get("https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest");
+                UnityWebRequest.Get(ApiRepositoryLatestRelease);
             yield return unityWebRequest.SendWebRequest();
 
             if (unityWebRequest.isNetworkError || unityWebRequest.isHttpError)
@@ -74,11 +74,16 @@ namespace WardIsLove.Util
                     WILLogger.LogWarning(
                         $"You seem to be running a test version of {ModName}, congrats...you're one of the cool kids. Remember to ask {Author} for a new version every now and then.");
                     coolKidVersion = true;
+                    IsUpToDate = true;
                 }
                 else if (githubParseVersion != currentVersion)
                 {
                     WILLogger.LogWarning(
                         $"Received GitHub version is not equal: GitHub version = {githubversion}; local version = {version}");
+                }
+                else if (githubParseVersion == currentVersion)
+                {
+                    IsUpToDate = true;
                 }
 
                 if (!IsUpToDate && !coolKidVersion)

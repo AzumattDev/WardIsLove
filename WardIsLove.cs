@@ -40,8 +40,8 @@ namespace WardIsLove
         public enum WardInteractBehaviorEnums
         {
             OwnerOnly = 0,
-            Default = 2,
-            Everyone = 3
+            Default = 1,
+            Everyone = 2
         }
 
         public enum WardModelTypes
@@ -55,7 +55,7 @@ namespace WardIsLove
             BetterWardType4 = 6,
         }
 
-        public const string version = "1.0.0";
+        public const string version = "1.0.2";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -85,8 +85,8 @@ namespace WardIsLove
         public static Material ForceField = null;
 
         // Project Repository Info
-        public static string Repository = "https://github.com/WardIsLove/WardIsLove";
-        public static string ApiRepository = "https://api.github.com/repos/WardIsLove/VersionCheck/tags";
+        internal static string Repository = "https://github.com/WardIsLove/WardIsLove";
+        internal static string ApiRepositoryLatestRelease = "https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest";
 
         //harmony
         private static Harmony harmony;
@@ -195,11 +195,11 @@ namespace WardIsLove
             //* Config Requirements *//
             /* Thor Ward */
             _thorwardItemReqs = config("ThorWard", "ItemReqs ThorWard",
-                "$item_silver,$item_surtlingcore,$item_dragonegg,$item_guck",
+                "Silver,SurtlingCore,TrophyAbomination,Thunderstone",
                 "The items required to craft the Ward.\nUses Prefab Name. Limit of 4 items\nFull List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
             _thorwardReco = config("ThorWard", "ItemRecovery ThorWard", "true,true,true,true",
                 "Should the item be recoverable or not?\nGoes in order from left to right");
-            _thorwardItemAmou = config("ThorWard", "ItemAmounts ThorWard", "25,30,1,1",
+            _thorwardItemAmou = config("ThorWard", "ItemAmounts ThorWard", "15,30,1,1",
                 "Amount of each item required to make the Green Ward\nGoes in order from left to right");
             /* Ward Range */
             _wardRangeEnabled = config("WardRange", "WardRangeEnabled", true,

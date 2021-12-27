@@ -11,14 +11,14 @@ namespace WardIsLove.Util
         {
             // Register version check call
             WardIsLovePlugin.WILLogger.LogDebug("Registering version RPC handler");
-            peer.m_rpc.Register($"{WardIsLovePlugin.ModName}_VersionCheck",
+            peer.m_rpc.Register($"{WardIsLovePlugin.ModName}_VersionChecking",
                 new Action<ZRpc, ZPackage>(RpcHandlers.RPC_WardIsLove_Version));
 
             // Make calls to check versions
             WardIsLovePlugin.WILLogger.LogDebug("Invoking version check");
             ZPackage zpackage = new();
             zpackage.Write(WardIsLovePlugin.version);
-            peer.m_rpc.Invoke($"{WardIsLovePlugin.ModName}_VersionCheck", zpackage);
+            peer.m_rpc.Invoke($"{WardIsLovePlugin.ModName}_VersionChecking", zpackage);
         }
     }
 

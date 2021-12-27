@@ -45,6 +45,7 @@ namespace WardIsLove.Util.UI
             }
             catch
             {
+                // ignored
             }
 
             for (int i = 0; i < Enum.GetNames(typeof(WardIsLovePlugin.WardGUIFeedbackEnums)).Length; i++)
@@ -66,19 +67,16 @@ namespace WardIsLove.Util.UI
             FeedbackDropdownValue = en.ToString();
         }
 
-        public static string GetString(WardIsLovePlugin.WardGUIFeedbackEnums me)
+        private static string GetString(WardIsLovePlugin.WardGUIFeedbackEnums me)
         {
-            switch (me)
+            return me switch
             {
-                case WardIsLovePlugin.WardGUIFeedbackEnums.Feedback:
-                    return Localization.instance.Localize("$wardmenu_optionfeedback");
-                case WardIsLovePlugin.WardGUIFeedbackEnums.Bug:
-                    return Localization.instance.Localize("$wardmenu_optionbug");
-                case WardIsLovePlugin.WardGUIFeedbackEnums.Idea:
-                    return Localization.instance.Localize("$wardmenu_optionidea");
-                default:
-                    return "ERROR";
-            }
+                WardIsLovePlugin.WardGUIFeedbackEnums.Feedback => Localization.instance.Localize(
+                    "$wardmenu_optionfeedback"),
+                WardIsLovePlugin.WardGUIFeedbackEnums.Bug => Localization.instance.Localize("$wardmenu_optionbug"),
+                WardIsLovePlugin.WardGUIFeedbackEnums.Idea => Localization.instance.Localize("$wardmenu_optionidea"),
+                _ => "ERROR"
+            };
         }
 
         public static void Hide()
@@ -98,12 +96,12 @@ namespace WardIsLove.Util.UI
             ShowCursor(true);
         }
 
-        public static void SetInteractedPa(WardMonoscript pa)
+        private static void SetInteractedPa(WardMonoscript pa)
         {
             interactedWard = pa;
         }
 
-        public static WardMonoscript PassInWardMonoscriptToGui()
+        internal static WardMonoscript PassInWardMonoscriptToGui()
         {
             return interactedWard;
         }

@@ -219,27 +219,13 @@ namespace WardIsLove.Util
                 if (IsEnabled())
                 {
                     AppendNameText(text);
-
-                    //_ = text.Append(m_name + " ( $piece_guardstone_active )");
-                    if (WardIsLovePlugin.Admin)
-                    {
-                        _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName() +
-                                        " <color=orange><b>[Steam Info: " +
-                                        m_nview.GetZDO().GetString("steamName") + " " +
-                                        m_nview.GetZDO().GetString("steamID") + "]</b></color>");
-                    }
-                    else
-                    {
-                        _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
-                    }
-
+                    AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_deactivate");
                 }
                 else
                 {
                     AppendNameText(text);
-                    
-                    _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+                    AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_activate");
                 }
             }
@@ -248,10 +234,9 @@ namespace WardIsLove.Util
                 if (IsEnabled())
                 {
                     AppendNameText(text);
-                    //_ = text.Append(m_name + " ( $piece_guardstone_active )");
-                    _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+                    AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin._wardHotKey.Value +
-                                    $"</b></color>] {Localization.instance.Localize("$piece_guardstone")}");
+                                    $"</b></color>] $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
                     if (Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
                     {
                         //SetEnabled(!IsEnabled());
@@ -267,10 +252,10 @@ namespace WardIsLove.Util
                 else
                 {
                     AppendNameText(text);
-                    // _ = text.Append(m_name + " ( $piece_guardstone_inactive )");
-                    _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+                    AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin._wardHotKey.Value +
                                     $"</b></color>] $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
+                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_remove");
                     if (Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
                     {
                         //SetEnabled(!IsEnabled());
@@ -288,14 +273,12 @@ namespace WardIsLove.Util
             else if (IsEnabled())
             {
                 AppendNameText(text);
-                //_ = text.Append(m_name + " ( $piece_guardstone_active )");
-                _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+                AdminAppend(text);
             }
             else
             {
                 AppendNameText(text);
-                //_ = text.Append(m_name + " ( $piece_guardstone_inactive )");
-                _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+                AdminAppend(text);
                 _ = text.Append(IsPermitted(Player.m_localPlayer.GetPlayerID())
                     ? "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_remove"
                     : "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_add");
@@ -426,6 +409,21 @@ namespace WardIsLove.Util
             }
 
             AddAdditionalInformation(text);
+        }
+        
+        public void AdminAppend(StringBuilder text)
+        {
+            if (WardIsLovePlugin.Admin)
+            {
+                _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName() +
+                                " <color=orange><b>[Steam Info: " +
+                                m_nview.GetZDO().GetString("steamName") + " " +
+                                m_nview.GetZDO().GetString("steamID") + "]</b></color>");
+            }
+            else
+            {
+                _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+            }
         }
 
         public void AddAdditionalInformation(StringBuilder text)

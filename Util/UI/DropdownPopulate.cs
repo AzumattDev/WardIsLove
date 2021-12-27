@@ -87,7 +87,7 @@ namespace WardIsLove.Util.UI
                 ModelTypeDropdown.options.Add(new Dropdown.OptionData { text = en.ToString() });
         }
 
-        private void PopulatePlayerList()
+        public void PopulatePlayerList()
         {
             if (Player.m_localPlayer == null)
                 return;
