@@ -10,13 +10,13 @@ namespace WardIsLove.PatchClasses
         {
 
             /* Hover Text */
-            _ = LocalizeWord("betterwards_accessMode", "Access: ");
+            _ = LocalizeWord("betterwards_accessMode", "Access • ");
             _ = LocalizeWord("betterwards_accessMode_OwnerOnly", "Owner Only");
             _ = LocalizeWord("betterwards_accessMode_Guild", "Guild Members");
             _ = LocalizeWord("betterwards_accessMode_Everyone", "Everyone");
             _ = LocalizeWord("betterwards_accessMode_Default", "Default");
 
-            _ = LocalizeWord("betterwards_bubbleMode", "Bubble Mode: ");
+            _ = LocalizeWord("betterwards_bubbleMode", "Bubble Mode • ");
             _ = LocalizeWord("betterwards_bubbleMode_Default", "Default (Creature Spawn Blocker)");
             _ = LocalizeWord("betterwards_bubbleMode_NoMonsters", "No Monster Area");
 

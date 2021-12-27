@@ -132,5 +132,6 @@ namespace WardIsLove.Util.RPCShit
                     new ZPackage());
             //ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestCostConfigSync", (object)new ZPackage());
         }
+        
     }
 }

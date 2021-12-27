@@ -220,13 +220,13 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_deactivate");
+                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_deactivate");
                 }
                 else
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_activate");
+                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_activate");
                 }
             }
             else if (IsPermitted(Player.m_localPlayer.GetPlayerID()))
@@ -236,7 +236,7 @@ namespace WardIsLove.Util
                     AppendNameText(text);
                     AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin._wardHotKey.Value +
-                                    $"</b></color>] $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
+                                    $"</b></color>] • $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
                     if (Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
                     {
                         //SetEnabled(!IsEnabled());
@@ -254,8 +254,8 @@ namespace WardIsLove.Util
                     AppendNameText(text);
                     AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin._wardHotKey.Value +
-                                    $"</b></color>] $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
-                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_remove");
+                                    $"</b></color>] • $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
+                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_remove");
                     if (Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
                     {
                         //SetEnabled(!IsEnabled());
@@ -280,8 +280,8 @@ namespace WardIsLove.Util
                 AppendNameText(text);
                 AdminAppend(text);
                 _ = text.Append(IsPermitted(Player.m_localPlayer.GetPlayerID())
-                    ? "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_remove"
-                    : "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_guardstone_add");
+                    ? "\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_remove"
+                    : "\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_add");
             }
 
             AddUserList(text);
@@ -400,7 +400,7 @@ namespace WardIsLove.Util
         public void AddUserList(StringBuilder text)
         {
             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-            _ = text.Append("\n$piece_guardstone_additional: ");
+            _ = text.Append("\n$piece_guardstone_additional • ");
             for (int index = 0; index < permittedPlayers.Count; ++index)
             {
                 _ = text.Append(permittedPlayers[index].Value);
@@ -415,14 +415,14 @@ namespace WardIsLove.Util
         {
             if (WardIsLovePlugin.Admin)
             {
-                _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName() +
+                _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName() +
                                 " <color=orange><b>[Steam Info: " +
                                 m_nview.GetZDO().GetString("steamName") + " " +
                                 m_nview.GetZDO().GetString("steamID") + "]</b></color>");
             }
             else
             {
-                _ = text.Append("\n$piece_guardstone_owner:" + GetCreatorName());
+                _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName());
             }
         }
 
@@ -437,7 +437,7 @@ namespace WardIsLove.Util
                 if (WardIsLovePlugin.Admin)
                 {
                     text.Append(Localization.instance.Localize(
-                        "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] Toggle Ward GUI"));
+                        "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
                 }
 
                 text.Append(Localization.instance.Localize(
@@ -445,14 +445,14 @@ namespace WardIsLove.Util
                 text.Append(Localization.instance.Localize(
                     $"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
                 text.Append(Localization.instance.Localize(
-                    $"\n$Radius: {this.GetWardRadius().ToString()}"));
+                    $"\n$Radius • {this.GetWardRadius().ToString()}"));
             }
             else
             {
                 if (WardIsLovePlugin.Admin)
                 {
                     text.Append(Localization.instance.Localize(
-                        "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] Toggle Ward GUI"));
+                        "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
                 }
 
                 text.Append(Localization.instance.Localize(
@@ -460,7 +460,7 @@ namespace WardIsLove.Util
                 text.Append(Localization.instance.Localize(
                     $"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
                 text.Append(Localization.instance.Localize(
-                    $"\n$Radius: {this.GetWardRadius().ToString()}"));
+                    $"\n$Radius • {this.GetWardRadius().ToString()}"));
             }
         }
 

@@ -86,7 +86,9 @@ namespace WardIsLove
 
         // Project Repository Info
         internal static string Repository = "https://github.com/WardIsLove/WardIsLove";
-        internal static string ApiRepositoryLatestRelease = "https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest";
+
+        internal static string ApiRepositoryLatestRelease =
+            "https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest";
 
         //harmony
         private static Harmony harmony;
