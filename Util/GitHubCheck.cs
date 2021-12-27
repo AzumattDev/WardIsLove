@@ -88,7 +88,7 @@ namespace WardIsLove.Util
 
                 if (!IsUpToDate && !coolKidVersion)
                     WILLogger.LogWarning(
-                        $"There is a newer version available of {ModName}. The latest version is v{githubversion}. Please visit the GitHub https://valheim.thunderstore.io/package/Azumatt/{ModName}/ to download the latest");
+                        $"There is a newer version available of {ModName}. The latest version is v{githubversion}. Please visit the Thunderstore page https://valheim.thunderstore.io/package/Azumatt/{ModName}/ to download the latest");
                 else
                     WILLogger.LogInfo($"{ModName} [" + version + "] is up to date.");
             }
