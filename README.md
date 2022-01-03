@@ -16,8 +16,8 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 *  PvP/PvE forced configurations
 *  Ward Range configuration
 * Different bubble modes
-  * (Default) Enemy spawns will query the range to prevent spawning inside base
-  * (No Monsters) Enemy monsters will not target players inside the ward's radius
+    * (Default) Enemy spawns will query the range to prevent spawning inside base
+    * (No Monsters) Enemy monsters will not target players inside the ward's radius
 * Health/Stamina Boosts for all players inside ward
 * Show area marker for the ward
 * Indestructible structures can be defined for further custom config (inside ward) (FULL LIST IN CONFIG)
@@ -73,12 +73,16 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 
 > ## FAQ
 > ### What if the game updates?
-> 
+>
 > Game updates are unlikely to do more than partially break Better Wards at worst. In case you encounter any issues, please reach out to the me.
 >
 > ### What if the wards overlap?
 >
 > The hope is that the wards should behave correctly, even if overlapped.
+>
+> ### How long are the days in Valheim for the ward?
+>
+> Approximately 20 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
 >
 > ### Where is the configuration file?
 >
@@ -87,7 +91,7 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 > ## Known Mod Conflicts
 <details> <summary></summary>
 
- * Anything that toggles PvE/PvP and forces the value will conflict if you have this mod toggle the values. Current known mods that do this are:
+* Anything that toggles PvE/PvP and forces the value will conflict if you have this mod toggle the values. Current known mods that do this are:
 
 ﻿World of Valheim - Zones
 
@@ -104,11 +108,49 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 
 `STEAM:` https://steamcommunity.com/id/azumatt/﻿
 
+
 For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 [![https://i.imgur.com/XXP6HCU.png](https://i.imgur.com/XXP6HCU.png)](https://discord.gg/Pb6bVMnFb2)
 
+## Ward Model Author (Models were commissioned for this mod and used with permissions)
+
+### deBARBA
+`Sketchfab:` https://sketchfab.com/dillonbarba
+
 ***
 > # Update Information (Latest listed first)
+> ### v2.0.0
+> `It is recommended that you delete your config files and localization file when upgrading to this version`
+> - Localization and default values fixed to match GUI properly.
+> - Fixed Food drain bug
+> - Added new ward model (Hel)
+> - Added Ward Limit (configured on the server and found in General section, thanks KG!)
+    >   - wardIsLoveData is where the ward limit information is stored. Found in BepInEx/config folder. Keyed to SteamIDs
+> - Added ward "Charging" to deactivate ward after {x} in game days (configured on server)
+    >   - The default cost of the charge is 5 Thunderstones. All wards that expire and are not charged will turn off until charged once more. Leaving it vulnerable to attack or takeover.
+>   - For reference. It's approximately 20 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
+      >     - This means that you either have 4.16 days until initial expiration or 6.25 if the wiki is correct.
+>     - The default expiration is 300 in-game days.
+> - Bubble color changes now saved and synced with clients
+> - Some hover text fixes
+> - Pushout Creatures/Players code changed to use collider and not code. BUBBLE MUST BE ON! I will find a way to make it to where it doesn't need to be in the next version. (If they are already inside your bubble, you deal with the consequences). This change also means that if the bubble is on, it blocks arrows and other projectiles.
+> - Default wards removed, players cannot build it anymore. Any vanilla wards will be "off" by default.
+> - When the bubble causes the ward to reach half health, the bubble turns off to allow raiding of bases. (Default ward health will be x5 of original. It's now set to 5000hp)
+> - Admin wards have a really long expire date (50k)
+> - Creature Damage Increase option added back from BetterWards!
+> - Recharging your ward now costs you. (Configurable)
+> - Added workbench to ward requirements
+> - Fix NRE when in Singleplayer
+> - Fix ward model order to match icon/hover text. Back to the way it should be.
+> - Fix ward emissions to toggle on and off when the ward does.
+> - Audio for "Ward is Love?" option is now instant.
+> - Add the new torches to the unlimited fire sources list
+> - Generic bug fixes
+> ### v1.0.2
+> - Ward interaction fixes
+> - Issue with saying a new version exists fixed
+> - Populate player list dropdown more often (On Access tab click as well as ward GUI show)
+> - Fix recipe issue. Forgot to update the defaults after moving to using prefab names
 > ### v1.0.0/1.0.1
 > - Initial Release
 > - Features most of what BetterWards can do. Slowly adding the features back in.

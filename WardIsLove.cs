@@ -18,6 +18,7 @@ using WardIsLove.Util.UI;
 namespace WardIsLove
 {
     [BepInPlugin(HGUIDLower, ModName, version)]
+    [BepInIncompatibility("azumatt.BetterWards")]
     [BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
     public partial class WardIsLovePlugin : BaseUnityPlugin
     {
