@@ -347,7 +347,7 @@ namespace WardIsLove.Util
             int timeto = m_nview.m_zdo.GetInt("WILLimitedWardTime") + WardIsLovePlugin.MaxDaysDifference;
             int difference = timeto - EnvMan.instance.GetCurrentDay();
             string tf = EnvMan.instance.GetCurrentDay() >= timeto
-                ? "<color=red>No</color>"
+                ? "<color=red>No</color>\n"
                 : "<color=lime>Yes</color>";
             string isEnabled = $"Is ward charged • {tf}";
             if (difference < 0)
