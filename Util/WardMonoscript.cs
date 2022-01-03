@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,7 @@ namespace WardIsLove.Util
         public GameObject m_bubble;
         public List<WardMonoscript> m_connectedAreas = new();
         public Light m_wardLightColor;
+        public ParticleSystem m_wardParticleLightColor;
         public GameObject m_connectEffect;
         public List<GameObject> m_connectionInstances = new();
         public float m_connectionUpdateTime = -1000f;
@@ -37,6 +39,7 @@ namespace WardIsLove.Util
         public MeshRenderer m_model;
         public MeshRenderer m_modelLoki;
         public MeshRenderer m_modelDefault;
+        public MeshRenderer m_modelHel;
         public MeshRenderer m_modelBetterWard;
         public MeshRenderer m_modelBetterWard_Type2;
         public MeshRenderer m_modelBetterWard_Type3;
@@ -88,11 +91,61 @@ namespace WardIsLove.Util
             m_allAreas.Add(this);
 
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
+            /* TODO Get This working again next patch */
+            //InvokeRepeating(nameof(DelayRepair), 0.0f, this.GetAutoRepairTextTime());
             m_nview.Register("ToggleEnabled", new Action<long, long>(RPC_ToggleEnabled));
             m_nview.Register("TogglePermitted", new Action<long, long, string>(RPC_TogglePermitted));
             m_nview.Register("FlashShield", RPC_FlashShield);
             m_nview.Register("SyncWardsMOFO", new Action<long, int>(SwapWardModel));
+            m_nview.Register("WILWardLimit Reactivate",
+                (long sender, bool isAdmin) =>
+                {
+                    if (!isAdmin)
+                    {
+                        m_nview.m_zdo.Set("WILLimitedWardTime", EnvMan.instance.GetCurrentDay());
+                    }
+                    else
+                    {
+                        m_nview.m_zdo.Set("WILLimitedWardTime", EnvMan.instance.GetCurrentDay() + 50000);
+                    }
+                });
             SwapWardModel(0, m_nview.GetZDO().GetInt("wardModelKey"));
+
+            /* Get bubble color */
+
+            if (m_nview.GetZDO().GetBool("wardFresh", true) == false)
+            {
+                int colorNumbers = m_nview.GetZDO().GetInt("wardColorCount",
+                    m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
+                int colorAlphaNumbers = m_nview.GetZDO().GetInt("wardAlphaCount",
+                    m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
+
+                WardIsLovePlugin.WILLogger.LogDebug(
+                    $"Color Number values has a value of {colorNumbers}");
+                Gradient gradient = new();
+                GradientColorKey[] gradientKeys = new GradientColorKey[colorNumbers];
+                GradientAlphaKey[] gradientAlphaKeys = new GradientAlphaKey[colorAlphaNumbers];
+                for (int i = 0; i < colorNumbers; i++)
+                {
+                    if (ColorUtility.TryParseHtmlString(
+                            m_nview.GetZDO().GetString($"wardColor{i}"), out Color color))
+                    {
+                        gradientKeys[i].color = color;
+                        gradientKeys[i].time = m_nview.GetZDO().GetFloat($"wardColorTime{i}");
+                    }
+                }
+
+                for (int i = 0; i < colorAlphaNumbers; i++)
+                {
+                    gradientAlphaKeys[i].alpha = m_nview.GetZDO().GetFloat($"wardAlpha{i}");
+                    gradientAlphaKeys[i].time = m_nview.GetZDO().GetFloat($"wardAlphaTime{i}");
+                }
+
+                gradient.SetKeys(gradientKeys, gradientAlphaKeys);
+                m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp = gradient;
+                m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
+                    gradient.colorKeys[1].color;
+            }
         }
 
         private void SwapWardModel(long sender, int index)
@@ -181,12 +234,12 @@ namespace WardIsLove.Util
                 try
                 {
                     m_bubble.gameObject.SetActive(false);
-                    Destroy(m_bubble.gameObject);
+                    ZNetScene.instance.Destroy(this.gameObject);
                 }
                 catch
                 {
                     m_bubble.gameObject.SetActive(false);
-                    DestroyImmediate(m_bubble.gameObject);
+                    ZNetScene.instance.Destroy(this.gameObject);
                 }
             }
             catch
@@ -206,6 +259,12 @@ namespace WardIsLove.Util
         {
             if (!m_nview.IsValid() || Player.m_localPlayer == null)
                 return "";
+            if (Vector3.Distance(Player.m_localPlayer.transform.position, transform.position) >= 5)
+            {
+                return "";
+            }
+
+            if (!m_nview.m_zdo.GetBool("WILLimitedWard")) return "";
             ShowAreaMarker();
             StringBuilder text = new(256);
             if (Input.GetKeyDown(KeyCode.DownArrow) && WardIsLovePlugin.Admin)
@@ -285,9 +344,36 @@ namespace WardIsLove.Util
             }
 
             AddUserList(text);
+            int timeto = m_nview.m_zdo.GetInt("WILLimitedWardTime") + WardIsLovePlugin.MaxDaysDifference;
+            int difference = timeto - EnvMan.instance.GetCurrentDay();
+            string tf = EnvMan.instance.GetCurrentDay() >= timeto
+                ? "<color=red>No</color>"
+                : "<color=lime>Yes</color>";
+            string isEnabled = $"Is ward charged • {tf}";
+            if (difference < 0)
+            {
+                difference = 0;
+            }
 
+            string daysTillExpire = $"\nDays Till Expiration • <color=lime>{difference}</color>\n";
+            if (EnvMan.instance.GetCurrentDay() >= timeto)
+            {
+                daysTillExpire = "";
+            }
 
-            return Localization.instance.Localize(text.ToString());
+            string creatorText = "";
+            if ((EnvMan.instance.GetCurrentDay() != m_nview.m_zdo.GetInt("WILLimitedWardTime")))
+            {
+                creatorText = m_piece.IsCreator() ||
+                              IsPermitted(Player.m_localPlayer.GetPlayerID())
+                    ? Localization.instance.Localize(
+                        "[<color=yellow><b>LAlt + $KEY_Use</b></color>] <color=lime>Recharge Ward</color>\n\n")
+                    : "";
+            }
+
+            string result = "<color=cyan>" + isEnabled + daysTillExpire + "</color>" +
+                            creatorText;
+            return result + Localization.instance.Localize(text.ToString());
         }
 
         public string GetHoverName()
@@ -299,6 +385,11 @@ namespace WardIsLove.Util
         {
             if (hold)
                 return false;
+            if (Vector3.Distance(Player.m_localPlayer.transform.position, transform.position) >= 5)
+            {
+                return false;
+            }
+
             Player player = human as Player;
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.Tilde))
                 try
@@ -320,6 +411,44 @@ namespace WardIsLove.Util
                     WardIsLovePlugin.WILLogger.LogError($"Interact Method : {ex}");
                     return true;
                 }
+
+            if (Input.GetKey(KeyCode.LeftAlt))
+            {
+                if ((m_piece.IsCreator() || IsPermitted(Player.m_localPlayer.GetPlayerID())) &&
+                    (EnvMan.instance.GetCurrentDay() != m_nview.m_zdo.GetInt("WILLimitedWardTime")))
+                {
+                    ItemDrop? item = ObjectDB.instance.GetItemPrefab(WardIsLovePlugin._chargeItem.Value)
+                        .GetComponent<ItemDrop>();
+                    WardIsLovePlugin.WILLogger.LogDebug(
+                        $":You have {Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name)} of {item.m_itemData.m_shared.m_name}");
+                    if (Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name) >=
+                        WardIsLovePlugin._chargeItemAmount.Value)
+                    {
+                        Player.m_localPlayer.GetInventory().RemoveItem(item.m_itemData.m_shared.m_name,
+                            WardIsLovePlugin._chargeItemAmount.Value);
+                        Player.m_localPlayer.ShowRemovedMessage(item.m_itemData,
+                            WardIsLovePlugin._chargeItemAmount.Value);
+                        Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
+                            Quaternion.identity);
+                        m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
+                    }
+                    else
+                    {
+                        if (WardIsLovePlugin.Admin)
+                        {
+                            Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
+                                Quaternion.identity);
+                            m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
+                        }
+                        else
+                        {
+                            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$msg_incompleteoffering");
+                        }
+                    }
+                }
+
+                return true;
+            }
 
             if (m_piece.IsCreator())
             {
@@ -349,17 +478,8 @@ namespace WardIsLove.Util
             bool flag = IsEnabled();
             m_enabledEffect.SetActive(flag);
             m_flashAvailable = true;
-            foreach (Material material in m_model.materials)
-                if (flag)
-                    material.EnableKeyword("_EMISSION");
-                else
-                    material.DisableKeyword("_EMISSION");
-            foreach (Material material in m_modelLoki.materials)
-                if (flag)
-                    material.EnableKeyword("_EMISSION");
-                else
-                    material.DisableKeyword("_EMISSION");
-            //m_bardWardAudio.SetActive(this.GetWardIsLoveOn());
+            WardMonoscriptExt.EmissionSetter(this);
+            m_bardWardAudio.SetActive(this.GetWardIsLoveOn());
 
             // if (this.m_areaMarker)
             m_areaMarker.m_radius = this.GetWardRadius();
@@ -397,6 +517,55 @@ namespace WardIsLove.Util
             }
         }
 
+        public void DelayRepair()
+        {
+            StartCoroutine(DelayRepairRoutine());
+        }
+
+        IEnumerator DelayRepairRoutine()
+        {
+            while (true)
+            {
+                float time;
+                WardMonoscript? ward = null;
+                if (WardIsLovePlugin._wardEnabled != null && ZNetScene.instance && WardIsLovePlugin._wardEnabled.Value)
+                {
+                    List<WearNTear> allInstances = WearNTear.GetAllInstaces();
+                    if (allInstances.Count > 0)
+                    {
+                        foreach (WearNTear instance in allInstances)
+                        {
+                            ZNetView instanceField = instance.m_nview;
+                            if (instanceField == null ||
+                                !CheckInWardMonoscript(instance.transform.position))
+                                continue;
+                            ward = WardMonoscriptExt.GetWardMonoscript(instance.transform.position);
+                            if (!ward.GetAutoRepairOn() || !IsEnabled()) continue;
+                            float num1 = instanceField.GetZDO().GetFloat("health");
+                            if (!(num1 > 0.0) || !(num1 < (double)instance.m_health)) continue;
+                            float num2 = num1 + (float)(instance.m_health * (double)ward.GetAutoRepairAmount() / 100.0);
+                            if (num2 > (double)instance.m_health)
+                                num2 = instance.m_health;
+                            instanceField.GetZDO().Set("health", num2);
+                            instanceField.InvokeRPC(ZNetView.Everybody, "WNTHealthChanged", num2);
+                        }
+                    }
+                }
+
+                //float time = 0;
+                try
+                {
+                    time = ward.GetAutoRepairTextTime();
+                }
+                catch
+                {
+                    time = 5;
+                }
+
+                yield return new WaitForSecondsRealtime(time);
+            }
+        }
+
         public void AddUserList(StringBuilder text)
         {
             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
@@ -410,7 +579,7 @@ namespace WardIsLove.Util
 
             AddAdditionalInformation(text);
         }
-        
+
         public void AdminAppend(StringBuilder text)
         {
             if (WardIsLovePlugin.Admin)
@@ -569,7 +738,7 @@ namespace WardIsLove.Util
 
         public bool IsEnabled()
         {
-            return m_nview.IsValid() && m_nview.GetZDO().GetBool("enabled");
+            return m_nview.IsValid() && m_nview.GetZDO().GetBool("enabled") && this.WILWardLimitCheck();
         }
 
         public void SetEnabled(bool enabled)
@@ -587,6 +756,7 @@ namespace WardIsLove.Util
             m_nview.GetZDO().Set("creatorName", name);
             m_nview.GetZDO().Set("steamName", SteamFriends.GetPersonaName());
             m_nview.GetZDO().Set("steamID", SteamUser.GetSteamID().ToString());
+            m_nview.GetZDO().Set("wardFresh", true);
         }
 
         public void PokeAllAreasInRange()
@@ -813,6 +983,10 @@ namespace WardIsLove.Util
             if (!IsEnabled())
                 return;
             FlashShield(false);
+            if (m_nview.GetZDO().GetFloat("health") < (GetComponent<WearNTear>().m_health / 2))
+            {
+                this.SetBubbleOn(false);
+            }
             //SendWardMessage(this, Player.m_localPlayer.GetPlayerName(), "Damage!", Player.m_localPlayer.GetPlayerID());
         }
 
@@ -879,6 +1053,10 @@ namespace WardIsLove.Util
                 {
                     _ = text.Append("<color=green>Loki</color>" + " ($piece_guardstone_active)");
                 }
+                else if (m_modelHel.gameObject.activeSelf)
+                {
+                    _ = text.Append("<color=red>Hel</color>" + " ($piece_guardstone_active)");
+                }
                 else if (m_modelBetterWard.gameObject.activeSelf || m_modelBetterWard_Type2.gameObject.activeSelf ||
                          m_modelBetterWard_Type3.gameObject.activeSelf || m_modelBetterWard_Type4.gameObject.activeSelf)
                 {
@@ -898,6 +1076,10 @@ namespace WardIsLove.Util
                 else if (m_modelLoki.gameObject.activeSelf)
                 {
                     _ = text.Append("<color=green>Loki</color>" + " ($piece_guardstone_inactive)");
+                }
+                else if (m_modelHel.gameObject.activeSelf)
+                {
+                    _ = text.Append("<color=red>Hel</color>" + " ($piece_guardstone_inactive)");
                 }
                 else if (m_modelBetterWard.gameObject.activeSelf || m_modelBetterWard_Type2.gameObject.activeSelf ||
                          m_modelBetterWard_Type3.gameObject.activeSelf || m_modelBetterWard_Type4.gameObject.activeSelf)

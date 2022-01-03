@@ -115,8 +115,6 @@ namespace WardIsLove.Util.RPCShit
                 new Action<long, ZPackage>(ClientSystem.RPC_EventAdminSync));
             ZRoutedRpc.instance.Register("BadRequestMsg",
                 new Action<long, ZPackage>(ClientSystem.RPC_BadRequestMsg));
-            //ZRoutedRpc.instance.Register<ZPackage>("EventCostConfigSync", new Action<long, ZPackage>(ClientSystem.RPC_EventCostConfigSync));
-            //ZRoutedRpc.instance.Register<ZPackage>("RequestCostConfigSync", new Action<long, ZPackage>(ClientSystem.RPC_RequestCostConfigSync));
         }
 
 
@@ -127,9 +125,9 @@ namespace WardIsLove.Util.RPCShit
             if (ZRoutedRpc.instance == null || !ZNetScene.instance)
                 return;
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestSync", new ZPackage());
-            if (!WardIsLovePlugin.Admin)
+            /*if (!WardIsLovePlugin.Admin)
                 ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestAdminSync",
-                    new ZPackage());
+                    new ZPackage());*/
             //ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestCostConfigSync", (object)new ZPackage());
         }
         

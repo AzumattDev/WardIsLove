@@ -456,6 +456,20 @@ namespace WardIsLove.Extensions
         {
             WardMonoscript.m_nview.GetZDO().Set("indestructList", indestructListVal);
         }
+        
+        public static int GetCreatureDamageIncrease(this WardMonoscript WardMonoscript)
+        {
+            if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
+                return WardMonoscript.m_nview.GetZDO().GetInt("creatureDmgeIncreaseAmount",
+                    WardIsLovePlugin._wardDamageIncrease.Value);
+            return WardIsLovePlugin._wardDamageIncrease.Value;
+        }
+
+        public static void SetCreatureDamageIncrease(this WardMonoscript WardMonoscript,
+            float creatureDamageIncreaseAmountVal)
+        {
+            WardMonoscript.m_nview.GetZDO().Set("creatureDmgeIncreaseAmount", creatureDamageIncreaseAmountVal);
+        }
 
         public static float GetStructDamageReduc(this WardMonoscript WardMonoscript)
         {
@@ -588,7 +602,7 @@ namespace WardIsLove.Extensions
         {
             WardMonoscript.m_nview.GetZDO().Set("smelterInteractOn", smelterInteractionOnVal);
         }
-        
+
         public static bool GetBeehiveInteractOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
@@ -601,6 +615,7 @@ namespace WardIsLove.Extensions
         {
             WardMonoscript.m_nview.GetZDO().Set("beehiveInteractOn", beehiveInteractionOnVal);
         }
+
         public static bool GetMapTableInteractOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
@@ -613,6 +628,7 @@ namespace WardIsLove.Extensions
         {
             WardMonoscript.m_nview.GetZDO().Set("maptableInteractOn", maptableInteractionOnVal);
         }
+
         public static bool GetOnlyPermOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
@@ -717,7 +733,7 @@ namespace WardIsLove.Extensions
         {
             WardMonoscript.m_nview.GetZDO().Set("raidablePlayersNeeded", raidablePlayersNeededVal);
         }
-        
+
         public static bool GetWardIsLoveOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
@@ -729,6 +745,53 @@ namespace WardIsLove.Extensions
         public static void SetWardIsLoveOn(this WardMonoscript WardMonoscript, bool wardIsLoveOnVal)
         {
             WardMonoscript.m_nview.GetZDO().Set("wardIsLoveOn", wardIsLoveOnVal);
+        }
+
+        public static bool WILWardLimitCheck(this WardMonoscript area)
+        {
+            return area.m_nview.IsValid() && area.m_nview.m_zdo.GetBool("WILLimitedWard") &&
+                   EnvMan.instance.GetCurrentDay() - area.m_nview.m_zdo.GetInt("WILLimitedWardTime") <
+                   WardIsLovePlugin.MaxDaysDifference;
+        }
+
+        internal static void EmissionSetter(this WardMonoscript area)
+        {
+            bool flag = area.IsEnabled();
+            foreach (Material material in area.m_model.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
+            foreach (Material material in area.m_modelLoki.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
+            foreach (Material material in area.m_modelHel.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
+            foreach (Material material in area.m_modelBetterWard.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
+            foreach (Material material in area.m_modelBetterWard_Type2.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
+            foreach (Material material in area.m_modelBetterWard_Type3.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
+            foreach (Material material in area.m_modelBetterWard_Type4.materials)
+                if (flag)
+                    material.EnableKeyword("_EMISSION");
+                else
+                    material.DisableKeyword("_EMISSION");
         }
     }
 }

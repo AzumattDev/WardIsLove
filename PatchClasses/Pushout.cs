@@ -1,8 +1,5 @@
 ﻿using Guilds;
 using HarmonyLib;
-using UnityEngine;
-using WardIsLove.Extensions;
-using WardIsLove.Util;
 
 namespace WardIsLove.PatchClasses
 {
@@ -10,99 +7,8 @@ namespace WardIsLove.PatchClasses
     [HarmonyPatch]
     public class Pushout
     {
-        /* Testing YAML */
-        /*        [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Start))]
-                [HarmonyPostfix]
-                public static void YAMLTEST_Postfix(FejdStartup __instance)
-                {
-                    try
-                    {
-                        var localTestClan = new Clan()
-                        {
-                            ClanSettings = new ClanSettings()
-                            {
-                                Name = "New Clan Name",
-                                Description = "Coolest Clan ever?",
-                                Leader = 123456789,
-                                Level = 10,
-                                Setting1 = "Setting 1",
-                                Setting2 = "Setting 2"
-                            },
-                            Members = new List<Member?>()
-                            {
-                                new()
-                                {
-                                    SteamId = 123456789,
-                                    Name = "Its Me Matt",
-                                    Rank = "10",
-                                    LastOnline = DateTime.Parse(DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss tt")),
-                                    PlayerId = 123456789
-                                },
-                                new()
-                                {
-                                    SteamId = 987654321,
-                                    Name = "Nik",
-                                    Rank = "15",
-                                    LastOnline = DateTime.Parse(DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss tt")),
-                                    PlayerId = 987654321
-                                }
-                            }
 
-                        };
-                        var serializer = new SerializerBuilder()
-                            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                            .Build();
-                        var yaml = serializer.Serialize(localTestClan);
-                        //System.Console.WriteLine(yaml);
-                        File.WriteAllText(Paths.PluginPath + "/Azumatt-WardIsLove/generatedFile.yml", yaml);
-
-                        var deserializer = new DeserializerBuilder()
-                            .WithNamingConvention(UnderscoredNamingConvention.Instance)
-                            .Build();
-
-
-
-
-                        var yml = File.ReadAllText(Paths.PluginPath + "/Azumatt-WardIsLove/generatedFile.yml");
-                        // Setup the input
-                        var input = new StringReader(yml);
-
-                        // Load the stream
-                        var yam = new YamlStream();
-                        yam.Load(input);
-
-                        // Examine the stream
-                        var mapping =
-                            (YamlMappingNode)yam.Documents[0].RootNode;
-
-
-                        WILLogger.LogError(mapping);
-
-                        // List all the items
-                        var items = (YamlSequenceNode)mapping.Children[new YamlScalarNode("items")];
-                        foreach (YamlMappingNode item in items)
-                        {
-                            WILLogger.LogError(
-                                $"{item.Children[new YamlScalarNode("part_no")]}\t{item.Children[new YamlScalarNode("descrip")]}");
-                        }
-                    }
-                    catch { }
-                }*/
-
-        [HarmonyPatch(typeof(Player), nameof(Player.Update))]
-        [HarmonyPostfix]
-        public static void Postfix_SetLocalPlayer(Player __instance)
-        {
-            /*            if (WardIsLovePlugin.guildAssembly != null)
-                    {*/
-            if (Player.m_localPlayer == null) return;
-            Guild? guild = API.CreateGuild("AzumattGuild");
-            API.AddPlayerToGuild(PlayerReference.fromPlayer(Player.m_localPlayer), guild);
-            API.SaveGuild(guild);
-            /*}*/
-        }
-
-        [HarmonyPatch(typeof(Player), nameof(Player.Update))]
+        /*[HarmonyPatch(typeof(Player), nameof(Player.Update))]
         [HarmonyPostfix]
         public static void Postfix(Player __instance)
         {
@@ -125,10 +31,10 @@ namespace WardIsLove.PatchClasses
             {
                 // ignored
             }
-        }
+        }*/
 
         /* Use character here instead of Humanoid to also pushout deer */
-        [HarmonyPatch(typeof(Character), nameof(Character.FixedUpdate))]
+        /*[HarmonyPatch(typeof(Character), nameof(Character.FixedUpdate))]
         [HarmonyPostfix]
         public static void Postfix(Character __instance)
         {
@@ -154,6 +60,6 @@ namespace WardIsLove.PatchClasses
             {
                 // ignored
             }
-        }
+        }*/
     }
 }

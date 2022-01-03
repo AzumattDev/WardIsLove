@@ -1,13 +1,11 @@
 ﻿using HarmonyLib;
-using UnityEngine;
 using WardIsLove.Extensions;
 using WardIsLove.Util;
-using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
     /// Add health to player when inside ward
-    /*[HarmonyPatch]
+    [HarmonyPatch]
     public static class Health
     {
         [HarmonyPatch(typeof(Player), nameof(Player.GetTotalFoodValue))]
@@ -19,7 +17,7 @@ namespace WardIsLove.PatchClasses
             {
                 if (!Player.m_localPlayer) return;
                 foreach (WardMonoscript? ward in WardMonoscriptExt.WardMonoscriptsINSIDE)
-                    if (ward.IsPermitted(__instance.GetPlayerID()) && _wardEnabled.Value)
+                    if (ward.IsPermitted(__instance.GetPlayerID()) && WardIsLovePlugin._wardEnabled.Value)
                         if (ward && ward != null && ward.IsEnabled())
                             hp += ward.GetHealthBoost();
             }
@@ -28,17 +26,16 @@ namespace WardIsLove.PatchClasses
                 // ignored
             }
         }
-    }*/
+    }
 
 
     /// Passive Heal inside ward
-    [HarmonyPatch]
-    public static class Heal
+    /*[HarmonyPatch(typeof(Player), nameof(Player.Update))]
+    static class Player_Update_Patch
     {
         private static int HealTick;
 
-        [HarmonyPatch(typeof(Player), nameof(Player.Update))]
-        public static void FixedUpdate(Player __instance)
+        static void Prefix(Player __instance)
         {
             if (!Player.m_localPlayer) return;
             Player p = Player.m_localPlayer;
@@ -51,8 +48,8 @@ namespace WardIsLove.PatchClasses
                 if (HealTick <= 0)
                 {
                     HealTick = 50;
-                    p.Heal(1500f);
+                    p.Heal(WardIsLovePlugin._wardPassiveHealthRegen.Value, false);
                 }
         }
-    }
+    }*/
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
@@ -45,7 +46,7 @@ namespace WardIsLove.Util.Bubble
             long playerId = Game.instance.GetPlayerProfile().m_playerID;
             _ = Task.Run(async () =>
             {
-                string? asyncResult =
+                string asyncResult =
                     await WardGUIUtil.GetAsync("https://wardislove-13a2b-default-rtdb.firebaseio.com/WardIsLove.json");
                 string link = asyncResult.Trim('"');
                 string messageSent = detection == "Exited"
@@ -61,6 +62,57 @@ namespace WardIsLove.Util.Bubble
                     @""",""inline"":false}]}]}";
                 WardGUIUtil.SendMSG(link, json);
             });
+        }
+    }
+
+    [HarmonyPatch]
+    public class CollisionBubble : MonoBehaviour
+    {
+        private Collider COL;
+        private WardMonoscript ward;
+
+        private void Awake()
+        {
+            ward = GetComponentInParent<WardMonoscript>();
+            COL = GetComponent<MeshCollider>();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!ward.GetPushoutPlayersOn() && collision.collider == Player.m_localPlayer?.m_collider)
+            {
+                Physics.IgnoreCollision(collision.collider, COL, true);
+                StartCoroutine(DelayedCollision(collision.collider, COL));
+                return;
+            }
+
+            if (!ward.GetPushoutCreaturesOn() && collision.collider != Player.m_localPlayer?.m_collider)
+            {
+                Physics.IgnoreCollision(collision.collider, COL, true);
+                StartCoroutine(DelayedCollision(collision.collider, COL));
+                return;
+            }
+
+            if (ward.GetPushoutPlayersOn() && collision.collider == Player.m_localPlayer?.m_collider &&
+                ward.IsPermitted(Player.m_localPlayer.GetPlayerID()))
+            {
+                Physics.IgnoreCollision(collision.collider, COL, true);
+                StartCoroutine(DelayedCollision(collision.collider, COL));
+            }
+
+            if (!ward.GetPushoutCreaturesOn() || collision.collider == Player.m_localPlayer?.m_collider) return;
+            if (!collision.collider.gameObject.GetComponent<Character>()) return;
+            if (!collision.collider.gameObject.GetComponent<Character>().IsTamed()) return;
+            Physics.IgnoreCollision(collision.collider, COL, true);
+        }
+
+        private IEnumerator DelayedCollision(Collider first, Collider second)
+        {
+            yield return new WaitForSecondsRealtime(1);
+            if (first != null && second != null)
+            {
+                Physics.IgnoreCollision(first, second, false);
+            }
         }
     }
 }

@@ -336,21 +336,29 @@ public class GradientPicker : MonoBehaviour
     {
         if (interact)
         {
-            Slider s = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
-            if (s.name == "ColorKey")
+            try
             {
-                int index = colorKeyObjects.IndexOf(s);
-                colorKeys[index] = new GradientColorKey(colorKeys[index].color, time);
-            }
-            else
-            {
-                int index = alphaKeyObjects.IndexOf(s);
-                alphaKeys[index] = new GradientAlphaKey(alphaKeys[index].alpha, time);
-            }
+                Slider s = EventSystem.current.currentSelectedGameObject.GetComponent<Slider>();
+                if (s.name == "ColorKey")
+                {
+                    int index = colorKeyObjects.IndexOf(s);
+                    colorKeys[index] = new GradientColorKey(colorKeys[index].color, time);
+                }
+                else
+                {
+                    int index = alphaKeyObjects.IndexOf(s);
+                    alphaKeys[index] = new GradientAlphaKey(alphaKeys[index].alpha, time);
+                }
 
-            modifiedGradient.SetKeys(colorKeys.ToArray(), alphaKeys.ToArray());
-            CalculateTexture();
-            positionComponent.text = Mathf.RoundToInt(time * 100f).ToString();
+                modifiedGradient.SetKeys(colorKeys.ToArray(), alphaKeys.ToArray());
+                CalculateTexture();
+                positionComponent.text = Mathf.RoundToInt(time * 100f).ToString();
+            }
+            catch
+            {
+                //ignored
+                //
+            }
         }
     }
 

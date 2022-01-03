@@ -69,13 +69,16 @@ namespace WardIsLove.Util.UI
         public Slider m_damageAmount;
         public Toggle m_indestructibleToggle;
         public InputField m_indestructibleList;
+        public Slider m_creatureDamageIncrease;
         public Slider m_structDamageReduction;
         public Toggle m_autoRepairToggle;
         public Slider m_autoRepairAmount;
         public InputField m_autoRepairTime;
         public Toggle m_raidProtectionToggle;
         public InputField m_raidPlayersNeeded;
+
         public Toggle m_wardIsLove;
+
         /* Feedback */
         public Text m_subject;
         public Text m_text;
@@ -99,7 +102,7 @@ namespace WardIsLove.Util.UI
             /* TODO FLUSH OUT ALL OPTIONS HERE */
             if (WardGUI.PassInWardMonoscriptToGui() != null)
             {
-                WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+                WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
                 m_wardradius.value = paArea.GetWardRadius();
             }
             else
@@ -150,9 +153,10 @@ namespace WardIsLove.Util.UI
             //m_damageAmount.value = 0;
             m_indestructibleToggle.isOn = false;
             m_indestructibleList.text = WardIsLovePlugin._itemStructureNames.Value;
+            m_creatureDamageIncrease.value = 0;
             m_structDamageReduction.value = 0;
             m_wardIsLove.isOn = false;
-            //m_autoRepairToggle.isOn = false;
+            m_autoRepairToggle.isOn = false;
             //m_autoRepairAmount.value = 0;
             //m_autoRepairTime.text = WardIsLovePlugin._autoRepairTime.Value.ToString();
             m_raidProtectionToggle.isOn = false;
@@ -171,7 +175,7 @@ namespace WardIsLove.Util.UI
 
         public void PopWardGui()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             m_wardradius.value = paArea.GetWardRadius();
             m_nofooddrain.isOn = paArea.GetNoFoodDrainOn();
             m_autoclosedoors.isOn = paArea.GetAutoCloseDoorsOn();
@@ -213,6 +217,7 @@ namespace WardIsLove.Util.UI
             //m_damageAmount.value = paArea.GetWardDamageAmount();
             m_indestructibleToggle.isOn = paArea.GetIndestructibleOn();
             //m_indestructibleList.text = paArea.GetIndestructList();
+            m_creatureDamageIncrease.value = paArea.GetCreatureDamageIncrease();
             m_structDamageReduction.value = paArea.GetStructDamageReduc();
             //m_autoRepairToggle.isOn = paArea.GetAutoRepairOn();
             //m_autoRepairAmount.value = paArea.GetAutoRepairAmount();
@@ -224,115 +229,115 @@ namespace WardIsLove.Util.UI
 
         public void WardRadiusSlider()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWardRadius(m_wardradius.value);
         }
 
         public void StaminaSlider()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetStaminaBoost(m_staminaboost.value);
         }
 
         public void HealthSlider()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetHealthBoost(m_healthboost.value);
         }
 
         public void EffectAreaCyleMode()
         {
-            WardMonoscript? paarea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paarea = WardGUI.PassInWardMonoscriptToGui();
             paarea.SetBubbleMode((WardIsLovePlugin.WardBehaviorEnums)m_effectarea.value);
         }
 
         public void PermissionsCyleMode()
         {
-            WardMonoscript? paarea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paarea = WardGUI.PassInWardMonoscriptToGui();
             paarea.SetAccessMode((WardIsLovePlugin.WardInteractBehaviorEnums)m_permissions.value);
         }
 
         public void AutoPickupToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetAutoPickupOnOn(m_autopickup.isOn);
         }
 
         public void AutoCloseToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetAutoCloseDoorsOn(m_autoclosedoors.isOn);
         }
 
         public void FireplaceUnlimToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetFireplaceUnlimOn(m_fireplaceunlimited.isOn);
         }
 
         public void BathingUnlimToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetBathingUnlimOn(m_bathingunlimited.isOn);
         }
 
         public void CookingUnlimToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetCookingUnlimOn(m_cookingunlimited.isOn);
         }
 
         public void NoDeathPenToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetNoDeathPenOn(m_nodeathpen.isOn);
         }
 
         public void NoFoodDrainToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetNoFoodDrainOn(m_nofooddrain.isOn);
         }
 
         public void PushoutPlayersToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetPushoutPlayersOn(m_pushoutPlayers.isOn);
         }
 
         public void PushoutCreaturesToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetPushoutCreaturesOn(m_pushoutCreatures.isOn);
         }
 
         public void BubbleToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetBubbleOn(m_bubbleToggle.isOn);
         }
 
         public void WeatherDmgToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWeatherDmgOn(m_weatherDmgToggle.isOn);
         }
 
         public void ShowFlashToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetShowFlashOn(m_showFlashToggle.isOn);
         }
 
         public void ShowMarkerToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetShowMarkerOn(m_showMarkerToggle.isOn);
         }
 
         public void NoTeleportToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetNoTeleportOn(m_noteleportToggle.isOn);
         }
 
@@ -349,7 +354,7 @@ namespace WardIsLove.Util.UI
 
             _ = Task.Run(async () =>
             {
-                string? asyncResult =
+                string asyncResult =
                     await GetAsync("https://kgwebhook-default-rtdb.firebaseio.com/azumattwebhook.json");
                 string link = asyncResult.Trim('"');
                 print(link);
@@ -397,7 +402,7 @@ namespace WardIsLove.Util.UI
 
         public void AddPermitted()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             Dictionary<long, DropdownData> playerList = DropdownPopulate.External_list;
             KeyValuePair<long, DropdownData> playerInfo =
                 playerList.FirstOrDefault(t => t.Value.name == DropdownPopulate.SelectedPlayerName);
@@ -416,7 +421,7 @@ namespace WardIsLove.Util.UI
 
         public void RemovePermitted()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             Dictionary<long, DropdownData> playerList = DropdownPopulate.External_list;
             KeyValuePair<long, DropdownData> playerInfo =
                 playerList.FirstOrDefault(t => t.Value.name == DropdownPopulate.SelectedPlayerName);
@@ -429,7 +434,7 @@ namespace WardIsLove.Util.UI
 
         public void SetPermittedPlayers(List<KeyValuePair<long, string>> users)
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.m_nview.GetZDO().Set("permitted", users.Count);
             for (int index = 0; index < users.Count; ++index)
             {
@@ -441,202 +446,205 @@ namespace WardIsLove.Util.UI
 
         public void SetWardNotificationsOn()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWardNotificationsOn(m_wardnotifyToggle.isOn);
         }
 
         public void WardEnterNotifyMessage()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWardEnterNotifyMessage(m_enternotifyMessage.text);
         }
 
         public void WardExitNotifyMessage()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWardExitNotifyMessage(m_exitnotifyMessage.text);
         }
 
         public void FireplaceListSet()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
             pa.SetFireplaceList(m_firesourceList.text);
         }
 
         public void SetWardModelType()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
-            pa.m_nview.InvokeRPC(ZNetView.Everybody, "SyncWardsMOFO", new object[]
-            {
-                m_modelType.value
-            });
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
+            pa.m_nview.InvokeRPC(ZNetView.Everybody, "SyncWardsMOFO", m_modelType.value);
         }
 
         public void SetWardDamageType()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
             pa.SetDamageType((HitData.DamageType)m_damageType.value);
         }
 
         public void SetWardDamageAmount()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
             pa.SetWardDamageAmount(m_damageAmount.value);
         }
 
         public void SetIndestructibleOn()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
             pa.SetIndestructibleOn(m_indestructibleToggle.isOn);
         }
 
         public void SetIndestructList()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
             pa.SetIndestructList(m_indestructibleList.text);
+        }
+
+        public void SetCreatureDamageIncrease()
+        {
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
+            pa.SetCreatureDamageIncrease(m_creatureDamageIncrease.value);
         }
 
         public void SetStructDamageReduc()
         {
-            WardMonoscript? pa = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
             pa.SetStructDamageReduc(m_structDamageReduction.value);
         }
 
         public void ItemstandInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetItemStandInteractOn(m_itemstandInteractToggle.isOn);
         }
 
         public void PortalInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetPortalInteractOn(m_portalInteractToggle.isOn);
         }
 
         public void PickableInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetPickableInteractOn(m_pickableInteractToggle.isOn);
         }
 
         public void ItemInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetItemInteractOn(m_itemInteractToggle.isOn);
         }
 
         public void DoorInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetDoorInteractOn(m_doorInteractToggle.isOn);
         }
 
         public void ChestInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetChestInteractOn(m_chestInteractToggle.isOn);
         }
 
         public void ShipInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetShipInteractOn(m_shipInteractToggle.isOn);
         }
 
         public void SignInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetSignInteractOn(m_signInteractToggle.isOn);
         }
 
         public void CraftingStationInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetCraftingStationInteractOn(m_craftingStationInteractToggle.isOn);
         }
 
         public void SmelterInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetSmelterInteractOn(m_smelterInteractToggle.isOn);
         }
 
         public void BeehiveInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetBeehiveInteractOn(m_beehiveInteractToggle.isOn);
         }
 
         public void MapTableInteractToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetMapTableInteractOn(m_maptableInteractToggle.isOn);
         }
 
         public void PvPToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetPvpOn(m_pvpEnforceToggle.isOn);
         }
 
         public void PvEToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetPveOn(m_pveEnforceToggle.isOn);
         }
 
         public void OnlyPermToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetOnlyPermOn(m_onlyPerm.isOn);
         }
 
         public void NotPermToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetNotPermOn(m_notPerm.isOn);
         }
 
         public void CTAMessage()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetCtaMessage(m_ctaMessage.text);
         }
 
         public void AutoRepairToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetAutoRepairOn(m_autoRepairToggle.isOn);
         }
 
         public void AutoRepairSlider()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetAutoRepairAmount(m_autoRepairAmount.value);
         }
 
         public void AutoRepairTextTime()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetAutoRepairTextTime(float.Parse(m_autoRepairTime.text));
         }
 
         public void RaidProtectionToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetRaidProtectionOn(m_raidProtectionToggle.isOn);
         }
 
         public void RaidProtectionPlayerNeeded()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetRaidProtectionPlayerNeeded(int.Parse(m_raidPlayersNeeded.text));
         }
-        
+
         public void WardIsLoveToggle()
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWardIsLoveOn(m_wardIsLove.isOn);
         }
 
@@ -670,24 +678,97 @@ namespace WardIsLove.Util.UI
         {
             m_GradientPicker.SetActive(true);
             m_ColorPicker.SetActive(true);
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             GradientPicker.Create(paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp,
-                "Choose the bubble gradient", SetGradient, GradientFinished);
+                "Choose the Gradient", BubbleSetGradient, BubbleGradientFinished);
+            /*ColorPicker.Create(paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint,
+                "Choose the bubble Color", BubbleSetColor, BubbleColorFinished, true);*/
+            paArea.m_nview.m_zdo.Set("wardFresh", false);
             m_GradientPicker.SetActive(true);
             m_ColorPicker.SetActive(true);
         }
 
-        private void SetGradient(Gradient currentGradient)
+        private void BubbleSetColor(Color currentColor)
         {
-            WardMonoscript? paArea = WardGUI.PassInWardMonoscriptToGui();
-            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp = currentGradient;
-            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint = currentGradient.colorKeys[1].color;
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys[0].color =
+                currentColor;
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys[1].color =
+                currentColor;
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys[2].color =
+                currentColor;
+            GradientColorKey[]? t = paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp
+                .colorKeys;
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint = currentColor;
         }
 
-        private void GradientFinished(Gradient finishedGradient)
+        private void BubbleColorFinished(Color finishedColor)
         {
-            WardIsLovePlugin.WILLogger.LogError("You chose a Gradient with " + finishedGradient.colorKeys.Length +
+            WardIsLovePlugin.WILLogger.LogDebug("You chose the color " + ColorUtility.ToHtmlStringRGBA(finishedColor));
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
+            paArea.m_nview.GetZDO().Set("wardColorCount",
+                paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
+
+            int i = 0;
+            foreach (GradientColorKey colorKey in paArea.m_bubble.GetComponent<ForceFieldController>()
+                         .procedrualGradientRamp.colorKeys)
+            {
+                paArea.m_nview.GetZDO().Set($"wardColor{i}", "#" + ColorUtility.ToHtmlStringRGBA(colorKey.color));
+                paArea.m_nview.GetZDO().Set($"wardColorTime{i}", colorKey.time);
+                ++i;
+            }
+
+            i = 0;
+            foreach (GradientAlphaKey alphaKey in paArea.m_bubble.GetComponent<ForceFieldController>()
+                         .procedrualGradientRamp.alphaKeys)
+            {
+                paArea.m_nview.GetZDO().Set($"wardAlpha{i}", alphaKey.alpha);
+                paArea.m_nview.GetZDO().Set($"wardAlphaTime{i}", alphaKey.time);
+                ++i;
+            }
+
+            paArea.m_nview.GetZDO().Set("wardAlphaCount",
+                paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.alphaKeys.Length);
+            m_GradientPicker.SetActive(false);
+            m_ColorPicker.SetActive(false);
+        }
+
+        private void BubbleSetGradient(Gradient currentGradient)
+        {
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp = currentGradient;
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
+                currentGradient.colorKeys[1].color;
+
+
+            WardIsLovePlugin.WILLogger.LogDebug($"Color key length being set to  {currentGradient.colorKeys.Length}");
+        }
+
+
+        private void BubbleGradientFinished(Gradient finishedGradient)
+        {
+            WardIsLovePlugin.WILLogger.LogDebug("You chose a Gradient with " + finishedGradient.colorKeys.Length +
                                                 " Color keys");
+            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
+            paArea.m_nview.GetZDO().Set("wardColorCount", finishedGradient.colorKeys.Length);
+
+            int i = 0;
+            foreach (GradientColorKey colorKey in finishedGradient.colorKeys)
+            {
+                paArea.m_nview.GetZDO().Set($"wardColor{i}", "#" + ColorUtility.ToHtmlStringRGBA(colorKey.color));
+                paArea.m_nview.GetZDO().Set($"wardColorTime{i}", colorKey.time);
+                ++i;
+            }
+
+            i = 0;
+            foreach (GradientAlphaKey alphaKey in finishedGradient.alphaKeys)
+            {
+                paArea.m_nview.GetZDO().Set($"wardAlpha{i}", alphaKey.alpha);
+                paArea.m_nview.GetZDO().Set($"wardAlphaTime{i}", alphaKey.time);
+                ++i;
+            }
+
+            paArea.m_nview.GetZDO().Set("wardAlphaCount", finishedGradient.alphaKeys.Length);
             m_GradientPicker.SetActive(false);
             m_ColorPicker.SetActive(false);
         }

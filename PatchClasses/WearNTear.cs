@@ -33,15 +33,21 @@ namespace WardIsLove.PatchClasses
         public static class StructureDamage
         {
             // Makes only certain items indestructible.
-            private static bool Prefix(ref WearNTear __instance)
+            private static bool Prefix(ref WearNTear __instance, ref float damage)
             {
                 bool shouldDamage = true;
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || !_wardEnabled.Value)
                     return shouldDamage;
-                WardMonoscript? paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (!OfflineStatus.CheckOfflineStatus(paa) && paa.GetRaidProtectionOn())
                 {
                     shouldDamage = false;
+                    return shouldDamage;
+                }
+
+                if (paa.GetStructDamageReduc() > 0)
+                {
+                    damage *= (float)(1.0 - paa.GetStructDamageReduc() / 100.0);
                     return shouldDamage;
                 }
 
@@ -49,7 +55,7 @@ namespace WardIsLove.PatchClasses
                 string[] array = paa.GetIndestructList().ToLower().Trim().Split(',').ToArray();
                 if (!array.Any()) return shouldDamage;
                 foreach (string item in array)
-                    if (__instance.m_piece.m_name.Contains(item))
+                    if (__instance.m_nview.GetPrefabName().Contains(item))
                     {
                         shouldDamage = false;
                         return shouldDamage;
@@ -69,7 +75,7 @@ namespace WardIsLove.PatchClasses
                 if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position) && ___m_nview != null &&
                     _wardEnabled.Value)
                 {
-                    WardMonoscript? paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                    WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                     if (!OfflineStatus.CheckOfflineStatus(paa) && paa.GetRaidProtectionOn())
                     {
                         hit.ApplyModifier(0);
@@ -79,7 +85,7 @@ namespace WardIsLove.PatchClasses
 
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || ___m_nview == null ||
                     !_wardEnabled.Value) return true;
-                WardMonoscript? pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 hit.ApplyModifier((float)(1.0 - pa.GetStructDamageReduc() / 100.0));
                 return true;
             }
@@ -87,9 +93,9 @@ namespace WardIsLove.PatchClasses
 
 
         [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.HaveRoof))]
-        public static class DisableWeatherDamagePatch
+        public static class WILDisableWeatherDamagePatch
         {
-            private static void Postfix(WearNTear __instance, ref bool __result)
+            private static void Prefix(WearNTear __instance, ref bool __result)
             {
                 /*if (!_wardEnabled.Value || !_noWeatherDmg.Value)
                     return;

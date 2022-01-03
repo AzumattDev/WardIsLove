@@ -25,7 +25,7 @@ namespace WardIsLove.PatchClasses
 
             /* Ward GUI General Tab */
             _ = LocalizeWord("wardmenu_bubbletoggle", "Toggle Bubble");
-            _ = LocalizeWord("wardmenu_weatherdmg", "Toggle Weather Damage");
+            _ = LocalizeWord("wardmenu_weatherdmg", "No Weather Damage");
             _ = LocalizeWord("wardmenu_wardradius", "Ward Radius");
             _ = LocalizeWord("wardmenu_health", "Increase Health");
             _ = LocalizeWord("wardmenu_stamina", "Increase Stamina");
@@ -67,6 +67,7 @@ namespace WardIsLove.PatchClasses
             _ = LocalizeWord("wardmenu_indestructiblestruct", "Protect Stuctures");
             _ = LocalizeWord("wardmenu_indestructibles", "Structure List");
             _ = LocalizeWord("wardmenu_damagereduction", "Damage Reduction");
+            _ = LocalizeWord("wardmenu_creaturedamageincrease", "Creature Damage Increase");
             _ = LocalizeWord("wardmenu_autorepairamount", "Auto Repair Amount");
 
             _ = LocalizeWord("wardmenu_removePermitted", "Remove Player");

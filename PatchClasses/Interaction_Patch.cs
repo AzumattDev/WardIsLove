@@ -56,21 +56,11 @@ namespace WardIsLove.PatchClasses
         {
             if (hold)
                 return false;
-            if (!WardMonoscript.CheckAccess(__instance.transform.position, 0.0f, false, true))
-            {
-                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!pa.GetPortalInteractOn())
-                {
-                    human.Message(MessageHud.MessageType.Center, "$piece_noaccess");
-                    return false;
-                }
-
-                TextInput.instance.RequestText(__instance, "$piece_portal_tag", 10);
-                return true;
-            }
-
-            TextInput.instance.RequestText(__instance, "$piece_portal_tag", 10);
-            return true;
+            if (WardMonoscript.CheckAccess(__instance.transform.position, 0.0f, false, true)) return true;
+            WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+            if (pa.GetPortalInteractOn()) return true;
+            human.Message(MessageHud.MessageType.Center, "$piece_noaccess");
+            return false;
         }
 
         [HarmonyPatch(typeof(Door), nameof(Door.Interact))]

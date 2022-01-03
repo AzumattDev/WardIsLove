@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using WardIsLove.PatchClasses;
 using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.Util
@@ -19,6 +18,8 @@ namespace WardIsLove.Util
                 !__result.m_name.ToLower().Contains("planned"))
             {
                 string name = __result.name;
+                __result.m_craftingStation =
+                    ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>();
                 string[] arrayItems = _thorwardItemReqs.Value.Trim().Split(',').ToArray();
                 string[] arrayReco = _thorwardReco.Value.Trim().Split(',').ToArray();
                 string[] arrayAmou = _thorwardItemAmou.Value.Trim().Split(',').ToArray();
@@ -48,7 +49,8 @@ namespace WardIsLove.Util
             if (!Player.m_localPlayer) return;
             Piece thorWard = Thorward.GetComponent<Piece>();
             List<Piece.Requirement> newReqs = new();
-
+            thorWard.m_craftingStation =
+                ZNetScene.instance.GetPrefab("piece_workbench").GetComponent<CraftingStation>();
 
             /* THOR WARD */
             string[] arrayItemsW2 = _thorwardItemReqs.Value.ToLower().Trim().Split(',').ToArray();
@@ -74,6 +76,15 @@ namespace WardIsLove.Util
             }
 
             fInit = true;
+        }
+
+        [HarmonyPatch(typeof(PrivateArea), nameof(PrivateArea.IsEnabled))]
+        static class PrivateArea_IsEnabled_Patch
+        {
+            static bool Prefix(PrivateArea __instance)
+            {
+                return false;
+            }
         }
     }
 }

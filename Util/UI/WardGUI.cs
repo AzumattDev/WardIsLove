@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using WardIsLove.Util.Bubble;
 using Object = UnityEngine.Object;
 
 namespace WardIsLove.Util.UI
@@ -29,6 +30,7 @@ namespace WardIsLove.Util.UI
             {
                 WardIsLovePlugin.Thorward =
                     wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/Thorward.prefab");
+                WardIsLovePlugin.Thorward.GetComponent<WardMonoscript>().m_bubble.AddComponent<CollisionBubble>();
 
 
                 wardGUI = Object.Instantiate(go);
@@ -50,7 +52,7 @@ namespace WardIsLove.Util.UI
 
             for (int i = 0; i < Enum.GetNames(typeof(WardIsLovePlugin.WardGUIFeedbackEnums)).Length; i++)
             {
-                string? en = GetString((WardIsLovePlugin.WardGUIFeedbackEnums)i);
+                string en = GetString((WardIsLovePlugin.WardGUIFeedbackEnums)i);
 
                 FeedbackDropdown.options.Add(new Dropdown.OptionData { text = en });
             }

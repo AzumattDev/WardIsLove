@@ -57,7 +57,7 @@ namespace WardIsLove.Util
                         WardIsLovePlugin.WILLogger.LogInfo(e);
                     }
 
-                    GameObject? tmp = hitcollider.gameObject;
+                    GameObject tmp = hitcollider.gameObject;
                     _collider = hitcollider;
                     hum = tmp.GetComponent<Humanoid>();
                     try

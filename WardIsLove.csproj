@@ -71,6 +71,9 @@
         <Reference Include="BepInEx, Version=5.4.17.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>$(GamePath)\BepInEx\core\BepInEx.dll</HintPath>
         </Reference>
+        <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
+          <HintPath>Libs\fastJSON.dll</HintPath>
+        </Reference>
         <Reference Include="Guilds, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>Libs\Guilds.dll</HintPath>
         </Reference>
@@ -150,6 +153,7 @@
         <Compile Include="PatchClasses\PvP.cs" />
         <Compile Include="PatchClasses\Stamina.cs" />
         <Compile Include="PatchClasses\Ward.cs" />
+        <Compile Include="PatchClasses\WardLimiter.cs" />
         <Compile Include="PatchClasses\WearNTear.cs" />
         <Compile Include="Util\Bubble\ControlParticlesSpawner.cs" />
         <Compile Include="Util\Bubble\ForceFieldController.cs" />
@@ -174,6 +178,9 @@
     <ItemGroup>
         <Content Include=".gitignore" />
         <Content Include="ILRepack.targets" />
+        <Content Include="Libs\fastJSON.dll">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="Libs\Guilds.dll" />
         <Content Include="Libs\GuildsAPI.dll" />
         <Content Include="Libs\ServerSync.dll" />

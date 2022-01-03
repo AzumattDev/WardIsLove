@@ -37,7 +37,7 @@ namespace WardIsLove.PatchClasses
                     ___m_nview.GetZDO() == null ||
                     !___m_nview.IsOwner()) return;
                 if (__instance.m_name.ToLower().Contains("tub"))
-                    __instance.SetFuel(__instance.m_maxFuel - 1);
+                    __instance.SetFuel(__instance.m_maxFuel);
             }
         }
 
@@ -52,7 +52,7 @@ namespace WardIsLove.PatchClasses
                     ___m_nview.GetZDO() == null ||
                     !___m_nview.IsOwner()) return;
                 if (__instance.m_name.ToLower().Contains("oven"))
-                    __instance.SetFuel(__instance.m_maxFuel - 1);
+                    __instance.SetFuel(__instance.m_maxFuel);
             }
         }
     }
