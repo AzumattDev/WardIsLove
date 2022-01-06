@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,8 +36,8 @@ namespace WardIsLove
 
         public enum WardInteractBehaviorEnums
         {
-            OwnerOnly = 0,
-            Default = 1,
+            Default = 0,
+            OwnerOnly = 1,
             Everyone = 2
         }
 
@@ -54,7 +53,7 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
-        public const string version = "2.0.0";
+        public const string version = "2.2.0";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -114,8 +113,7 @@ namespace WardIsLove
             _chargeItem = config("Charge", "Charge Item", "Thunderstone",
                 "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
             _chargeItemAmount = config("Charge", "Charge Item Amount", 5,
-                "Amount of the Item needed to charge the ward.");
-
+                "Amount of the Item needed to charge the ward. If you set this to 0, the item is not needed and can charge without cost.");
             /* General */
             _wardEnabled = config("General", "WardEnabled", true, "Enable WardIsLove Configurations");
             _showMarker = config("General", "ShowMarker", true,
@@ -321,7 +319,7 @@ namespace WardIsLove
         private void OnDestroy()
         {
             localizationFile.Save();
-            harmony.UnpatchSelf();
+           // harmony.UnpatchSelf();
         }
 
 
@@ -405,7 +403,7 @@ namespace WardIsLove
         }
 
         [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
-        public static class TestPrefab
+        public static class WardIsLoveZNetScenePrefix
         {
             public static void Prefix(ZNetScene __instance)
             {

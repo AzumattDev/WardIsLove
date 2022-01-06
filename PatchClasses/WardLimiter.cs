@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection.Emit;
+using BepInEx;
 using fastJSON;
 using HarmonyLib;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace WardIsLove
     {
         private static int MaxWardCount = 99999;
 
-        private static int WardCount = 0;
+        private static int WardCount;
         public static int MaxDaysDifference = 99999;
         private static WardManager _manager;
 
@@ -34,7 +35,7 @@ namespace WardIsLove
             IsServer = SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
             if (IsServer)
             {
-                _manager = new WardManager(Path.Combine(BepInEx.Paths.ConfigPath, "wardIsLoveData"));
+                _manager = new WardManager(Path.Combine(Paths.ConfigPath, "wardIsLoveData"));
                 MaxWardCountConfig = Config.Bind("General", "Max Wards Per Player", 3);
                 MaxWardCountVIPConfig = Config.Bind("General", "Max Wards Per Player (VIP)", 5);
                 MaxDaysDifferenceConfig = Config.Bind("General", "Days For Deactivate", 300);
@@ -114,7 +115,7 @@ namespace WardIsLove
             {
                 if (IsServer)
                 {
-                    ZRoutedRpc.instance.Register("WILLimitWard GetClientInfo", new Action<long>(GetClientInfo));
+                    ZRoutedRpc.instance.Register("WILLimitWard GetClientInfo", GetClientInfo);
                 }
                 else
                 {
@@ -206,8 +207,7 @@ namespace WardIsLove
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 List<CodeInstruction> list = new List<CodeInstruction>(instructions);
-                CodeInstruction[] NewInstructions = new[]
-                {
+                CodeInstruction[] NewInstructions = {
                     new CodeInstruction(OpCodes.Ldloc_3),
                     new CodeInstruction(OpCodes.Call,
                         AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard),

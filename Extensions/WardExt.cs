@@ -738,7 +738,7 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("wardIsLoveOn", false);
+                    .GetBool("wardIsLoveOn");
             return false;
         }
 

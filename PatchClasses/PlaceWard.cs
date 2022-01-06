@@ -7,7 +7,7 @@ using static WardIsLove.WardIsLovePlugin;
 namespace WardIsLove.PatchClasses
 {
     [HarmonyPatch]
-    public class PlaceWard : MonoBehaviour
+    public class PlaceWard
     {
         [HarmonyPatch(typeof(Player), nameof(Player.GetPiece))]
         [HarmonyPostfix]
@@ -46,7 +46,7 @@ namespace WardIsLove.PatchClasses
                 RecipeFunction.UpdateWardRecipe(ref __instance);
                 if (!__instance.name.ToLower().Contains("planned") &&
                     !__instance.m_name.ToLower().Contains("planned") ||
-                    !__instance.m_name.ToLower().Contains("betterw")) return;
+                    !__instance.m_name.ToLower().Contains("thorwar")) return;
                 Piece? planned = __instance.gameObject.GetComponent<Piece>();
                 foreach (Piece.Requirement? req in __instance.m_resources) req.m_recover = false;
             }
@@ -59,42 +59,9 @@ namespace WardIsLove.PatchClasses
             {
                 if (!__instance.name.ToLower().Contains("planned") &&
                     !__instance.m_name.ToLower().Contains("planned") ||
-                    !__instance.m_name.ToLower().Contains("better")) return;
+                    !__instance.m_name.ToLower().Contains("thorwar")) return;
                 Piece? planned = __instance.gameObject.GetComponent<Piece>();
                 foreach (Piece.Requirement? req in planned.m_resources) req.m_recover = false;
-            }
-
-            private static void Postfix(ref WardMonoscript __instance)
-            {
-#if DEBUG
-                // WardIsLovePlugin.WILLogger.LogError(__instance.m_name);
-#endif
-                if (!Player.m_localPlayer || !__instance) return;
-                List<GameObject> gameObjectList = new();
-                double wardDetection = _wardRange.Value;
-
-                foreach (Collider component in Physics.OverlapSphere(Player.m_localPlayer.transform.position,
-                             (float)wardDetection))
-                {
-                    EffectArea componentInParent = component.GetComponentInParent<EffectArea>();
-
-
-                    if ((!(bool)componentInParent ? 0 :
-                            Vector3.Distance(Player.m_localPlayer.transform.position,
-                                componentInParent.transform.position) <= wardDetection ? 1 : 0) == 0) continue;
-                    if (gameObjectList.Contains(componentInParent.gameObject)) continue;
-                    gameObjectList.Add(componentInParent.gameObject);
-                    try
-                    {
-                        if (componentInParent.m_type is EffectArea.Type.NoMonsters or EffectArea.Type.PlayerBase)
-                            DestroyImmediate(componentInParent);
-                    }
-                    catch (UnityException ex)
-                    {
-                        WILLogger.LogError(
-                            $"Error, couldn't destroy the effect area {ex}");
-                    }
-                }
             }
         }
 

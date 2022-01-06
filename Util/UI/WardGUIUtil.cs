@@ -415,7 +415,7 @@ namespace WardIsLove.Util.UI
             }
 
             permittedPlayers.Add(new KeyValuePair<long, string>(playerInfo.Value.id, playerInfo.Value.name));
-            SetPermittedPlayers(permittedPlayers);
+            paArea.SetPermittedPlayers(permittedPlayers);
             _ = paArea.m_addPermittedEffect.Create(transform.position, transform.rotation);
         }
 
@@ -428,20 +428,8 @@ namespace WardIsLove.Util.UI
             List<KeyValuePair<long, string>> permittedPlayers = paArea.GetPermittedPlayers();
             if (permittedPlayers.RemoveAll(x => x.Key == playerInfo.Value.id) <= 0)
                 return;
-            SetPermittedPlayers(permittedPlayers);
+            paArea.SetPermittedPlayers(permittedPlayers);
             _ = paArea.m_removedPermittedEffect.Create(transform.position, transform.rotation);
-        }
-
-        public void SetPermittedPlayers(List<KeyValuePair<long, string>> users)
-        {
-            WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
-            paArea.m_nview.GetZDO().Set("permitted", users.Count);
-            for (int index = 0; index < users.Count; ++index)
-            {
-                KeyValuePair<long, string> user = users[index];
-                paArea.m_nview.GetZDO().Set("pu_id" + index, user.Key);
-                paArea.m_nview.GetZDO().Set("pu_name" + index, user.Value);
-            }
         }
 
         public void SetWardNotificationsOn()

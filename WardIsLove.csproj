@@ -152,6 +152,7 @@
         <Compile Include="PatchClasses\Pushout.cs" />
         <Compile Include="PatchClasses\PvP.cs" />
         <Compile Include="PatchClasses\Stamina.cs" />
+        <Compile Include="PatchClasses\TerrainChecking.cs" />
         <Compile Include="PatchClasses\Ward.cs" />
         <Compile Include="PatchClasses\WardLimiter.cs" />
         <Compile Include="PatchClasses\WearNTear.cs" />

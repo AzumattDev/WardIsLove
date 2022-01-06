@@ -234,12 +234,12 @@ namespace WardIsLove.Util
                 try
                 {
                     m_bubble.gameObject.SetActive(false);
-                    ZNetScene.instance.Destroy(this.gameObject);
+                    ZNetScene.instance.Destroy(gameObject);
                 }
                 catch
                 {
                     m_bubble.gameObject.SetActive(false);
-                    ZNetScene.instance.Destroy(this.gameObject);
+                    ZNetScene.instance.Destroy(gameObject);
                 }
             }
             catch
@@ -424,6 +424,13 @@ namespace WardIsLove.Util
                     if (Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name) >=
                         WardIsLovePlugin._chargeItemAmount.Value)
                     {
+                        if (WardIsLovePlugin._chargeItemAmount.Value == 0)
+                        {
+                            Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
+                                Quaternion.identity);
+                            m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
+                            return true;
+                        }
                         Player.m_localPlayer.GetInventory().RemoveItem(item.m_itemData.m_shared.m_name,
                             WardIsLovePlugin._chargeItemAmount.Value);
                         Player.m_localPlayer.ShowRemovedMessage(item.m_itemData,
@@ -464,6 +471,7 @@ namespace WardIsLove.Util
 
             if (IsEnabled())
                 return false;
+            m_nview.ClaimOwnership();
             m_nview.InvokeRPC("TogglePermitted", player.GetPlayerID(), player.GetPlayerName());
             return true;
         }
@@ -478,7 +486,7 @@ namespace WardIsLove.Util
             bool flag = IsEnabled();
             m_enabledEffect.SetActive(flag);
             m_flashAvailable = true;
-            WardMonoscriptExt.EmissionSetter(this);
+            this.EmissionSetter();
             m_bardWardAudio.SetActive(this.GetWardIsLoveOn());
 
             // if (this.m_areaMarker)
@@ -680,6 +688,7 @@ namespace WardIsLove.Util
 
         public void SetPermittedPlayers(List<KeyValuePair<long, string>> users)
         {
+            m_nview.ClaimOwnership();
             m_nview.GetZDO().Set("permitted", users.Count);
             for (int index = 0; index < users.Count; ++index)
             {

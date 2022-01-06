@@ -1,151 +1,262 @@
 ﻿using HarmonyLib;
+using WardIsLove.Extensions;
 using WardIsLove.Util;
 using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
+    [HarmonyPatch]
     internal class HoverTextPatches
     {
         [HarmonyPatch(typeof(Sign), nameof(Sign.GetHoverText))]
-        [HarmonyPrefix]
-        private static void SignGetHoverTextion(Sign __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string SignGetHoverTextion(string __result, Sign __instance)
         {
             if (!_wardEnabled.Value)
-                return;
+                return __result;
+            string hoverText = __result;
             string localize = !WardMonoscript.CheckAccess(__instance.transform.position, flash: false)
                 ? "\"" + __instance.GetText() + "\""
                 : "\"" + __instance.GetText() + "\"\n" +
                   Localization.instance.Localize(__instance.m_name +
                                                  "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_use");
-            __result = localize;
+            return localize;
         }
 
         [HarmonyPatch(typeof(ItemStand), nameof(ItemStand.GetHoverText))]
-        [HarmonyPrefix]
-        private static void ItemStandGetHoverText(ItemStand __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string ItemStandGetHoverText(string __result, ItemStand __instance)
         {
             if (!_wardEnabled.Value)
-                return;
+                return __result;
+            string hoverText = __result;
 
-            if (!Player.m_localPlayer)
-                __result = "";
+
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
-                __result = Localization.instance.Localize(__instance.m_name + "\n$piece_noaccess");
-            if (__instance.HaveAttachment())
             {
-                if (__instance.m_canBeRemoved)
-                    __result = Localization.instance.Localize(__instance.m_name + " ( " + __instance.m_currentItemName +
-                                                              " )\n[<color=yellow><b>$KEY_Use</b></color>] $piece_itemstand_take");
-                if (!(__instance.m_guardianPower != null) ||
-                    __instance.IsInvoking("DelayedPowerActivation") ||
-                    __instance.IsGuardianPowerActive(Player.m_localPlayer))
-                    __result = "";
-                __result = Localization.instance.Localize("<color=orange>" + __instance.m_guardianPower.m_name +
-                                                          "</color>\n" + __instance.m_guardianPower.GetTooltipString() +
-                                                          "\n\n[<color=yellow><b>$KEY_Use</b></color>] $guardianstone_hook_activate");
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetItemStandInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
             }
 
-            __result = __instance.m_autoAttach && __instance.m_supportedItems.Count == 1
-                ? Localization.instance.Localize(__instance.m_name +
-                                                 "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_itemstand_attach")
-                : Localization.instance.Localize(__instance.m_name +
-                                                 "\n[<color=yellow><b>1-8</b></color>] $piece_itemstand_attach");
+            return __result;
         }
 
         [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.GetHoverText))]
-        [HarmonyPrefix]
-        private static void Portal(TeleportWorld __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string PortalHoverText(string __result, TeleportWorld __instance)
         {
             if (!_wardEnabled.Value)
-                return;
+                return __result;
+            string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
-                __result = Localization.instance.Localize(__instance.gameObject.name + "\n$piece_noaccess");
-            __result = Localization.instance.Localize("$piece_portal $piece_portal_tag:\"" + __instance.GetText() +
-                                                      "\"  [" +
-                                                      (__instance.HaveTarget()
-                                                          ? "$piece_portal_connected"
-                                                          : "$piece_portal_unconnected") +
-                                                      "]\n[<color=yellow><b>$KEY_Use</b></color>] $piece_portal_settag");
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (!pa.GetNoTeleportOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
         }
 
         [HarmonyPatch(typeof(Door), nameof(Door.GetHoverText))]
         [HarmonyPostfix]
-        private static void DoorGetHoverTextion(Door __instance, Humanoid character, ref string __result)
+        private static string DoorGetHoverText(string __result, Door __instance)
         {
             if (!_wardEnabled.Value)
-                return;
-            if (!__instance.m_nview.IsValid())
-                __result = "";
+                return __result;
+            string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
-                __result = Localization.instance.Localize(__instance.m_name + "\n$piece_noaccess");
-            if (!__instance.CanInteract())
-                __result = Localization.instance.Localize(__instance.m_name);
-            __result = __instance.m_nview.GetZDO().GetInt("state") != 0
-                ? Localization.instance.Localize(__instance.m_name +
-                                                 "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_door_close")
-                : Localization.instance.Localize(__instance.m_name +
-                                                 "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_door_open");
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetDoorInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
         }
 
         [HarmonyPatch(typeof(Container), nameof(Container.GetHoverText))]
-        [HarmonyPrefix]
-        private static void ContainerGetHoverTextion(Container __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string ContainerGetHoverText(string __result, Container __instance)
         {
             if (!_wardEnabled.Value)
-                return;
-            __result =
-                __instance.m_checkGuardStone && !WardMonoscript.CheckAccess(__instance.transform.position, flash: false)
-                    ? Localization.instance.Localize(__instance.m_name + "\n$piece_noaccess")
-                    : Localization.instance.Localize(
-                        (__instance.m_inventory.NrOfItems() != 0
-                            ? __instance.m_name
-                            : __instance.m_name + " ( $piece_container_empty )") +
-                        "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_container_open");
+                return __result;
+            string hoverText = __result;
+            if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetChestInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
         }
 
 
         [HarmonyPatch(typeof(Pickable), nameof(Pickable.GetHoverText))]
-        [HarmonyPrefix]
-        private static void RPC_Pick(Pickable __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string PickableGetHoverText(string __result, Pickable __instance)
         {
             if (!_wardEnabled.Value)
-                return;
+                return __result;
+            string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
-                __result = Localization.instance.Localize(__instance.gameObject.name + "\n$piece_noaccess");
-            __result = __instance.m_picked
-                ? ""
-                : Localization.instance.Localize(__instance.GetHoverName() +
-                                                 "\n[<color=yellow><b>$KEY_Use</b></color>] $inventory_pickup");
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetPickableInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
         }
 
         [HarmonyPatch(typeof(ItemDrop), nameof(ItemDrop.GetHoverText))]
-        [HarmonyPrefix]
-        private static void Pickup(ItemDrop __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string IDHoverText(string __result, ItemDrop __instance)
         {
             if (!_wardEnabled.Value)
-                return;
+                return __result;
+            string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
-                __result = Localization.instance.Localize(__instance.gameObject.name + "\n$msg_privatezone");
-            string str = __instance.m_itemData.m_shared.m_name;
-            if (__instance.m_itemData.m_quality > 1)
-                str = str + "[" + __instance.m_itemData.m_quality + "] ";
-            if (__instance.m_itemData.m_stack > 1)
-                str = str + " x" + __instance.m_itemData.m_stack;
-            __result = Localization.instance.Localize(str +
-                                                      "\n[<color=yellow><b>$KEY_Use</b></color>] $inventory_pickup");
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetItemInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
         }
 
         [HarmonyPatch(typeof(ShipControlls), nameof(ShipControlls.GetHoverText))]
-        [HarmonyPrefix]
-        private static void Ship(ShipControlls __instance, ref string __result)
+        [HarmonyPostfix]
+        private static string ShipHoverText(string __result, ShipControlls __instance)
+        {
+            if (!_wardEnabled.Value)
+                return __result;
+            string hoverText = __result;
+            if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetShipInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
+        }
+
+
+        [HarmonyPatch(typeof(CraftingStation), nameof(CraftingStation.GetHoverText))]
+        [HarmonyPostfix]
+        private static string CraftingStation_HoverTextCheck(string __result, CraftingStation __instance)
+        {
+            if (!_wardEnabled.Value)
+                return __result;
+            string hoverText = __result;
+            if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetCraftingStationInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
+        }
+
+        [HarmonyPatch(typeof(Smelter), nameof(Smelter.UpdateHoverTexts))]
+        [HarmonyPostfix]
+        private static void SmeltingStation_HoverTextCheck(Smelter __instance)
         {
             if (!_wardEnabled.Value)
                 return;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
-                __result = Localization.instance.Localize(__instance.gameObject.name + "\n$msg_privatezone");
-            __result = !__instance.InUseDistance(Player.m_localPlayer)
-                ? Localization.instance.Localize("<color=grey>$piece_toofar</color>")
-                : Localization.instance.Localize("[<color=yellow><b>$KEY_Use</b></color>] " + __instance.m_hoverText);
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetSmelterInteractOn()) return;
+                if (__instance.m_addWoodSwitch)
+                    __instance.m_addWoodSwitch.m_hoverText =
+                        Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                if (__instance.m_emptyOreSwitch && __instance.m_spawnStack)
+                    __instance.m_emptyOreSwitch.m_hoverText =
+                        Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                if (__instance.m_addOreSwitch)
+                {
+                    __instance.m_addOreSwitch.m_hoverText =
+                        Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                    Switch addOreSwitch = __instance.m_addOreSwitch;
+                    addOreSwitch.m_hoverText =
+                        Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Beehive), nameof(Beehive.GetHoverText))]
+        [HarmonyPostfix]
+        private static string Beehive_HoverTextCheck(string __result, Beehive __instance)
+        {
+            if (!_wardEnabled.Value)
+                return __result;
+            string hoverText = __result;
+            if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetBeehiveInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
+                                                           "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
+        }
+
+        [HarmonyPatch(typeof(MapTable), nameof(MapTable.GetWriteHoverText))]
+        [HarmonyPostfix]
+        private static string MapTable_HoverTextCheck(string __result, MapTable __instance)
+        {
+            if (!_wardEnabled.Value)
+                return __result;
+            string hoverText = __result;
+            if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetMapTableInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
+        }
+
+        [HarmonyPatch(typeof(MapTable), nameof(MapTable.GetReadHoverText))]
+        [HarmonyPostfix]
+        private static string MapTable_HoverTextCheckOnRead(string __result, MapTable __instance)
+        {
+            if (!_wardEnabled.Value)
+                return __result;
+            string hoverText = __result;
+            if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+            {
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (pa.GetMapTableInteractOn()) return __result;
+                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=red>$piece_noaccess</color>");
+                return hoverText;
+            }
+
+            return __result;
         }
     }
 }

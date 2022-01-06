@@ -41,7 +41,7 @@ namespace WardIsLove.PatchClasses
                         PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
                         List<GameObject> gameObjectList = new();
                         foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                            _wardRange.Value*1.5f))
+                                     _wardRange.Value * 1.5f))
                         {
                             WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
                             if (!componentInParent || !(Vector3.Distance(localPlayer.transform.position,
@@ -65,7 +65,7 @@ namespace WardIsLove.PatchClasses
                             PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
                             List<GameObject> gameObjectList = new();
                             foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                _wardRange.Value*1.5f))
+                                         _wardRange.Value * 1.5f))
                             {
                                 WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
                                 if (!componentInParent || !(Vector3.Distance(localPlayer.transform.position,
@@ -97,7 +97,7 @@ namespace WardIsLove.PatchClasses
                             PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
                             List<GameObject> gameObjectList = new();
                             foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                _wardRange.Value*1.5f))
+                                         _wardRange.Value * 1.5f))
                             {
                                 WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
                                 bool flag = true;
@@ -107,9 +107,9 @@ namespace WardIsLove.PatchClasses
                                            componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
                                                .GetPlayerID());
                                 if (((!(bool)componentInParent ? 0 :
-                                    Vector3.Distance(localPlayer.transform.position,
-                                        componentInParent.transform.position) <=
-                                    (double)_wardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
+                                        Vector3.Distance(localPlayer.transform.position,
+                                            componentInParent.transform.position) <=
+                                        (double)_wardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
                                 componentInParent.SetEnabled(false);
                                 if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                                 gameObjectList.Add(componentInParent.gameObject);
@@ -127,7 +127,7 @@ namespace WardIsLove.PatchClasses
                             PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
                             List<GameObject> gameObjectList = new();
                             foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                _wardRange.Value*1.5f))
+                                         _wardRange.Value * 1.5f))
                             {
                                 WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
                                 bool flag = true;
@@ -137,9 +137,9 @@ namespace WardIsLove.PatchClasses
                                            componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
                                                .GetPlayerID());
                                 if (((!(bool)componentInParent ? 0 :
-                                    Vector3.Distance(localPlayer.transform.position,
-                                        componentInParent.transform.position) <=
-                                    (double)_wardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
+                                        Vector3.Distance(localPlayer.transform.position,
+                                            componentInParent.transform.position) <=
+                                        (double)_wardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
                                 componentInParent.SetEnabled(true);
                                 if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                                 gameObjectList.Add(componentInParent.gameObject);
@@ -157,7 +157,7 @@ namespace WardIsLove.PatchClasses
                             PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
                             List<GameObject> gameObjectList = new();
                             foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                _wardRange.Value*1.5f))
+                                         _wardRange.Value * 1.5f))
                             {
                                 WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
                                 bool flag = true;
@@ -167,9 +167,9 @@ namespace WardIsLove.PatchClasses
                                            componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
                                                .GetPlayerID());
                                 if (((!(bool)componentInParent ? 0 :
-                                    Vector3.Distance(localPlayer.transform.position,
-                                        componentInParent.transform.position) <=
-                                    (double)_wardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
+                                        Vector3.Distance(localPlayer.transform.position,
+                                            componentInParent.transform.position) <=
+                                        (double)_wardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
                                 componentInParent.FlashShield(true);
                                 if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                                 gameObjectList.Add(componentInParent.gameObject);

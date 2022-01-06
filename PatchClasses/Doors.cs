@@ -14,7 +14,6 @@ namespace WardIsLove.PatchClasses
         private static readonly Dictionary<int, Coroutine> coroutineClose = new();
 
         [HarmonyPatch(typeof(Door), nameof(Door.Interact))]
-        [HarmonyPostfix]
         private static void Postfix(ref Door __instance, ZNetView ___m_nview)
         {
             if (!_wardEnabled.Value) return;

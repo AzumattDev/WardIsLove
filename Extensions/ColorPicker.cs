@@ -303,7 +303,7 @@ public class ColorPicker : MonoBehaviour
     //HSV helper class
     private sealed class HSV
     {
-        public double H = 0, S = 1, V = 1;
+        public double H, S = 1, V = 1;
         public byte A = 255;
 
         public HSV()

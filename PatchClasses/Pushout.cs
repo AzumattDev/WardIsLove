@@ -1,5 +1,7 @@
-﻿using Guilds;
-using HarmonyLib;
+﻿using HarmonyLib;
+using UnityEngine;
+using WardIsLove.Extensions;
+using WardIsLove.Util;
 
 namespace WardIsLove.PatchClasses
 {
@@ -7,8 +9,7 @@ namespace WardIsLove.PatchClasses
     [HarmonyPatch]
     public class Pushout
     {
-
-        /*[HarmonyPatch(typeof(Player), nameof(Player.Update))]
+        [HarmonyPatch(typeof(Player), nameof(Player.Update))]
         [HarmonyPostfix]
         public static void Postfix(Player __instance)
         {
@@ -20,7 +21,8 @@ namespace WardIsLove.PatchClasses
                     if (!ward.IsEnabled()) continue;
                     if (!ward.GetPushoutPlayersOn() ||
                         ward.m_piece.GetCreator() == Game.instance.GetPlayerProfile().GetPlayerID() ||
-                        ward.IsPermitted(Game.instance.GetPlayerProfile().GetPlayerID())) continue;
+                        ward.IsPermitted(Game.instance.GetPlayerProfile().GetPlayerID()) ||
+                        !ward.m_bubble.activeSelf) continue;
                     Vector3 position = __instance.transform.position;
                     Vector3 dir = (position - ward.transform.position).normalized;
                     position += dir * 0.15f;
@@ -31,10 +33,10 @@ namespace WardIsLove.PatchClasses
             {
                 // ignored
             }
-        }*/
+        }
 
         /* Use character here instead of Humanoid to also pushout deer */
-        /*[HarmonyPatch(typeof(Character), nameof(Character.FixedUpdate))]
+        [HarmonyPatch(typeof(Character), nameof(Character.FixedUpdate))]
         [HarmonyPostfix]
         public static void Postfix(Character __instance)
         {
@@ -49,7 +51,7 @@ namespace WardIsLove.PatchClasses
                     if (!ward.IsEnabled()) continue;
                     if (__instance.IsPlayer() || __instance.IsTamed()) continue;
                     if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) continue;
-                    if (!ward.GetPushoutCreaturesOn()) continue;
+                    if (!ward.GetPushoutCreaturesOn() || !ward.m_bubble.activeSelf) continue;
                     Vector3 position = __instance.transform.position;
                     Vector3 dir = (position - ward.transform.position).normalized;
                     position += dir * 0.15f;
@@ -60,6 +62,6 @@ namespace WardIsLove.PatchClasses
             {
                 // ignored
             }
-        }*/
+        }
     }
 }
