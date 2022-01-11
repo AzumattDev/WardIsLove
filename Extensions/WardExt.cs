@@ -121,21 +121,21 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("healthBoost", WardIsLovePlugin._wardHealthBoostValue.Value);
-            return WardIsLovePlugin._wardHealthBoostValue.Value;
+                    .GetFloat("healthRegen", WardIsLovePlugin._wardPassiveHealthRegen.Value);
+            return WardIsLovePlugin._wardPassiveHealthRegen.Value;
         }
 
-        public static void SetHealthBoost(this WardMonoscript WardMonoscript, float healthBoostSliderVal)
+        public static void SetHealthBoost(this WardMonoscript WardMonoscript, float healthRegenSliderVal)
         {
-            WardMonoscript.m_nview.GetZDO().Set("healthBoost", healthBoostSliderVal);
+            WardMonoscript.m_nview.GetZDO().Set("healthRegen", healthRegenSliderVal);
         }
 
         public static float GetStaminaBoost(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("staminaBoost", WardIsLovePlugin._wardStaminaBoostValue.Value);
-            return WardIsLovePlugin._wardStaminaBoostValue.Value;
+                    .GetFloat("staminaBoost", WardIsLovePlugin._wardPassiveStaminaRegen.Value);
+            return WardIsLovePlugin._wardPassiveStaminaRegen.Value;
         }
 
         public static void SetStaminaBoost(this WardMonoscript WardMonoscript, float staminaBoostSliderVal)
@@ -456,7 +456,7 @@ namespace WardIsLove.Extensions
         {
             WardMonoscript.m_nview.GetZDO().Set("indestructList", indestructListVal);
         }
-        
+
         public static int GetCreatureDamageIncrease(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)

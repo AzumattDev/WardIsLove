@@ -9,6 +9,7 @@ namespace WardIsLove.Util.UI
     public class WardGUI
     {
         public static GameObject wardGUI;
+        public static GameObject wardGUINoAdmin;
         public static WardMonoscript interactedWard;
         public static Dropdown EffectAreaDropdown;
         public static Dropdown FeedbackDropdown;
@@ -18,14 +19,17 @@ namespace WardIsLove.Util.UI
 
         public static bool IsPanelVisible()
         {
-            return wardGUI && wardGUI.activeSelf;
+            return (wardGUI && wardGUI.activeSelf) || (wardGUINoAdmin && wardGUINoAdmin.activeSelf);
         }
 
         public static void Init()
         {
             AssetBundle wardMenuBundle = WardIsLovePlugin.GetAssetBundle("wardislove");
-            //AssetBundle wardMenuBundle2 = WardIsLovePlugin.GetAssetBundle("guildfabs");
+            GameObject go2 =
+                wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUINoAdmin.prefab");
             GameObject go = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUI.prefab");
+            WardIsLovePlugin.LightningVFX =
+                wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/wardlightningAOE.prefab");
             try
             {
                 WardIsLovePlugin.Thorward =
@@ -35,6 +39,8 @@ namespace WardIsLove.Util.UI
 
                 wardGUI = Object.Instantiate(go);
                 Object.DontDestroyOnLoad(wardGUI);
+                wardGUINoAdmin = Object.Instantiate(go2);
+                Object.DontDestroyOnLoad(wardGUINoAdmin);
                 FeedbackDropdown = wardGUI.transform
                     .Find("Canvas/UI/panel/Tabs/FeedbackPanel/FeedbackType/FeedbackTypeDropdown")
                     .GetComponent<Dropdown>();
@@ -59,6 +65,7 @@ namespace WardIsLove.Util.UI
 
             /////Here initialize UI (write the data you want to text, etc.
             wardGUI.SetActive(false);
+            wardGUINoAdmin.SetActive(false);
         }
 
 
@@ -85,16 +92,22 @@ namespace WardIsLove.Util.UI
         {
             ShowCursor(false);
             wardGUI.SetActive(false);
+            wardGUINoAdmin.SetActive(false);
         }
 
         public static void Show(WardMonoscript ward)
         {
-            ZNetView znet = ward.m_nview;
-            int accessMode = znet.GetZDO().GetInt("bubbleMode");
-
             SetInteractedPa(ward);
 
-            wardGUI.SetActive(true);
+            if (ward.m_piece.IsCreator() && !WardIsLovePlugin.Admin)
+            {
+                wardGUINoAdmin.SetActive(true);
+            }
+            else
+            {
+                wardGUI.SetActive(true);
+            }
+
             ShowCursor(true);
         }
 

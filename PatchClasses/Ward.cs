@@ -93,70 +93,30 @@ namespace WardIsLove.PatchClasses
         {
             [HarmonyPatch(typeof(Player), nameof(Player.RemovePiece))]
             [HarmonyPrefix]
-            private static bool Prefix(ref Player __instance)
+            private static bool PrefixRemovePiece(ref Player __instance)
             {
+                if (!_wardEnabled.Value)
+                    return true;
+                bool flag = false;
+
+
                 RaycastHit hitInfo;
-                if (Physics.Raycast(GameCamera.instance.transform.position, GameCamera.instance.transform.forward,
-                        out hitInfo, 50f, __instance.m_removeRayMask) &&
-                    Vector3.Distance(hitInfo.point, __instance.m_eye.position) <
-                    (double)__instance.m_maxPlaceDistance)
-                {
-                    Piece piece = hitInfo.collider.GetComponentInParent<Piece>();
-                    if (piece == null &&
-                        (bool)(Object)hitInfo.collider.GetComponent<Heightmap>())
-                        piece = TerrainModifier.FindClosestModifierPieceInRange(hitInfo.point, 2.5f);
-                    if ((bool)(Object)piece && piece.m_canBeRemoved)
-                    {
-                        if (Location.IsInsideNoBuildLocation(piece.transform.position))
-                        {
-                            __instance.Message(MessageHud.MessageType.Center, "$msg_nobuildzone");
-                            return false;
-                        }
+                if (!Physics.Raycast(GameCamera.instance.transform.position, GameCamera.instance.transform.forward,
+                        out hitInfo, 50f, __instance.m_removeRayMask) ||
+                    !(Vector3.Distance(hitInfo.point, __instance.m_eye.position) <
+                      (double)__instance.m_maxPlaceDistance)) return false;
+                Piece piece = hitInfo.collider.GetComponentInParent<Piece>();
+                if (piece == null && hitInfo.collider.GetComponent<Heightmap>())
+                    piece = TerrainModifier.FindClosestModifierPieceInRange(hitInfo.point, 2.5f);
+                if (!piece || !piece.m_canBeRemoved) return false;
+                if (!WardMonoscript.CheckInWardMonoscript(piece.transform.position) || CustomCheck.CheckAccess(
+                        Player.m_localPlayer.GetPlayerID(), piece.transform.position,
+                        flash: false)) return !flag;
 
-                        if (!WardMonoscript.CheckAccess(piece.transform.position))
-                        {
-                            __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
-                            return false;
-                        }
-
-                        if (!__instance.CheckCanRemovePiece(piece))
-                            return false;
-                        ZNetView component1 = piece.GetComponent<ZNetView>();
-                        if (component1 == null)
-                            return false;
-                        if (!piece.CanBeRemoved())
-                        {
-                            __instance.Message(MessageHud.MessageType.Center, "$msg_cantremovenow");
-                            return false;
-                        }
-
-                        WearNTear component2 = piece.GetComponent<WearNTear>();
-                        if ((bool)(Object)component2)
-                        {
-                            component2.Remove();
-                        }
-                        else
-                        {
-                            ZLog.Log("Removing non WNT object with hammer " + piece.name);
-                            component1.ClaimOwnership();
-                            piece.DropResources();
-                            piece.m_placeEffect.Create(piece.transform.position, piece.transform.rotation,
-                                piece.gameObject.transform);
-                            __instance.m_removeEffects.Create(piece.transform.position, Quaternion.identity);
-                            ZNetScene.instance.Destroy(piece.gameObject);
-                        }
-
-                        ItemDrop.ItemData rightItem = __instance.GetRightItem();
-                        if (rightItem != null)
-                        {
-                            __instance.FaceLookDirection();
-                            __instance.m_zanim.SetTrigger(rightItem.m_shared.m_attack.m_attackAnimation);
-                        }
-
-                        return true;
-                    }
-                }
-
+                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
+                        Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
+                        flash: false)) return !flag;
+                __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
                 return false;
             }
 
@@ -165,19 +125,10 @@ namespace WardIsLove.PatchClasses
             private static bool PlacePieceOverlapCheck(ref Player __instance, ref Piece piece)
             {
                 if (piece == null) return true;
-                if (!piece.GetComponent<WardMonoscript>()) return true;
-                WardMonoscript? wardPiece = piece.GetComponent<WardMonoscript>();
-                bool isInArea = false;
-                if (!WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, wardPiece.m_radius,
-                        true,
-                        true))
-                {
-                    isInArea = true;
-
-                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
-                }
-
-                return !isInArea;
+                if (WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, 0.0f, true, true))
+                    return true;
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
+                return false;
             }
 
             [HarmonyPatch(typeof(Player), nameof(Player.UpdatePlacementGhost))]

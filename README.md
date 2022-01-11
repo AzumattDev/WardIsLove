@@ -3,12 +3,20 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 `This mod is NOT backwards compatible with BetterWards.`
 > ## Features
 ### Everything listed below is a feature in the mod. The config values dictate the `GLOBAL` defaults for these values. Admins can change the individual options via the GUI per ward.
-* Easy to use GUI interface for admins to configure wards
+* Easy to use GUI interface for admins to configure wards (and owners, in a limited GUI interface, if server allows via config)
 * Enforced Config with server (besides client custom configs)
 * Built in readiness for our Guilds mod when it releases
 * Server version checking, must have mod & must be same version as server
+* Default wards removed, players cannot build it anymore. Any vanilla wards will be "off" by default.
 * Multiple ward models (including legacy BetterWards models)
 * Add players to the permitted list no matter where they are in the world. (As long as they are online)
+* Ward Limiting with VIP option for those *special* players that you want to allow more wards for (configured on the server and found in General section, thanks KG!)
+    - wardIsLoveData is where the ward limit information is stored. Found in BepInEx/config folder. Keyed to SteamIDs
+    - Ward "Charging" to deactivate ward after {x} in game days (configured on server)
+        - The default cost of the charge is 5 Thunderstones. All wards that expire and are not charged will turn off until charged once more. Leaving it vulnerable to attack or takeover.
+        - For reference. It's approximately 24 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
+            - This means that you either have ~5 days until initial expiration or 6.25 if the wiki is correct.
+            - The default expiration is 300 in-game days.
 * Configurable entry and exit messages.
 * Different levels of access to the ward.
 * The hotkey can be adjusted by the configuration file.
@@ -18,6 +26,8 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 * Different bubble modes
     * (Default) Enemy spawns will query the range to prevent spawning inside base
     * (No Monsters) Enemy monsters will not target players inside the ward's radius
+* Configurable bubble colors!
+* Pushout Creatures/Players. BUBBLE MUST BE ON! (If they are already inside your bubble, you deal with the consequences). This change also means that if the bubble is on, it blocks arrows and other projectiles.
 * Health/Stamina Boosts for all players inside ward
 * Show area marker for the ward
 * Indestructible structures can be defined for further custom config (inside ward) (FULL LIST IN CONFIG)
@@ -35,6 +45,7 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 * Configurable ward recipe to craft
 * Auto repair structures inside ward
 * No food drain inside ward
+  ... and much more! Give the mod a try!
 
 > ## Client Custom Config Options
 
@@ -119,6 +130,20 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
+> ### v2.3.0
+> - Logout & placement exploit fix
+> - Owner GUI with limited configuration options added. Found in config "Control GUI" section. `Must be allowed via server configurations! Off by default!`
+> - Health and Stamina Boost changed to Passive Health/Stamina regeneration.
+> - Auto Repair added back from Better Wards.
+> - Additional optimizations to the ward bubble shader. Reduced textures to half their current size, and some lighting fixes to improve performance.
+> ### v2.2.0
+> - Original pushout code re-added to prevent clipping through the bubble using doors and other things
+> - Added terrain checking
+> - Optional cost to charging. (If you set the cost value to 0, the item is not needed and can charge without cost.)
+> - Fix some issues with opting-in/out of the ward.
+> - Remove redundancies in code.
+> ### v2.0.1
+> Update ServerSync version to fix some syncing issues.
 > ### v2.0.0
 > `It is recommended that you delete your config files and localization file when upgrading to this version`
 > - Localization and default values fixed to match GUI properly.
@@ -133,7 +158,7 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 >     - The default expiration is 300 in-game days.
 > - Bubble color changes now saved and synced with clients
 > - Some hover text fixes
-> - Pushout Creatures/Players code changed to use collider and not code. BUBBLE MUST BE ON! I will find a way to make it to where it doesn't need to be in the next version. (If they are already inside your bubble, you deal with the consequences). This change also means that if the bubble is on, it blocks arrows and other projectiles.
+> - Pushout Creatures/Players code changed to use collider and not code. BUBBLE MUST BE ON! (If they are already inside your bubble, you deal with the consequences). This change also means that if the bubble is on, it blocks arrows and other projectiles.
 > - Default wards removed, players cannot build it anymore. Any vanilla wards will be "off" by default.
 > - When the bubble causes the ward to reach half health, the bubble turns off to allow raiding of bases. (Default ward health will be x5 of original. It's now set to 5000hp)
 > - Admin wards have a really long expire date (50k)

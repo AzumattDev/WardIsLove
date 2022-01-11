@@ -9,6 +9,7 @@ using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
 using WardIsLove.Extensions;
+using WardIsLove.PatchClasses;
 using WardIsLove.Util.UI;
 using Object = UnityEngine.Object;
 
@@ -92,6 +93,7 @@ namespace WardIsLove.Util
 
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
             /* TODO Get This working again next patch */
+            StartCoroutine(DelayRepairRoutine());
             //InvokeRepeating(nameof(DelayRepair), 0.0f, this.GetAutoRepairTextTime());
             m_nview.Register("ToggleEnabled", new Action<long, long>(RPC_ToggleEnabled));
             m_nview.Register("TogglePermitted", new Action<long, long, string>(RPC_TogglePermitted));
@@ -400,8 +402,10 @@ namespace WardIsLove.Util
                     }
                     else
                     {
-                        //if (m_piece.IsCreator() || WardIsLovePlugin.Admin) WardGUI.Show(this);
-                        if (WardIsLovePlugin.Admin) WardGUI.Show(this);
+                        if (WardIsLovePlugin.Admin || (m_piece.IsCreator() && WardIsLovePlugin._wardControl.Value))
+                        {
+                            WardGUI.Show(this);
+                        }
                     }
 
                     return false;
@@ -431,6 +435,7 @@ namespace WardIsLove.Util
                             m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
                             return true;
                         }
+
                         Player.m_localPlayer.GetInventory().RemoveItem(item.m_itemData.m_shared.m_name,
                             WardIsLovePlugin._chargeItemAmount.Value);
                         Player.m_localPlayer.ShowRemovedMessage(item.m_itemData,
@@ -525,10 +530,10 @@ namespace WardIsLove.Util
             }
         }
 
-        public void DelayRepair()
+        /*public void DelayRepair()
         {
             StartCoroutine(DelayRepairRoutine());
-        }
+        }*/
 
         IEnumerator DelayRepairRoutine()
         {
@@ -574,6 +579,51 @@ namespace WardIsLove.Util
             }
         }
 
+
+        /*IEnumerator DelayRepairRoutine()
+        {
+            while (true)
+            {
+                float time;
+                WardMonoscript? ward = null;
+                if (WardIsLovePlugin._wardEnabled != null && ZNetScene.instance && WardIsLovePlugin._wardEnabled.Value)
+                {
+                    List<WearNTear> allInstances = WearNTear.GetAllInstaces();
+                    if (allInstances.Count > 0)
+                    {
+                        foreach (WearNTear instance in allInstances)
+                        {
+                            ZNetView instanceField = instance.m_nview;
+                            if (instanceField == null ||
+                                !CheckInWardMonoscript(instance.transform.position))
+                                continue;
+                            ward = WardMonoscriptExt.GetWardMonoscript(instance.transform.position);
+                            if (!ward.GetAutoRepairOn() || !IsEnabled()) continue;
+                            float num1 = instanceField.GetZDO().GetFloat("health");
+                            if (!(num1 > 0.0) || !(num1 < (double)instance.m_health)) continue;
+                            float num2 = num1 + (float)(instance.m_health * (double)ward.GetAutoRepairAmount() / 100.0);
+                            if (num2 > (double)instance.m_health)
+                                num2 = instance.m_health;
+                            instanceField.GetZDO().Set("health", num2);
+                            instanceField.InvokeRPC(ZNetView.Everybody, "WNTHealthChanged", num2);
+                        }
+                    }
+                }
+
+                //float time = 0;
+                try
+                {
+                    time = ward.GetAutoRepairTextTime();
+                }
+                catch
+                {
+                    time = 5;
+                }
+
+                yield return new WaitForSecondsRealtime(time);
+            }
+        }*/
+
         public void AddUserList(StringBuilder text)
         {
             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
@@ -611,7 +661,7 @@ namespace WardIsLove.Util
 
             if (m_piece.IsCreator())
             {
-                if (WardIsLovePlugin.Admin)
+                if (WardIsLovePlugin._wardControl.Value || WardIsLovePlugin.Admin)
                 {
                     text.Append(Localization.instance.Localize(
                         "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
@@ -653,24 +703,29 @@ namespace WardIsLove.Util
         public bool IsPermitted(long playerID)
         {
             bool iIsPermitted = false;
-            WardIsLovePlugin.WardInteractBehaviorEnums accessMode = this.GetAccessMode();
-            foreach (KeyValuePair<long, string> permittedPlayer in GetPermittedPlayers()
-                         .Where(permittedPlayer => permittedPlayer.Key == playerID))
-                iIsPermitted = true;
-
-            if (WardIsLovePlugin.Admin && WardIsLovePlugin._adminAutoPerm.Value)
-                return true;
-            return accessMode switch
+            if (this.m_nview.IsValid())
             {
-                WardIsLovePlugin.WardInteractBehaviorEnums.Everyone => true,
-                /*case WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted ||
-                                                                            m_piece.IsCreator() || WardMonoscriptExt.InGuild():
-                    return true;*/
-                //WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted || m_piece.IsCreator() => true,
-                WardIsLovePlugin.WardInteractBehaviorEnums.Default when iIsPermitted || m_piece.IsCreator() => true,
-                WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.IsCreator() => true,
-                _ => false
-            };
+                WardIsLovePlugin.WardInteractBehaviorEnums accessMode = this.GetAccessMode();
+                foreach (KeyValuePair<long, string> permittedPlayer in GetPermittedPlayers()
+                             .Where(permittedPlayer => permittedPlayer.Key == playerID))
+                    iIsPermitted = true;
+
+                if (WardIsLovePlugin.Admin && WardIsLovePlugin._adminAutoPerm.Value)
+                    return true;
+                return accessMode switch
+                {
+                    WardIsLovePlugin.WardInteractBehaviorEnums.Everyone => true,
+                    /*case WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted ||
+                                                                                m_piece.IsCreator() || WardMonoscriptExt.InGuild():
+                        return true;*/
+                    //WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted || m_piece.IsCreator() => true,
+                    WardIsLovePlugin.WardInteractBehaviorEnums.Default when iIsPermitted || m_piece.IsCreator() => true,
+                    WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.IsCreator() => true,
+                    _ => false
+                };
+            }
+
+            return false;
         }
 
         public void AddPermitted(long playerID, string playerName)

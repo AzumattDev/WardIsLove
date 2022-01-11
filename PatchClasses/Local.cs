@@ -27,8 +27,8 @@ namespace WardIsLove.PatchClasses
             _ = LocalizeWord("wardmenu_bubbletoggle", "Toggle Bubble");
             _ = LocalizeWord("wardmenu_weatherdmg", "No Weather Damage");
             _ = LocalizeWord("wardmenu_wardradius", "Ward Radius");
-            _ = LocalizeWord("wardmenu_health", "Increase Health");
-            _ = LocalizeWord("wardmenu_stamina", "Increase Stamina");
+            _ = LocalizeWord("wardmenu_health", "Health Regen Amount");
+            _ = LocalizeWord("wardmenu_stamina", "Stamina Regen Amount");
             _ = LocalizeWord("wardmenu_autopickup", "Auto-Pickup");
             _ = LocalizeWord("wardmenu_autoclosedoors", "Auto Close Doors");
             _ = LocalizeWord("wardmenu_fireplaceunlimited", "Unlimited Fireplace Fuel");

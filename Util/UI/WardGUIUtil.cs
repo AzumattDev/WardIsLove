@@ -157,8 +157,8 @@ namespace WardIsLove.Util.UI
             m_structDamageReduction.value = 0;
             m_wardIsLove.isOn = false;
             m_autoRepairToggle.isOn = false;
-            //m_autoRepairAmount.value = 0;
-            //m_autoRepairTime.text = WardIsLovePlugin._autoRepairTime.Value.ToString();
+            m_autoRepairAmount.value = 0;
+            m_autoRepairTime.text = WardIsLovePlugin._autoRepairTime.Value.ToString();
             m_raidProtectionToggle.isOn = false;
             m_raidPlayersNeeded.text = WardIsLovePlugin._raidablePlayersNeeded.Value.ToString();
         }
@@ -171,6 +171,7 @@ namespace WardIsLove.Util.UI
         {
             WardGUI.ShowCursor(false);
             WardGUI.wardGUI.SetActive(false);
+            WardGUI.wardGUINoAdmin.SetActive(false);
         }
 
         public void PopWardGui()
@@ -219,8 +220,8 @@ namespace WardIsLove.Util.UI
             //m_indestructibleList.text = paArea.GetIndestructList();
             m_creatureDamageIncrease.value = paArea.GetCreatureDamageIncrease();
             m_structDamageReduction.value = paArea.GetStructDamageReduc();
-            //m_autoRepairToggle.isOn = paArea.GetAutoRepairOn();
-            //m_autoRepairAmount.value = paArea.GetAutoRepairAmount();
+            m_autoRepairToggle.isOn = paArea.GetAutoRepairOn();
+            m_autoRepairAmount.value = paArea.GetAutoRepairAmount();
             //m_autoRepairTime.text = paArea.GetAutoRepairTextTime().ToString();
             m_raidProtectionToggle.isOn = paArea.GetRaidProtectionOn();
             m_wardIsLove.isOn = paArea.GetWardIsLoveOn();

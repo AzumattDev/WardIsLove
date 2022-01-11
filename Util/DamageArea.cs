@@ -18,7 +18,7 @@ namespace WardIsLove.Util
 
         private void Awake()
         {
-            LightningStrikeVFX = ZNetScene.instance.GetPrefab("lightningAOE");
+            LightningStrikeVFX = ZNetScene.instance.GetPrefab("wardlightningAOE");
         }
 
         private void OnEnable()
@@ -99,18 +99,18 @@ namespace WardIsLove.Util
                     }
 
                     strikelocation = hum.transform;
-                    StartCoroutine(LightningStrike());
-                    /*Instantiate(LightningStrikeVFX, strikelocation.position, Quaternion.identity);
-                    hum.ApplyDamage(hitdata, true, false, HitData.DamageModifier.Weak);*/
+                    //StartCoroutine(LightningStrike());
+                    Instantiate(LightningStrikeVFX, strikelocation.position, Quaternion.identity);
+                    hum.ApplyDamage(hitdata, true, false, HitData.DamageModifier.Weak);
                 }
         }
 
-        private IEnumerator LightningStrike()
+        /*private IEnumerator LightningStrike()
         {
             //yield return null;
             Instantiate(LightningStrikeVFX, strikelocation, false);
             hum.ApplyDamage(hitdata, true, false, HitData.DamageModifier.Weak);
             yield return new WaitForSeconds(2.5f);
-        }
+        }*/
     }
 }

@@ -3,7 +3,10 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
+using WardIsLove.PatchClasses;
 using WardIsLove.Util.UI;
+using static WardIsLove.PatchClasses.PlayerHealthUpdatePatch;
+using static WardIsLove.PatchClasses.PlayerStaminaUpdatePatch;
 
 namespace WardIsLove.Util.Bubble
 {
@@ -11,6 +14,8 @@ namespace WardIsLove.Util.Bubble
     public class WardEntryDetector : MonoBehaviour
     {
         public WardMonoscript m_wardEntered;
+        private Coroutine? Heal;
+        private Coroutine? Stamina;
 
         private void OnTriggerEnter(Collider collider)
         {
@@ -25,6 +30,9 @@ namespace WardIsLove.Util.Bubble
             if (m_wardEntered.GetRaidProtectionOn())
                 OfflineStatus.CheckOfflineStatus(m_wardEntered);
 
+            Heal = StartCoroutine(DelayedHeal(component, m_wardEntered));
+            Stamina = StartCoroutine(DelayedStaminaRegen(component, m_wardEntered));
+
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Entered", component.GetPlayerID());
         }
 
@@ -36,6 +44,8 @@ namespace WardIsLove.Util.Bubble
             if (m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
                 Player.m_localPlayer.Message(MessageHud.MessageType.Center,
                     string.Format(m_wardEntered.GetWardExitNotifyMessage(), component.GetPlayerName()));
+            StopCoroutine(Heal);
+            StopCoroutine(Stamina);
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Exited", component.GetPlayerID());
         }
 

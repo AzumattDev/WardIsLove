@@ -65,6 +65,11 @@ namespace WardIsLove.Util.RPCShit
 
                     WardIsLovePlugin.WILLogger.LogInfo($"Local Play Detected setting Admin: {WardIsLovePlugin.Admin}");
                 }
+
+                if (ZRoutedRpc.instance == null || !ZNetScene.instance)
+                    return;
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestSync",
+                    new ZPackage());
             }
         }
     }
@@ -80,11 +85,12 @@ namespace WardIsLove.Util.RPCShit
         }
     }
 
-    [HarmonyPatch(typeof(Game), nameof(Game.Logout))]
-    [HarmonyPatch(typeof(ZNet), nameof(ZNet.Disconnect))]
-    [HarmonyPatch(typeof(ZNet), nameof(ZNet.RPC_Error))]
+    [HarmonyPatch]
     internal static class ClientResetPatches
     {
+        [HarmonyPatch(typeof(Game), nameof(Game.Logout))]
+        [HarmonyPatch(typeof(ZNet), nameof(ZNet.Disconnect))]
+        [HarmonyPatch(typeof(ZNet), nameof(ZNet.RPC_Error))]
         private static void Prefix()
         {
             if (!WardIsLovePlugin._wardEnabled.Value)
@@ -97,12 +103,10 @@ namespace WardIsLove.Util.RPCShit
         }
     }
 
-    [HarmonyPatch]
-    public class ClientRPC_Registrations
+    [HarmonyPatch(typeof(Game), nameof(Game.Start))]
+    static class ClientRPC_Registrations
     {
-        [HarmonyPatch(typeof(Game), nameof(Game.Start))]
-        [HarmonyPrefix]
-        public static void Start_Prefix()
+        static void Prefix(Game __instance)
         {
             if (ZNet.m_isServer) return;
             ZRoutedRpc.instance.Register("RequestTestConnection",
@@ -116,20 +120,5 @@ namespace WardIsLove.Util.RPCShit
             ZRoutedRpc.instance.Register("BadRequestMsg",
                 new Action<long, ZPackage>(ClientSystem.RPC_BadRequestMsg));
         }
-
-
-        [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
-        [HarmonyPrefix]
-        public static void Awake_Postfix()
-        {
-            if (ZRoutedRpc.instance == null || !ZNetScene.instance)
-                return;
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestSync", new ZPackage());
-            /*if (!WardIsLovePlugin.Admin)
-                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestAdminSync",
-                    new ZPackage());*/
-            //ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestCostConfigSync", (object)new ZPackage());
-        }
-        
     }
 }

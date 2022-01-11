@@ -53,7 +53,7 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
-        public const string version = "2.2.0";
+        public const string version = "2.3.0";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -69,6 +69,7 @@ namespace WardIsLove
         public static bool fInit = false;
         public static int EffectTick = 0;
         public static GameObject Thorward;
+        public static GameObject LightningVFX;
 
         private static Sprite icon;
         public static readonly ManualLogSource WILLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
@@ -107,13 +108,15 @@ namespace WardIsLove
 
             /* ANNOUNCEMENT IN CONFIGS */
             _announcement = config("Announcement", "Information about this config file", "",
-                "The values set in this config file are the GLOBAL defaults for each ward placed. Admins can change the individual ward configurations per ward",
+                "The values set in this config file are the GLOBAL defaults for each ward placed. Admins and owners (when allowed) can change the individual ward configurations per ward",
                 false);
             /* Charge */
             _chargeItem = config("Charge", "Charge Item", "Thunderstone",
                 "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
             _chargeItemAmount = config("Charge", "Charge Item Amount", 5,
                 "Amount of the Item needed to charge the ward. If you set this to 0, the item is not needed and can charge without cost.");
+            /* Control GUI */
+            _wardControl = config("Control GUI", "Ward Control", false, "Should ward owners have control of their ward via their own (limited) GUI interface?");
             /* General */
             _wardEnabled = config("General", "WardEnabled", true, "Enable WardIsLove Configurations");
             _showMarker = config("General", "ShowMarker", true,
@@ -204,18 +207,12 @@ namespace WardIsLove
             /* Ward Range */
             _wardRange = config<float>("WardRange", "WardRange", 20,
                 new ConfigDescription("Range of the ward", new AcceptableValueRange<float>(0.0f, 100f)));
-            /*Health Boost */
-            /*_wardHealthBoost = config("Health Boost", "WardHealthBoost", false,
-                "Whether or not you want to have a health boost inside a ward");*/
-            _wardHealthBoostValue = config<float>("Health Boost", "WardHealthBoostValue", 0,
-                "How much additional health you would like while inside a ward");
-            /*_wardPassiveHealthRegen = config("Health Boost", "WardPassiveHealthRegenValue", 0.5f,
-                "How much health you should regen passively inside a ward per second");*/
-            /* Stamina Boost */
-            /*_wardStaminaBoost = config("Stamina Boost", "WardStaminaBoost", false,
-                "Whether or not you want to have a stamina boost inside a ward");*/
-            _wardStaminaBoostValue = config<float>("Stamina Boost", "WardStaminaBoostValue", 0,
-                "How much additional stamina you would like while inside a ward");
+            /*Health Regen */
+            _wardPassiveHealthRegen = config("Health Regen", "WardPassiveHealthRegenValue", 0.5f,
+                "How much health you should regen passively inside a ward per second");
+            /* Stamina Regen */
+            _wardPassiveStaminaRegen = config("Stamina Regen", "WardPassiveStaminaRegenValue", 0.5f,
+                "How much stamina you should regen passively inside a ward per second");
             /* PvE */
             _wardPve = config("PvE", "WardPvE", false,
                 "Whether or not you want PvE enabled inside a ward by default.");
@@ -240,10 +237,10 @@ namespace WardIsLove
                     new AcceptableValueRange<float>(0.0f, 100f)));
             _noWeatherDmg = config("Structures", "NoWeatherDmg", true,
                 "No weather damage on structures inside wards");
-            /*_autoRepair = config("Structures", "AutoRepair", false, "Auto repair on structures inside wards");
-            _autoRepairTime = config("Structures", "AutoRepairTime", 60f, "Time between auto repair ticks");
+            _autoRepair = config("Structures", "AutoRepair", false, "Auto repair on structures inside wards");
+            _autoRepairTime = config("Structures", "AutoRepairTime", 3f, "Time between auto repair ticks");
             _autoRepairAmount = config<float>("Structures", "AutoRepairAmount", 20,
-                new ConfigDescription("Repair amount in percent", new AcceptableValueRange<float>(0.0f, 100f)));*/
+                new ConfigDescription("Repair amount in percent", new AcceptableValueRange<float>(0.0f, 100f)));
 
             /* RAID PROTECTION */
             _raidProtection = config("Raid Protection", "RaidProtection", true,
@@ -409,6 +406,7 @@ namespace WardIsLove
             {
                 if (__instance.m_prefabs is not { Count: > 0 }) return;
                 __instance.m_prefabs.Add(Thorward);
+                __instance.m_prefabs.Add(LightningVFX);
             }
         }
 
@@ -442,18 +440,16 @@ namespace WardIsLove
 
         public static ConfigEntry<bool>? _serverConfigLocked;
         public static ConfigEntry<bool>? _wardEnabled;
-
+        
+        public static ConfigEntry<bool>? _wardControl;
         public static ConfigEntry<string>? _chargeItem;
         public static ConfigEntry<int>? _chargeItemAmount;
         public static ConfigEntry<string>? _announcement;
         public static ConfigEntry<KeyCode>? _wardHotKey;
         public static ConfigEntry<bool>? _wardRangeEnabled;
         public static ConfigEntry<float>? _wardRange;
-        public static ConfigEntry<bool>? _wardHealthBoost;
-        public static ConfigEntry<float>? _wardHealthBoostValue;
         public static ConfigEntry<float>? _wardPassiveHealthRegen;
-        public static ConfigEntry<bool>? _wardStaminaBoost;
-        public static ConfigEntry<float>? _wardStaminaBoostValue;
+        public static ConfigEntry<float>? _wardPassiveStaminaRegen;
         public static ConfigEntry<bool>? _wardOnlyPerm;
         public static ConfigEntry<bool>? _wardNotPerm;
         public static ConfigEntry<bool>? _pvpNotPerm;
@@ -474,8 +470,6 @@ namespace WardIsLove
         public static ConfigEntry<bool>? _cookingUnlimited;
         public static ConfigEntry<bool>? _fireplaceUnlimited;
         public static ConfigEntry<string>? _fireSources;
-        public static ConfigEntry<bool>? _wardHeal;
-        public static ConfigEntry<int>? _wardHealAmount;
         public static ConfigEntry<bool>? _disablePickup;
         public static ConfigEntry<bool>? _pushoutPlayers;
         public static ConfigEntry<bool>? _pushoutCreatures;

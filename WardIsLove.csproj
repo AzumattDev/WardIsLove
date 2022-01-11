@@ -140,7 +140,7 @@
         <Compile Include="PatchClasses\Creatures.cs" />
         <Compile Include="PatchClasses\Doors.cs" />
         <Compile Include="PatchClasses\FireplaceUnlimited.cs" />
-        <Compile Include="PatchClasses\Health.cs" />
+        <Compile Include="PatchClasses\Passive.cs" />
         <Compile Include="PatchClasses\HoverTextPatches.cs" />
         <Compile Include="PatchClasses\Interaction_Patch.cs" />
         <Compile Include="PatchClasses\Local.cs" />
@@ -151,7 +151,6 @@
         <Compile Include="PatchClasses\PlaceWard.cs" />
         <Compile Include="PatchClasses\Pushout.cs" />
         <Compile Include="PatchClasses\PvP.cs" />
-        <Compile Include="PatchClasses\Stamina.cs" />
         <Compile Include="PatchClasses\TerrainChecking.cs" />
         <Compile Include="PatchClasses\Ward.cs" />
         <Compile Include="PatchClasses\WardLimiter.cs" />

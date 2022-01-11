@@ -15,7 +15,7 @@ namespace WardIsLove.PatchClasses
             public static bool Prefix(ref bool __result)
             {
                 __result = true;
-                return false;
+                return __result;
             }
         }
 
@@ -24,9 +24,8 @@ namespace WardIsLove.PatchClasses
         {
             private static void Postfix()
             {
-#if DEBUG
                 WILLogger.LogDebug("Patching Console Commands");
-#endif
+
 
                 /*if (!ValidServer || !Admin)
                     return;*/
