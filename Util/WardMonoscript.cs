@@ -93,8 +93,7 @@ namespace WardIsLove.Util
 
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
             /* TODO Get This working again next patch */
-            StartCoroutine(DelayRepairRoutine());
-            //InvokeRepeating(nameof(DelayRepair), 0.0f, this.GetAutoRepairTextTime());
+            //StartCoroutine(DelayRepairRoutine());
             m_nview.Register("ToggleEnabled", new Action<long, long>(RPC_ToggleEnabled));
             m_nview.Register("TogglePermitted", new Action<long, long, string>(RPC_TogglePermitted));
             m_nview.Register("FlashShield", RPC_FlashShield);
@@ -568,61 +567,16 @@ namespace WardIsLove.Util
                 //float time = 0;
                 try
                 {
-                    time = ward.GetAutoRepairTextTime();
+                    time = ward.GetAutoRepairTextTime() + 30;
                 }
                 catch
                 {
-                    time = 5;
+                    time = 30;
                 }
 
                 yield return new WaitForSecondsRealtime(time);
             }
         }
-
-
-        /*IEnumerator DelayRepairRoutine()
-        {
-            while (true)
-            {
-                float time;
-                WardMonoscript? ward = null;
-                if (WardIsLovePlugin._wardEnabled != null && ZNetScene.instance && WardIsLovePlugin._wardEnabled.Value)
-                {
-                    List<WearNTear> allInstances = WearNTear.GetAllInstaces();
-                    if (allInstances.Count > 0)
-                    {
-                        foreach (WearNTear instance in allInstances)
-                        {
-                            ZNetView instanceField = instance.m_nview;
-                            if (instanceField == null ||
-                                !CheckInWardMonoscript(instance.transform.position))
-                                continue;
-                            ward = WardMonoscriptExt.GetWardMonoscript(instance.transform.position);
-                            if (!ward.GetAutoRepairOn() || !IsEnabled()) continue;
-                            float num1 = instanceField.GetZDO().GetFloat("health");
-                            if (!(num1 > 0.0) || !(num1 < (double)instance.m_health)) continue;
-                            float num2 = num1 + (float)(instance.m_health * (double)ward.GetAutoRepairAmount() / 100.0);
-                            if (num2 > (double)instance.m_health)
-                                num2 = instance.m_health;
-                            instanceField.GetZDO().Set("health", num2);
-                            instanceField.InvokeRPC(ZNetView.Everybody, "WNTHealthChanged", num2);
-                        }
-                    }
-                }
-
-                //float time = 0;
-                try
-                {
-                    time = ward.GetAutoRepairTextTime();
-                }
-                catch
-                {
-                    time = 5;
-                }
-
-                yield return new WaitForSecondsRealtime(time);
-            }
-        }*/
 
         public void AddUserList(StringBuilder text)
         {

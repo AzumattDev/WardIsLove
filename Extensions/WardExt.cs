@@ -460,7 +460,7 @@ namespace WardIsLove.Extensions
         public static int GetCreatureDamageIncrease(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO().GetInt("creatureDmgeIncreaseAmount",
+                return WardMonoscript.m_nview.GetZDO().GetInt("CDamageIncreaseAmount",
                     WardIsLovePlugin._wardDamageIncrease.Value);
             return WardIsLovePlugin._wardDamageIncrease.Value;
         }
@@ -468,7 +468,7 @@ namespace WardIsLove.Extensions
         public static void SetCreatureDamageIncrease(this WardMonoscript WardMonoscript,
             float creatureDamageIncreaseAmountVal)
         {
-            WardMonoscript.m_nview.GetZDO().Set("creatureDmgeIncreaseAmount", creatureDamageIncreaseAmountVal);
+            WardMonoscript.m_nview.GetZDO().Set("CDamageIncreaseAmount", creatureDamageIncreaseAmountVal);
         }
 
         public static float GetStructDamageReduc(this WardMonoscript WardMonoscript)

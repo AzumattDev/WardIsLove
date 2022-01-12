@@ -183,6 +183,7 @@ namespace WardIsLove.PatchClasses
         {
             if (!_wardEnabled.Value)
                 return;
+            if (!Player.m_localPlayer) return;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);

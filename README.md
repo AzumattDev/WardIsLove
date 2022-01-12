@@ -93,7 +93,7 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 >
 > ### How long are the days in Valheim for the ward?
 >
-> Approximately 24 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
+> Approximately 20 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
 >
 > ### Where is the configuration file?
 >
@@ -130,6 +130,10 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
+> ### v2.3.1
+> - FPS Fixes
+> - Remove Autorepair until FPS performance can be increased.
+> - Pushout changes to be more performant. Now only runs when they cross into your ward. Teleporting in will not activate this code anymore. Allowing players to "trap" others inside their radius. (requested)
 > ### v2.3.0
 > - Logout & placement exploit fix
 > - Owner GUI with limited configuration options added. Found in config "Control GUI" section. `Must be allowed via server configurations! Off by default!`
@@ -153,8 +157,8 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
     >   - wardIsLoveData is where the ward limit information is stored. Found in BepInEx/config folder. Keyed to SteamIDs
 > - Added ward "Charging" to deactivate ward after {x} in game days (configured on server)
     >   - The default cost of the charge is 5 Thunderstones. All wards that expire and are not charged will turn off until charged once more. Leaving it vulnerable to attack or takeover.
->   - For reference. It's approximately 24 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
-      >     - This means that you either have ~5 days until initial expiration or 6.25 if the wiki is correct.
+>   - For reference. It's approximately 20 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
+      >     - This means that you either have 4.16 days until initial expiration or 6.25 if the wiki is correct.
 >     - The default expiration is 300 in-game days.
 > - Bubble color changes now saved and synced with clients
 > - Some hover text fixes

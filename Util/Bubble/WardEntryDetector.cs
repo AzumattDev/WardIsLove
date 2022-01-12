@@ -7,6 +7,7 @@ using WardIsLove.PatchClasses;
 using WardIsLove.Util.UI;
 using static WardIsLove.PatchClasses.PlayerHealthUpdatePatch;
 using static WardIsLove.PatchClasses.PlayerStaminaUpdatePatch;
+using static WardIsLove.PatchClasses.PushoutNonPermitted;
 
 namespace WardIsLove.Util.Bubble
 {
@@ -17,9 +18,28 @@ namespace WardIsLove.Util.Bubble
         private Coroutine? Heal;
         private Coroutine? Stamina;
 
+        /* Pushout Routines */
+        private Coroutine? PushoutPlayersRoutine;
+        private Coroutine? PushoutCreaturesRoutine;
+
         private void OnTriggerEnter(Collider collider)
         {
-            Player component = collider.GetComponent<Player>();
+            Player component = null;
+            Character component2 = null;
+            if (collider.GetComponent<Player>())
+            {
+                component = collider.GetComponent<Player>();
+            }
+            else if (collider.GetComponent<Character>())
+            {
+                component2 = collider.GetComponent<Character>();
+            }
+
+            if (component2 != null && Player.m_localPlayer != component2)
+            {
+                PushoutCreaturesRoutine = StartCoroutine(PushoutCreature(component2, m_wardEntered));
+            }
+
             if (component == null || Player.m_localPlayer != component)
                 return;
             if (m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
@@ -33,6 +53,9 @@ namespace WardIsLove.Util.Bubble
             Heal = StartCoroutine(DelayedHeal(component, m_wardEntered));
             Stamina = StartCoroutine(DelayedStaminaRegen(component, m_wardEntered));
 
+            PushoutPlayersRoutine = StartCoroutine(PushoutPlayer(component, m_wardEntered));
+
+
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Entered", component.GetPlayerID());
         }
 
@@ -44,8 +67,25 @@ namespace WardIsLove.Util.Bubble
             if (m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
                 Player.m_localPlayer.Message(MessageHud.MessageType.Center,
                     string.Format(m_wardEntered.GetWardExitNotifyMessage(), component.GetPlayerName()));
-            StopCoroutine(Heal);
-            StopCoroutine(Stamina);
+            if (Heal != null)
+            {
+                StopCoroutine(Heal);
+            }
+
+            if (Stamina != null)
+            {
+                StopCoroutine(Stamina);
+            }
+
+            if (PushoutPlayersRoutine != null)
+            {
+                StopCoroutine(PushoutPlayersRoutine);
+            }
+
+            if (PushoutCreaturesRoutine != null)
+            {
+                StopCoroutine(PushoutCreaturesRoutine);
+            }
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Exited", component.GetPlayerID());
         }
 
