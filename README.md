@@ -130,6 +130,12 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
+> ### v2.3.2
+> - Placement exploit fixed.
+> - Wards from non-permitted players can no longer overlap a ward they aren't permitted on.
+    >   - This also means they can not build above a ward they aren't permitted on.
+> - Yuleklapps (gift containers) are now ignored by the ward, as they are in vanilla
+> - Creature damage increase slider fixed.
 > ### v2.3.1
 > - FPS Fixes
 > - Remove Autorepair until FPS performance can be increased.
