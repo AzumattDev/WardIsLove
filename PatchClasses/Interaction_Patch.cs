@@ -98,13 +98,14 @@ namespace WardIsLove.PatchClasses
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
                     flash: false)) return !flag;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-            if (!pa.GetChestInteractOn())
+            if (pa.GetChestInteractOn()) return true;
+            if (__instance.m_piece.m_name.Contains("yuleklapp"))
             {
-                character.Message(MessageHud.MessageType.Center, "$msg_privatezone");
-                return false;
+                return true;
             }
 
-            return true;
+            character.Message(MessageHud.MessageType.Center, "$msg_privatezone");
+            return false;
         }
 
 

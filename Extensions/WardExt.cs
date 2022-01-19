@@ -457,10 +457,10 @@ namespace WardIsLove.Extensions
             WardMonoscript.m_nview.GetZDO().Set("indestructList", indestructListVal);
         }
 
-        public static int GetCreatureDamageIncrease(this WardMonoscript WardMonoscript)
+        public static float GetCreatureDamageIncrease(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO().GetInt("CDamageIncreaseAmount",
+                return WardMonoscript.m_nview.GetZDO().GetFloat("CreatDamageIncreaseAmount",
                     WardIsLovePlugin._wardDamageIncrease.Value);
             return WardIsLovePlugin._wardDamageIncrease.Value;
         }
@@ -468,7 +468,7 @@ namespace WardIsLove.Extensions
         public static void SetCreatureDamageIncrease(this WardMonoscript WardMonoscript,
             float creatureDamageIncreaseAmountVal)
         {
-            WardMonoscript.m_nview.GetZDO().Set("CDamageIncreaseAmount", creatureDamageIncreaseAmountVal);
+            WardMonoscript.m_nview.GetZDO().Set("CreatDamageIncreaseAmount", creatureDamageIncreaseAmountVal);
         }
 
         public static float GetStructDamageReduc(this WardMonoscript WardMonoscript)

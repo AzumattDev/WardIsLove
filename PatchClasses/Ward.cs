@@ -24,7 +24,6 @@ namespace WardIsLove.PatchClasses
         [HarmonyPatch(typeof(WardMonoscript), nameof(WardMonoscript.RPC_ToggleEnabled))]
         public class HarmonyPatch_RPC_ToggleEnabled
         {
-            // Rewrite of the original patch to allow permitted players to toggle the ward on and off. The original way that I did this prevented some users from "holding the interact key"s
             [HarmonyPrefix]
             public static bool RPC_ToggleEnabled(long uid, long playerID, WardMonoscript __instance)
             {
@@ -99,7 +98,6 @@ namespace WardIsLove.PatchClasses
                     return true;
                 bool flag = false;
 
-
                 RaycastHit hitInfo;
                 if (!Physics.Raycast(GameCamera.instance.transform.position, GameCamera.instance.transform.forward,
                         out hitInfo, 50f, __instance.m_removeRayMask) ||
@@ -109,15 +107,22 @@ namespace WardIsLove.PatchClasses
                 if (piece == null && hitInfo.collider.GetComponent<Heightmap>())
                     piece = TerrainModifier.FindClosestModifierPieceInRange(hitInfo.point, 2.5f);
                 if (!piece || !piece.m_canBeRemoved) return false;
-                if (!WardMonoscript.CheckInWardMonoscript(piece.transform.position) || CustomCheck.CheckAccess(
-                        Player.m_localPlayer.GetPlayerID(), piece.transform.position,
-                        flash: false)) return !flag;
 
-                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
-                        Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
-                        flash: false)) return !flag;
-                __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
-                return false;
+                /* For the piece */
+                if (!WardMonoscript.CheckAccess(piece.transform.position, flash: false, wardCheck: true))
+                {
+                    __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
+                    return flag;
+                }
+
+                /* For the player */
+                if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false, wardCheck: true))
+                {
+                    __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
+                    return flag;
+                }
+
+                return !flag;
             }
 
             [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
@@ -125,9 +130,11 @@ namespace WardIsLove.PatchClasses
             private static bool PlacePieceOverlapCheck(ref Player __instance, ref Piece piece)
             {
                 if (piece == null) return true;
-                if (WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, 0.0f, true, true))
-                    return true;
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
+                WardMonoscript component5 = piece.GetComponent<WardMonoscript>();
+                float radius = component5 ? component5.GetWardRadius() : 0.0f;
+                if (WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, radius, flash: false,
+                        wardCheck: true)) return true;
+                __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
                 return false;
             }
 
@@ -150,7 +157,7 @@ namespace WardIsLove.PatchClasses
                         __instance.m_placementStatus = Player.PlacementStatus.Valid;
 
                         WardMonoscript component5 = component1.GetComponent<WardMonoscript>();
-                        float radius = component5 ? component5.GetWardRadius() * 2 : 0.0f;
+                        float radius = component5 ? component5.GetWardRadius() : 0.0f;
                         bool wardCheck = component5 != null;
                         if (!WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, radius,
                                 flashGuardStone, wardCheck))
@@ -160,16 +167,6 @@ namespace WardIsLove.PatchClasses
                             __instance.m_placementStatus = Player.PlacementStatus.PrivateZone;
                         }
                     }
-
-                    else
-                    {
-                        if (__instance.m_placementMarkerInstance)
-                            __instance.m_placementMarkerInstance.SetActive(false);
-                        __instance.m_placementGhost.SetActive(false);
-                        __instance.m_placementStatus = Player.PlacementStatus.Invalid;
-                    }
-
-                    __instance.SetPlacementGhostValid(__instance.m_placementStatus == Player.PlacementStatus.Valid);
                 }
             }
         }

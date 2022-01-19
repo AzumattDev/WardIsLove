@@ -18,7 +18,6 @@ namespace WardIsLove.PatchClasses
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (!_wardEnabled.Value || !pa.GetFireplaceUnlimOn() || ___m_nview.GetZDO() == null ||
                     !___m_nview.IsOwner()) return;
-                //string[] array = _fireSources.Value.ToLower().Trim().Split(',').ToArray();
                 string[] array = pa.GetFireplaceList().ToLower().Trim().Split(',').ToArray();
                 foreach (string item in array)
                     if (__instance.gameObject.name.Contains(item))

@@ -92,7 +92,7 @@ namespace WardIsLove.Util
             m_allAreas.Add(this);
 
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
-            /* TODO Get This working again next patch */
+            /* TODO Get This working again */
             //StartCoroutine(DelayRepairRoutine());
             m_nview.Register("ToggleEnabled", new Action<long, long>(RPC_ToggleEnabled));
             m_nview.Register("TogglePermitted", new Action<long, long, string>(RPC_TogglePermitted));
@@ -232,15 +232,18 @@ namespace WardIsLove.Util
         {
             try
             {
-                try
+                if (ZNetScene.instance)
                 {
-                    m_bubble.gameObject.SetActive(false);
-                    ZNetScene.instance.Destroy(gameObject);
-                }
-                catch
-                {
-                    m_bubble.gameObject.SetActive(false);
-                    ZNetScene.instance.Destroy(gameObject);
+                    try
+                    {
+                        m_bubble.gameObject.SetActive(false);
+                        ZNetScene.instance.Destroy(gameObject);
+                    }
+                    catch
+                    {
+                        m_bubble.gameObject.SetActive(false);
+                        ZNetScene.instance.Destroy(gameObject);
+                    }
                 }
             }
             catch
@@ -626,7 +629,7 @@ namespace WardIsLove.Util
                 text.Append(Localization.instance.Localize(
                     $"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
                 text.Append(Localization.instance.Localize(
-                    $"\n$Radius • {this.GetWardRadius().ToString()}"));
+                    $"\nRadius • {this.GetWardRadius().ToString()}"));
             }
             else
             {
@@ -641,7 +644,7 @@ namespace WardIsLove.Util
                 text.Append(Localization.instance.Localize(
                     $"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
                 text.Append(Localization.instance.Localize(
-                    $"\n$Radius • {this.GetWardRadius().ToString()}"));
+                    $"\nRadius • {this.GetWardRadius().ToString()}"));
             }
         }
 

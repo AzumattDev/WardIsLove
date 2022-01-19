@@ -53,7 +53,7 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
-        public const string version = "2.3.1";
+        public const string version = "2.3.2";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -131,10 +131,10 @@ namespace WardIsLove
                 "Entry message for ward notifications");
             _wardNotifyMessageExit = config("General", "WardExitMessage", "{0} you have left the ward",
                 "Exit message for ward notifications");
-            _wardDamageIncrease = config("General", "WardDamageIncrease", 0,
+            _wardDamageIncrease = config("General", "WardDamageIncrease", 0f,
                 new ConfigDescription(
                     "Increase incoming damage to creatures in the game while they are inside the ward.\nValues are in percentage 0% - 100%.",
-                    new AcceptableValueRange<int>(0, 100)));
+                    new AcceptableValueRange<float>(0, 100)));
             _disablePickup = config("General", "EnablePickup", false,
                 "Allow non-permitted users to automatically picking up items inside a ward");
             _adminAutoPerm = config("General", "AdminAutoPerm", false,
@@ -488,7 +488,7 @@ namespace WardIsLove
         public static ConfigEntry<bool>? _maptableInteraction;
         public static ConfigEntry<bool>? _enableBubble;
         public static ConfigEntry<float>? _wardDamageReduction;
-        public static ConfigEntry<int>? _wardDamageIncrease;
+        public static ConfigEntry<float>? _wardDamageIncrease;
         public static ConfigEntry<int>? _raidablePlayersNeeded;
         public static ConfigEntry<bool>? _raidProtection;
         public static ConfigEntry<bool>? _autoRepair;
