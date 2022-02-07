@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
-using WardIsLove.PatchClasses;
 using WardIsLove.Util.UI;
 using static WardIsLove.PatchClasses.PlayerHealthUpdatePatch;
 using static WardIsLove.PatchClasses.PlayerStaminaUpdatePatch;

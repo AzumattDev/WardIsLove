@@ -89,11 +89,8 @@ namespace WardIsLove.Util.UI
 
         public void PopulatePlayerList()
         {
-            if (Player.m_localPlayer == null)
-                return;
+            if (!PlayerDropdown || !ZNet.instance || !Player.m_localPlayer) return;
             External_list.Clear();
-
-            //var playerList = Player.GetAllPlayers();
             List<ZNet.PlayerInfo>? playerList = ZNet.instance.GetPlayerList();
             int i = 0;
             foreach (ZNet.PlayerInfo playerInfo in playerList)

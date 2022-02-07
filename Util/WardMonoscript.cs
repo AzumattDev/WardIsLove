@@ -9,7 +9,6 @@ using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
 using WardIsLove.Extensions;
-using WardIsLove.PatchClasses;
 using WardIsLove.Util.UI;
 using Object = UnityEngine.Object;
 
@@ -676,8 +675,8 @@ namespace WardIsLove.Util
                                                                                 m_piece.IsCreator() || WardMonoscriptExt.InGuild():
                         return true;*/
                     //WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted || m_piece.IsCreator() => true,
-                    WardIsLovePlugin.WardInteractBehaviorEnums.Default when iIsPermitted || m_piece.IsCreator() => true,
-                    WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.IsCreator() => true,
+                    WardIsLovePlugin.WardInteractBehaviorEnums.Default when iIsPermitted || m_piece.GetCreator() == playerID => true,
+                    WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.GetCreator() == playerID => true,
                     _ => false
                 };
             }

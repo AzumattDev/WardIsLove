@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Util;
 using static WardIsLove.WardIsLovePlugin;
@@ -35,7 +34,7 @@ namespace WardIsLove.PatchClasses
             {
                 if (!__instance.name.ToLower().Contains("planned") &&
                     !__instance.m_name.ToLower().Contains("planned") ||
-                    !__instance.m_name.ToLower().Contains("better")) return;
+                    !__instance.m_name.ToLower().Contains("thorwar")) return;
                 Piece? planned = __instance.gameObject.GetComponent<Piece>();
                 foreach (Piece.Requirement? req in __instance.m_resources) req.m_recover = false;
             }
