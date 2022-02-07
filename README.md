@@ -130,6 +130,10 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
+> ### v2.3.3
+> - PressurePlate compat
+> - Update ServerSync
+> - Internal removal of unused directives
 > ### v2.3.2
 > - Placement exploit fixed.
 > - Wards from non-permitted players can no longer overlap a ward they aren't permitted on.
