@@ -10,7 +10,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static void Postfix_ChatAwake(ref Chat __instance)
         {
-            Chat.m_instance.AddString("[WardIsLove]",
+            __instance.AddString("[WardIsLove]",
                 !IsUpToDate
                     ? $"<color=\"yellow\">You are running on an older version of WardIsLove ({version}). " +
                       "A newer version has been released, Please visit the Thunderstore page to download the latest. https://valheim.thunderstore.io/package/Azumatt/WardIsLove/ </color>"
