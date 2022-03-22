@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -726,6 +726,10 @@ namespace WardIsLove.Extensions
                 return WardMonoscript.m_nview.GetZDO()
                     .GetInt("raidablePlayersNeeded", WardIsLovePlugin._raidablePlayersNeeded.Value);
             return WardIsLovePlugin._raidablePlayersNeeded.Value;
+        }
+        public static bool GetRaidShowMessage(this WardMonoscript WardMonoscript)
+        {
+            return WardIsLovePlugin._showraidableMessage.Value;
         }
 
         public static void SetRaidProtectionPlayerNeeded(this WardMonoscript WardMonoscript,
