@@ -727,10 +727,6 @@ namespace WardIsLove.Extensions
                     .GetInt("raidablePlayersNeeded", WardIsLovePlugin._raidablePlayersNeeded.Value);
             return WardIsLovePlugin._raidablePlayersNeeded.Value;
         }
-        public static bool GetRaidShowMessage(this WardMonoscript WardMonoscript)
-        {
-            return WardIsLovePlugin._showraidableMessage.Value;
-        }
 
         public static void SetRaidProtectionPlayerNeeded(this WardMonoscript WardMonoscript,
             int raidablePlayersNeededVal)
