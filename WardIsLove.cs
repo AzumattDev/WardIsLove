@@ -53,7 +53,7 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
-        public const string version = "2.3.3";
+        public const string version = "2.3.4";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -203,7 +203,7 @@ namespace WardIsLove
             _thorwardReco = config("ThorWard", "ItemRecovery ThorWard", "true,true,true,true",
                 "Should the item be recoverable or not?\nGoes in order from left to right");
             _thorwardItemAmou = config("ThorWard", "ItemAmounts ThorWard", "15,30,1,1",
-                "Amount of each item required to make the Green Ward\nGoes in order from left to right");
+                "Amount of each item required to make the Thor Ward\nGoes in order from left to right");
             /* Ward Range */
             _wardRange = config<float>("WardRange", "WardRange", 20,
                 new ConfigDescription("Range of the ward", new AcceptableValueRange<float>(0.0f, 100f)));
@@ -237,10 +237,10 @@ namespace WardIsLove
                     new AcceptableValueRange<float>(0.0f, 100f)));
             _noWeatherDmg = config("Structures", "NoWeatherDmg", true,
                 "No weather damage on structures inside wards");
-            _autoRepair = config("Structures", "AutoRepair", false, "Auto repair on structures inside wards");
-            _autoRepairTime = config("Structures", "AutoRepairTime", 3f, "Time between auto repair ticks");
-            _autoRepairAmount = config<float>("Structures", "AutoRepairAmount", 20,
-                new ConfigDescription("Repair amount in percent", new AcceptableValueRange<float>(0.0f, 100f)));
+            // _autoRepair = config("Structures", "AutoRepair", false, "Auto repair on structures inside wards");
+            // _autoRepairTime = config("Structures", "AutoRepairTime", 3f, "Time between auto repair ticks");
+            // _autoRepairAmount = config<float>("Structures", "AutoRepairAmount", 20,
+            //     new ConfigDescription("Repair amount in percent", new AcceptableValueRange<float>(0.0f, 100f)));
 
             /* RAID PROTECTION */
             _raidProtection = config("Raid Protection", "RaidProtection", true,
