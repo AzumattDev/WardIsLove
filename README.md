@@ -1,4 +1,4 @@
-Another dedicated ward mod brought to you by the Author of BetterWards. Based around the idea that wards should be individually configurable. Managed with a simple GUI interface for admins.
+Another dedicated ward mod brought to you by the Author of BetterWards. Based around the idea that wards should be individually configurable. Managed with a simple GUI interface for admins. -WMVersion
 
 `This mod is NOT backwards compatible with BetterWards.`
 > ## Features
