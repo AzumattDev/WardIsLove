@@ -247,6 +247,8 @@ namespace WardIsLove
                 "Should offline raid protection be turned on?\nPrevents non permitted players from damaging your base if inside your ward");
             _raidablePlayersNeeded = config("Raid Protection", "RaidablePlayersNeeded", 2,
                 "Minimum number of players required to be online for their warded area to be raided");
+            _showraidableMessage = config("Raid Protection", "RaidableMessageShow", true,
+                "Display Raid message if not raidable", false);
 
 
             localizationFile =
@@ -491,6 +493,7 @@ namespace WardIsLove
         public static ConfigEntry<float>? _wardDamageIncrease;
         public static ConfigEntry<int>? _raidablePlayersNeeded;
         public static ConfigEntry<bool>? _raidProtection;
+        public static ConfigEntry<bool>? _showraidableMessage;
         public static ConfigEntry<bool>? _autoRepair;
         public static ConfigEntry<float>? _autoRepairTime;
         public static ConfigEntry<float>? _autoRepairAmount;
