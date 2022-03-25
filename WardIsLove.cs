@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -442,7 +442,7 @@ namespace WardIsLove
 
         public static ConfigEntry<bool>? _serverConfigLocked;
         public static ConfigEntry<bool>? _wardEnabled;
-        
+
         public static ConfigEntry<bool>? _wardControl;
         public static ConfigEntry<string>? _chargeItem;
         public static ConfigEntry<int>? _chargeItemAmount;

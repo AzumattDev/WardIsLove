@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using WardIsLove.Extensions;
 
@@ -31,7 +31,7 @@ namespace WardIsLove.Util
                     flag = raidProtectionPlayerNeeded <= 1;
                     return flag;
                 }
-                    
+
                 /* If owner is online and people from the permitted list are online, compare raidable count */
                 case > 0 when stringList.Contains(ward.GetCreatorName()):
                 {
