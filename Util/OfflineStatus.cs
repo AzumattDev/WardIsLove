@@ -60,7 +60,7 @@ namespace WardIsLove.Util
             switch (flag)
             {
                 case false:
-                    bool showmessage = ward.GetRaidShowMessage();
+                    bool showmessage = WardIsLovePlugin._showraidableMessage.Value;
                     if (showmessage)
                     {
                         if (stringList.Contains(ward.GetCreatorName()))
