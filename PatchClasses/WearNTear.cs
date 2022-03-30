@@ -39,9 +39,13 @@ namespace WardIsLove.PatchClasses
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || !_wardEnabled.Value)
                     return shouldDamage;
                 WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!OfflineStatus.CheckOfflineStatus(paa) && paa.GetRaidProtectionOn())
+                if (paa.GetRaidProtectionOn())
                 {
-                    shouldDamage = false;
+                    if (!OfflineStatus.CheckOfflineStatus(paa))
+                    {
+                        shouldDamage = false;
+                    }
+
                     return shouldDamage;
                 }
 
@@ -76,10 +80,13 @@ namespace WardIsLove.PatchClasses
                     _wardEnabled.Value)
                 {
                     WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                    if (!OfflineStatus.CheckOfflineStatus(paa) && paa.GetRaidProtectionOn())
+                    if (paa.GetRaidProtectionOn())
                     {
-                        hit.ApplyModifier(0);
-                        return false;
+                        if (!OfflineStatus.CheckOfflineStatus(paa))
+                        {
+                            hit.ApplyModifier(0);
+                            return false;
+                        }
                     }
                 }
 
