@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -727,7 +727,6 @@ namespace WardIsLove.Extensions
                     .GetInt("raidablePlayersNeeded", WardIsLovePlugin._raidablePlayersNeeded.Value);
             return WardIsLovePlugin._raidablePlayersNeeded.Value;
         }
-
         public static void SetRaidProtectionPlayerNeeded(this WardMonoscript WardMonoscript,
             int raidablePlayersNeededVal)
         {

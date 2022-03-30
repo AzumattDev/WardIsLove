@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using WardIsLove.Extensions;
 
@@ -31,7 +31,7 @@ namespace WardIsLove.Util
                     flag = raidProtectionPlayerNeeded <= 1;
                     return flag;
                 }
-                    
+
                 /* If owner is online and people from the permitted list are online, compare raidable count */
                 case > 0 when stringList.Contains(ward.GetCreatorName()):
                 {
@@ -60,23 +60,27 @@ namespace WardIsLove.Util
             switch (flag)
             {
                 case false:
-                    if (stringList.Contains(ward.GetCreatorName()))
+                    bool showmessage = WardIsLovePlugin._showraidableMessage.Value;
+                    if (showmessage)
                     {
-                        Chat.m_instance.AddString("[WardIsLove]",
-                            $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline + 1}, NEEDED: {raidProtectionPlayerNeeded}</color>",
-                            Talker.Type.Normal);
-                        Chat.m_instance.AddString("[WardIsLove]",
-                            "<color=\"red\">All structures inside the ward are indestructible</color>",
-                            Talker.Type.Normal);
-                    }
-                    else
-                    {
-                        Chat.m_instance.AddString("[WardIsLove]",
-                            $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline}, NEEDED: {raidProtectionPlayerNeeded}</color>",
-                            Talker.Type.Normal);
-                        Chat.m_instance.AddString("[WardIsLove]",
-                            "<color=\"red\">All structures inside the ward are indestructible</color>",
-                            Talker.Type.Normal);
+                        if (stringList.Contains(ward.GetCreatorName()))
+                        {
+                            Chat.m_instance.AddString("[WardIsLove]",
+                                $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline + 1}, NEEDED: {raidProtectionPlayerNeeded}</color>",
+                                Talker.Type.Normal);
+                            Chat.m_instance.AddString("[WardIsLove]",
+                                "<color=\"red\">All structures inside the ward are indestructible</color>",
+                                Talker.Type.Normal);
+                        }
+                        else
+                        {
+                            Chat.m_instance.AddString("[WardIsLove]",
+                                $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline}, NEEDED: {raidProtectionPlayerNeeded}</color>",
+                                Talker.Type.Normal);
+                            Chat.m_instance.AddString("[WardIsLove]",
+                                "<color=\"red\">All structures inside the ward are indestructible</color>",
+                                Talker.Type.Normal);
+                        }
                     }
 
                     break;
