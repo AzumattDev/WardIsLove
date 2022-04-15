@@ -110,6 +110,12 @@ namespace WardIsLove
             _announcement = config("Announcement", "Information about this config file", "",
                 "The values set in this config file are the GLOBAL defaults for each ward placed. Admins and owners (when allowed) can change the individual ward configurations per ward",
                 false);
+            /* Streamer Mode */
+            _streamerMode = config("UI", "StreamerMode", false,
+                "Prevent the display of steam hover text for admins. SteamID and SteamName will be hidden for all users.", false);
+            _disableGUI = config("UI", "DisableGUI", false,
+                "Prevent the GUI option from being available, even in SinglePlayer - Gratak special request. Also disables the hover text display.");
+            
             /* Charge */
             _chargeItem = config("Charge", "Charge Item", "Thunderstone",
                 "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
@@ -175,9 +181,6 @@ namespace WardIsLove
                 "Allow non-permitted users to interact with ships inside a ward");
             _noFoodDrain = config("General", "NoFoodDrain", false,
                 "Prevent food loss inside ward for permitted players");
-            
-            _disableGUI = config("GUI", "DisableGUI", false,
-                "Prevent the GUI option from being available, even in SinglePlayer - Gratak special request.");
             /*_wardDamageAmount = config("General", "WardDamageAmount", 0f,
                 new ConfigDescription(
                     "Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are in percentage 0% - XXXX%.",
@@ -446,6 +449,7 @@ namespace WardIsLove
         public static ConfigEntry<bool>? _serverConfigLocked;
         public static ConfigEntry<bool>? _wardEnabled;
 
+        public static ConfigEntry<bool>? _streamerMode;
         public static ConfigEntry<bool>? _wardControl;
         public static ConfigEntry<string>? _chargeItem;
         public static ConfigEntry<int>? _chargeItemAmount;

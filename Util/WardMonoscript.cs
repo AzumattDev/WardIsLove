@@ -599,7 +599,7 @@ namespace WardIsLove.Util
 
         public void AdminAppend(StringBuilder text)
         {
-            if (WardIsLovePlugin.Admin)
+            if (WardIsLovePlugin.Admin && !WardIsLovePlugin._streamerMode.Value)
             {
                 _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName() +
                                 " <color=orange><b>[Steam Info: " +
