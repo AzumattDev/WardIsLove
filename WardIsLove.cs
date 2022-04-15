@@ -53,7 +53,7 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
-        public const string version = "2.3.6";
+        public const string version = "2.3.7";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
