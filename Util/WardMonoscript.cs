@@ -403,9 +403,12 @@ namespace WardIsLove.Util
                     }
                     else
                     {
-                        if (WardIsLovePlugin.Admin || (m_piece.IsCreator() && WardIsLovePlugin._wardControl.Value))
+                        if (!WardIsLovePlugin._disableGUI.Value)
                         {
-                            WardGUI.Show(this);
+                            if (WardIsLovePlugin.Admin || (m_piece.IsCreator() && WardIsLovePlugin._wardControl.Value))
+                            {
+                                WardGUI.Show(this);
+                            }
                         }
                     }
 
@@ -632,7 +635,7 @@ namespace WardIsLove.Util
             }
             else
             {
-                if (WardIsLovePlugin.Admin)
+                if (WardIsLovePlugin.Admin && !WardIsLovePlugin._disableGUI.Value)
                 {
                     text.Append(Localization.instance.Localize(
                         "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));

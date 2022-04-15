@@ -20,12 +20,22 @@ namespace WardIsLove.PatchClasses
             try
             {
                 ward = pieceComp.gameObject.GetComponent<WardMonoscript>();
-                if (ward) ward.Setup(Player.GetPlayer(creatorLong).GetPlayerName());
+                if (ward)
+                {
+                    ward.Setup(Player.GetPlayer(creatorLong).GetPlayerName());
+                }
             }
             catch
             {
                 // ignored
             }
+        }
+        
+        [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
+        [HarmonyPostfix]
+        private static void WardCreatorNameUpdates(Player __instance)
+        {
+
         }
 
         // Alter damage to structure inside of ward

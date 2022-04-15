@@ -53,7 +53,7 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
-        public const string version = "2.3.5";
+        public const string version = "2.3.6";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -175,6 +175,9 @@ namespace WardIsLove
                 "Allow non-permitted users to interact with ships inside a ward");
             _noFoodDrain = config("General", "NoFoodDrain", false,
                 "Prevent food loss inside ward for permitted players");
+            
+            _disableGUI = config("GUI", "DisableGUI", false,
+                "Prevent the GUI option from being available, even in SinglePlayer - Gratak special request.");
             /*_wardDamageAmount = config("General", "WardDamageAmount", 0f,
                 new ConfigDescription(
                     "Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are in percentage 0% - XXXX%.",
@@ -510,6 +513,7 @@ namespace WardIsLove
         private static ConfigEntry<int>? MaxWardCountVIPConfig;
         public static ConfigEntry<int>? MaxDaysDifferenceConfig;
         public static ConfigEntry<string>? VIPplayersListConfig;
+        public static ConfigEntry<bool>? _disableGUI;
 
 
         private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description,
