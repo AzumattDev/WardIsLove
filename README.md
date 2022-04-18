@@ -1,7 +1,10 @@
 Another dedicated ward mod brought to you by the Author of BetterWards. Based around the idea that wards should be individually configurable. Managed with a simple GUI interface for admins.
 
 `This mod is NOT backwards compatible with BetterWards.`
-`This mod uses ServerSync, if installed on the server and the config is set to be forced, it will sync all configs to client`
+
+`This mod uses ServerSync, if installed on the server and the config is set to be forced, it will sync all configs to clients.`
+
+`This mod uses a FileWatcher. If the file on the server is changed, upon saving the file, the configurations are sent to all clients.`
 
 > ## Features
 ### Everything listed below is a feature in the mod. The config values dictate the `GLOBAL` defaults for these values. Admins can change the individual options via the GUI per ward.
@@ -66,9 +69,9 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 
 #### Windows (Steam)
 1. Locate your game folder manually or start Steam client and :
-   a. Right click the Valheim game in your steam library
-   b. "Go to Manage" -> "Browse local files"
-   c. Steam should open your game folder
+   1. Right click the Valheim game in your steam library
+   2. "Go to Manage" -> "Browse local files"
+   3. Steam should open your game folder
 2. Extract the contents of the archive. Put the DLL into BepInEx\plugins the other files are needed for the thunderstore upload and can be ignored.
 3. Locate azumatt.WardIsLove.cfg under BepInEx\config and configure the mod to your needs
 
@@ -76,9 +79,9 @@ Another dedicated ward mod brought to you by the Author of BetterWards. Based ar
 
 `﻿Must be installed on both the client and the server for syncing to work properly.`
 1. Locate your main folder manually and :
-   a. Extract the contents of the archive into BepInEx\plugins.
-   b. Launch your game at least once to generate the config file needed if you haven't already done so.
-   c. Locate azumatt.WardIsLove.cfg under BepInEx\config on your machine and configure the mod to your needs
+   1. Extract the contents of the archive into BepInEx\plugins.
+   2. Launch your game at least once to generate the config file needed if you haven't already done so.
+   3. Locate azumatt.WardIsLove.cfg under BepInEx\config on your machine and configure the mod to your needs
 2. Reboot your server. All clients will now sync to the server's config file even if theirs differs. Config Manager mod changes will only change the client config, not what the server is enforcing.
 
 
@@ -132,6 +135,12 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
+> ### v2.3.8
+- Fix ongoing/random dropdown population issue.
+- Fix issue with carts, ships, tames with saddles, etc not making it into bubbles.
+- Fix Weather Damage Patch
+> ### v2.3.7
+> - Streamer special request. Prevent steam information from showing for admins. Client config option.
 > ### v2.3.6
 > - Gratak special request. Prevent GUI opening and option showing on hover even in singleplayer.
 > ### v2.3.5
@@ -176,9 +185,9 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
     >   - wardIsLoveData is where the ward limit information is stored. Found in BepInEx/config folder. Keyed to SteamIDs
 > - Added ward "Charging" to deactivate ward after {x} in game days (configured on server)
     >   - The default cost of the charge is 5 Thunderstones. All wards that expire and are not charged will turn off until charged once more. Leaving it vulnerable to attack or takeover.
->   - For reference. It's approximately 20 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
-      >     - This means that you either have 4.16 days until initial expiration or 6.25 if the wiki is correct.
->     - The default expiration is 300 in-game days.
+    >   - For reference. It's approximately 20 minutes for a full day cycle. Though this wiki says otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
+          >     - This means that you either have 4.16 days until initial expiration or 6.25 if the wiki is correct.
+          >     - The default expiration is 300 in-game days.
 > - Bubble color changes now saved and synced with clients
 > - Some hover text fixes
 > - Pushout Creatures/Players code changed to use collider and not code. BUBBLE MUST BE ON! (If they are already inside your bubble, you deal with the consequences). This change also means that if the bubble is on, it blocks arrows and other projectiles.

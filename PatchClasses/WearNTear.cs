@@ -112,7 +112,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.HaveRoof))]
         public static class WILDisableWeatherDamagePatch
         {
-            private static void Prefix(WearNTear __instance, ref bool __result)
+            private static void Postfix(WearNTear __instance, ref bool __result)
             {
                 /*if (!_wardEnabled.Value || !_noWeatherDmg.Value)
                     return;
@@ -121,7 +121,7 @@ namespace WardIsLove.PatchClasses
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (!_wardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null ||
                     !__instance.m_nview.IsOwner()) return;
-                __result = false;
+                __result = true;
             }
         }
     }

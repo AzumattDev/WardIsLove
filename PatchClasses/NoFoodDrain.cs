@@ -22,7 +22,7 @@ namespace WardIsLove.PatchClasses
                         flash: false)) continue;
                 if (!(__instance.m_foodUpdateTimer + dt >= 1) && !forceUpdate) continue;
                 foreach (Player.Food food in __instance.m_foods) ++food.m_time;
-                break;
+                break;  // Added break to prevent food drain timer constant increase for each ward you are inside of.
             }
         }
     }

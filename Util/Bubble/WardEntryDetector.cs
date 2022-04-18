@@ -128,6 +128,25 @@ namespace WardIsLove.Util.Bubble
 
         private void OnCollisionEnter(Collision collision)
         {
+            if (ward.GetBubbleOn())
+            {
+                if (collision.collider.transform.root.gameObject.name.ToLower().Contains("ship") ||
+                    collision.collider.transform.root.gameObject.name.ToLower().Contains("karve") ||
+                    collision.collider.transform.root.gameObject.name.ToLower().Contains("raft") ||
+                    collision.collider.transform.root.gameObject.name.ToLower().Contains("cart") ||
+                    collision.collider.transform.root.gameObject.name.ToLower().Contains("saddle"))
+                {
+                    Physics.IgnoreCollision(collision.collider, COL, true);
+                    Collider[]? colliders =
+                        collision.collider.transform.root.gameObject.GetComponentsInChildren<Collider>();
+                    foreach (Collider collider in colliders)
+                    {
+                        Physics.IgnoreCollision(collider, COL, true); // Have to do this, or it glitches for ships.
+                    }
+                    return;
+                }
+            }
+
             if (!ward.GetPushoutPlayersOn() && collision.collider == Player.m_localPlayer?.m_collider)
             {
                 Physics.IgnoreCollision(collision.collider, COL, true);
