@@ -184,7 +184,7 @@ public class GradientPicker : MonoBehaviour
             g[i] = modifiedGradient.Evaluate(i / (float)g.Length);
         }
 
-        Texture2D tex = new Texture2D(g.Length, 1)
+        Texture2D tex = new(g.Length, 1)
         {
             wrapMode = TextureWrapMode.Clamp,
             filterMode = FilterMode.Bilinear

@@ -90,35 +90,19 @@ namespace WardIsLove.Util.UI
         public void PopulatePlayerList()
         {
             if (!PlayerDropdown || !ZNet.instance || !Player.m_localPlayer) return;
-            External_list.Clear();
-            List<ZNet.PlayerInfo>? playerList = ZNet.instance.GetPlayerList();
-            int i = 0;
-            foreach (ZNet.PlayerInfo playerInfo in playerList)
-                if (playerInfo.m_name != "Human")
+            
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "DropdownListRequest",
+                new ZPackage());
+            
+            if (External_list.Count > 0)
+            {
+                PlayerDropdown.ClearOptions();
+                foreach (KeyValuePair<long, DropdownData> player in External_list)
                 {
-                    External_list.Add(i,
-                        new DropdownData
-                        {
-                            id = ZDOMan.instance.GetZDO(playerInfo.m_characterID).GetLong("playerID"),
-                            name = playerInfo.m_name
-                        });
-                    ++i;
+                    PlayerDropdown.options.Add(new Dropdown.OptionData { text = player.Value.name });
+                    WardIsLovePlugin.WILLogger.LogWarning($"Adding {player.Value.name} to dropdown.");
                 }
-                else
-                {
-                    if (!ZNet.instance.IsServer() || ZNet.instance.IsDedicated()) continue;
-                    External_list.Add(i,
-                        new DropdownData
-                        {
-                            id = ZDOMan.instance.GetZDO(playerInfo.m_characterID).GetLong("playerID"),
-                            name = Player.m_localPlayer.GetPlayerName()
-                        });
-                    ++i;
-                }
-
-            PlayerDropdown.ClearOptions();
-            foreach (KeyValuePair<long, DropdownData> player in External_list)
-                PlayerDropdown.options.Add(new Dropdown.OptionData { text = player.Value.name });
+            }
         }
 
         private void PopulateOwnerText()

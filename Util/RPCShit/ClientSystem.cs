@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using HarmonyLib;
+using UnityEngine.UI;
+using WardIsLove.Util.UI;
 
 namespace WardIsLove.Util.RPCShit
 {
@@ -30,6 +33,10 @@ namespace WardIsLove.Util.RPCShit
                 return;
             Chat.m_instance.AddString("Server", "<color=\"red\">" + str + "</color>", Talker.Type.Normal);
         }
+        
+        public static void RPC_RequestDropdownPlayers(long sender, ZPackage pkg)
+        {
+        }
 
         /// <summary>
         ///     All events, put in order to the corresponding requests. These are "received" from the server
@@ -52,6 +59,51 @@ namespace WardIsLove.Util.RPCShit
 
         public static void RPC_EventRequestGuild(long sender, ZPackage pkg)
         {
+        }
+        
+        public static void RPC_EventDropdownPlayers(long sender, ZPackage pkg)
+        {
+            /* Populate External list, then populate dropdown in DropdownPopulate.cs "PopulatePlayerList()" */
+            DropdownPopulate.External_list.Clear();
+            int num = pkg.ReadInt();
+            long playerID;
+            for (int index = 0; index < num; ++index)
+            {
+                ZNet.PlayerInfo playerInfo = new()
+                {
+                    m_name = pkg.ReadString(),
+                    m_host = pkg.ReadString(),
+                    m_characterID = pkg.ReadZDOID()
+                };
+                playerID = pkg.ReadLong();
+                playerInfo.m_publicPosition = pkg.ReadBool();
+                if (playerInfo.m_publicPosition)
+                    playerInfo.m_position = pkg.ReadVector3();
+                
+                if (playerInfo.m_name != "Human")
+                {
+                    DropdownPopulate.External_list.Add(index,
+                        new DropdownData
+                        {
+                            //id = ZDOMan.instance.GetZDO(playerInfo.m_characterID).GetLong("playerID"),
+                            id = playerID,
+                            name = playerInfo.m_name
+                        });
+                }
+                else
+                {
+                    if (!ZNet.instance.IsServer() || ZNet.instance.IsDedicated()) continue;
+                    DropdownPopulate.External_list.Add(index,
+                        new DropdownData
+                        {
+                            //id = ZDOMan.instance.GetZDO(playerInfo.m_characterID).GetLong("playerID"),
+                            id = playerID,
+                            name = Player.m_localPlayer.GetPlayerName()
+                        });
+                }
+                
+                WardIsLovePlugin.WILLogger.LogWarning($"GOT DATA FROM SERVER: \n Name:{playerInfo.m_name} \n CharacterID:{playerInfo.m_characterID}\nHost:{playerInfo.m_host}\nPosition:{playerInfo.m_position}\nPlayerID:{playerID}");
+            }
         }
 
         [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
@@ -119,6 +171,12 @@ namespace WardIsLove.Util.RPCShit
                 new Action<long, ZPackage>(ClientSystem.RPC_EventAdminSync));
             ZRoutedRpc.instance.Register("BadRequestMsg",
                 new Action<long, ZPackage>(ClientSystem.RPC_BadRequestMsg));
+            
+            /* Dropdown list fix */
+            ZRoutedRpc.instance.Register("DropdownListRequest",
+                new Action<long, ZPackage>(ClientSystem.RPC_RequestDropdownPlayers));
+            ZRoutedRpc.instance.Register("DropdownListEvent",
+                new Action<long, ZPackage>(ClientSystem.RPC_EventDropdownPlayers));
         }
     }
 }

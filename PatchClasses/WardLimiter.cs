@@ -206,10 +206,10 @@ namespace WardIsLove
 
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
-                List<CodeInstruction> list = new List<CodeInstruction>(instructions);
+                List<CodeInstruction> list = new(instructions);
                 CodeInstruction[] NewInstructions = {
-                    new CodeInstruction(OpCodes.Ldloc_3),
-                    new CodeInstruction(OpCodes.Call,
+                    new(OpCodes.Ldloc_3),
+                    new(OpCodes.Call,
                         AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard),
                             new[] { typeof(GameObject) }))
                 };
