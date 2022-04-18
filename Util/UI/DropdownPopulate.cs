@@ -100,7 +100,7 @@ namespace WardIsLove.Util.UI
                 foreach (KeyValuePair<long, DropdownData> player in External_list)
                 {
                     PlayerDropdown.options.Add(new Dropdown.OptionData { text = player.Value.name });
-                    WardIsLovePlugin.WILLogger.LogWarning($"Adding {player.Value.name} to dropdown.");
+                    WardIsLovePlugin.WILLogger.LogDebug($"Adding {player.Value.name} to dropdown. Player has an ID of {player.Value.id}");
                 }
             }
         }
