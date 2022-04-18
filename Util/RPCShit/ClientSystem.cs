@@ -102,7 +102,7 @@ namespace WardIsLove.Util.RPCShit
                         });
                 }
                 
-                WardIsLovePlugin.WILLogger.LogWarning($"GOT DATA FROM SERVER: \n Name:{playerInfo.m_name} \n CharacterID:{playerInfo.m_characterID}\nHost:{playerInfo.m_host}\nPosition:{playerInfo.m_position}\nPlayerID:{playerID}");
+                WardIsLovePlugin.WILLogger.LogDebug($"Dropdown data from server:\nName:{playerInfo.m_name}\nCharacterID:{playerInfo.m_characterID}\nHost:{playerInfo.m_host}\nPosition:{playerInfo.m_position}\nPlayerID:{playerID}");
             }
         }
 

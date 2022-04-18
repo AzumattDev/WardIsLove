@@ -93,7 +93,7 @@ namespace WardIsLove.Util.RPCShit
                 if (player.m_publicPosition)
                     zpackage.Write(player.m_position);
                 
-                WardIsLovePlugin.WILLogger.LogWarning($"SERVER DATA FOUND: \n Name:{player.m_name} \n CharacterID:{player.m_characterID}\nHost:{player.m_host}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong("playerID")}");
+                WardIsLovePlugin.WILLogger.LogDebug($"Server Data being sent to Dropdown list:\nName:{player.m_name}\nCharacterID:{player.m_characterID}\nHost:{player.m_host}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong("playerID")}");
             }
             ZRoutedRpc.instance.InvokeRoutedRPC(sender, "DropdownListEvent", zpackage);
         }
