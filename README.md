@@ -135,7 +135,7 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
-> ### v2.3.8
+> ### v2.3.8 (In Progress!)
 - Fix ongoing/random dropdown population issue.
 - Fix issue with carts, ships, tames with saddles, etc not making it into bubbles.
 - Fix Weather Damage Patch
