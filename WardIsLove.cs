@@ -19,6 +19,7 @@ namespace WardIsLove
     [BepInPlugin(HGUIDLower, ModName, version)]
     [BepInIncompatibility("azumatt.BetterWards")]
     [BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     public partial class WardIsLovePlugin : BaseUnityPlugin
     {
         public enum WardBehaviorEnums
@@ -38,7 +39,8 @@ namespace WardIsLove
         {
             Default = 0,
             OwnerOnly = 1,
-            Everyone = 2
+            Everyone = 2,
+            Group = 3
         }
 
         public enum WardModelTypes
