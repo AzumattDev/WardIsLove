@@ -109,11 +109,6 @@
         <Content Include="Libs\fastJSON.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Content Include="Libs\Groups.dll" />
-        <Content Include="Libs\GroupsAPI.dll">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Libs\Guilds.dll" />
         <Content Include="Libs\GuildsAPI.dll" />
         <Content Include="Libs\ServerSync.dll" />
         <Content Include="README.md" />
@@ -146,9 +141,6 @@
         </Reference>
         <Reference Include="Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>Libs\Groups.dll</HintPath>
-        </Reference>
-        <Reference Include="Guilds, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>Libs\Guilds.dll</HintPath>
         </Reference>
         <Reference Include="GuildsAPI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>Libs\GuildsAPI.dll</HintPath>
