@@ -676,7 +676,8 @@ namespace WardIsLove.Util
                 switch (accessMode)
                 {
                     case WardIsLovePlugin.WardInteractBehaviorEnums.Everyone:
-                    case WardIsLovePlugin.WardInteractBehaviorEnums.Default when (iIsPermitted || m_piece.GetCreator() == playerID):
+                    case WardIsLovePlugin.WardInteractBehaviorEnums.Default
+                        when (iIsPermitted || m_piece.GetCreator() == playerID):
                     case WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.GetCreator() == playerID:
                         return true;
                     case WardIsLovePlugin.WardInteractBehaviorEnums.Group:
@@ -684,13 +685,32 @@ namespace WardIsLove.Util
                         if (API.IsLoaded())
                         {
                             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-                            if (permittedPlayers.Any(kvp => kvp.Key == playerID) || m_piece.GetCreator() == playerID)
+                            if (API.GroupPlayers().Contains(Groups.PlayerReference.fromPlayerId(m_piece.GetCreator())))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    if (permittedPlayers.Any(permittedPlayer => API.GroupPlayers()
+                                            .Contains(Groups.PlayerReference.fromPlayerId(permittedPlayer.Key))))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            /*if (permittedPlayers.Any(kvp => kvp.Key == playerID) || m_piece.GetCreator() == playerID)
                             {
                                 if (API.GroupPlayers().Any())
                                 {
                                     return true;
                                 }
-                            }
+                            }*/
                         }
 
                         break;

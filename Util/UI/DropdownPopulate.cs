@@ -40,6 +40,7 @@ namespace WardIsLove.Util.UI
         {
             PopulateEffectAreaList();
             PopulatePermissionsList();
+            PopulateDamageTypes();
             PopulatePlayerList();
             PopulateModelTypes();
         }
@@ -74,7 +75,7 @@ namespace WardIsLove.Util.UI
         {
             DamageTypeDropdown.ClearOptions();
             HitData hit = new();
-            foreach (HitData.DamageType types in Enum.GetValues(typeof(HitData.DamageType)))
+            foreach (WardIsLovePlugin.WardDamageTypes types in Enum.GetValues(typeof(WardIsLovePlugin.WardDamageTypes)))
                 DamageTypeDropdown.options.Add(new Dropdown.OptionData { text = types.ToString() });
         }
 
@@ -90,17 +91,18 @@ namespace WardIsLove.Util.UI
         public void PopulatePlayerList()
         {
             if (!PlayerDropdown || !ZNet.instance || !Player.m_localPlayer) return;
-            
+
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "DropdownListRequest",
                 new ZPackage());
-            
+
             if (External_list.Count > 0)
             {
                 PlayerDropdown.ClearOptions();
                 foreach (KeyValuePair<long, DropdownData> player in External_list)
                 {
                     PlayerDropdown.options.Add(new Dropdown.OptionData { text = player.Value.name });
-                    WardIsLovePlugin.WILLogger.LogDebug($"Adding {player.Value.name} to dropdown. Player has an ID of {player.Value.id}");
+                    WardIsLovePlugin.WILLogger.LogDebug(
+                        $"Adding {player.Value.name} to dropdown. Player has an ID of {player.Value.id}");
                 }
             }
         }

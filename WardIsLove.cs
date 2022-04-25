@@ -55,6 +55,17 @@ namespace WardIsLove
             BetterWardType4 = 7,
         }
 
+        public enum WardDamageTypes
+        {
+            Normal,
+            Frost,
+            Poison,
+            Fire,
+            Lightning,
+            Spirit,
+            Stagger
+        }
+
         public const string version = "2.3.9";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
@@ -114,17 +125,19 @@ namespace WardIsLove
                 false);
             /* Streamer Mode */
             _streamerMode = config("UI", "StreamerMode", false,
-                "Prevent the display of steam hover text for admins. SteamID and SteamName will be hidden for all users.", false);
+                "Prevent the display of steam hover text for admins. SteamID and SteamName will be hidden for all users.",
+                false);
             _disableGUI = config("UI", "DisableGUI", false,
                 "Prevent the GUI option from being available, even in SinglePlayer - Gratak special request. Also disables the hover text display.");
-            
+
             /* Charge */
             _chargeItem = config("Charge", "Charge Item", "Thunderstone",
                 "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
             _chargeItemAmount = config("Charge", "Charge Item Amount", 5,
                 "Amount of the Item needed to charge the ward. If you set this to 0, the item is not needed and can charge without cost.");
             /* Control GUI */
-            _wardControl = config("Control GUI", "Ward Control", false, "Should ward owners have control of their ward via their own (limited) GUI interface?");
+            _wardControl = config("Control GUI", "Ward Control", false,
+                "Should ward owners have control of their ward via their own (limited) GUI interface?");
             /* General */
             _wardEnabled = config("General", "WardEnabled", true, "Enable WardIsLove Configurations");
             _showMarker = config("General", "ShowMarker", true,
@@ -183,10 +196,12 @@ namespace WardIsLove
                 "Allow non-permitted users to interact with ships inside a ward");
             _noFoodDrain = config("General", "NoFoodDrain", false,
                 "Prevent food loss inside ward for permitted players");
-            /*_wardDamageAmount = config("General", "WardDamageAmount", 0f,
+            _wardDamageAmount = config("General", "WardDamageAmount", 0f,
                 new ConfigDescription(
-                    "Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are in percentage 0% - XXXX%.",
-                    new AcceptableValueRange<float>(0f, 1000f)));*/
+                    "Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are direct values, not percents."));
+            _wardDamageRepeatRate = config("General", "WardDamageRepeatRate", 2f,
+                new ConfigDescription(
+                    "Amount of seconds to wait between damage ticks."));
 
 
             /* Show Flash */
@@ -326,7 +341,7 @@ namespace WardIsLove
         private void OnDestroy()
         {
             localizationFile.Save();
-           // harmony.UnpatchSelf();
+            // harmony.UnpatchSelf();
         }
 
 
@@ -473,6 +488,7 @@ namespace WardIsLove
         public static ConfigEntry<string>? _itemStructureNames;
         public static ConfigEntry<bool>? _autoClose;
         public static ConfigEntry<float>? _wardDamageAmount;
+        public static ConfigEntry<float>? _wardDamageRepeatRate;
         public static ConfigEntry<bool>? _wardNotify;
         public static ConfigEntry<string>? _wardNotifyMessageEntry;
         public static ConfigEntry<string>? _wardNotifyMessageExit;
