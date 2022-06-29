@@ -157,6 +157,29 @@ namespace WardIsLove.PatchClasses
             return __result;
         }
 
+        /*[HarmonyPatch(typeof(ArmorStand), nameof(ArmorStand.Awake))]
+        static class ArmorStand_Awake_Patch
+        {
+            static void Postfix(ArmorStand __instance)
+            {
+                foreach (ArmorStand.ArmorStandSlot slot in __instance.m_slots)
+                {
+                    ArmorStand.ArmorStandSlot item = slot;
+                    if (item.m_switch.m_onUse != null) continue;
+                   // if (WardMonoscript.CheckAccess(__instance.transform.position, flash: false)) continue;
+                    WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                    item.m_switch.m_onHover += (Switch.TooltipCallback)(() => pa.GetItemStandInteractOn()
+                        ? Localization.instance.Localize(item.m_switch.m_hoverText +
+                                                         "\n[<color=yellow><b>1-8</b></color>] $piece_itemstand_attach" +
+                                                         (__instance.GetNrOfAttachedItems() > 0
+                                                             ? "\n[<color=yellow><b>$KEY_Use</b></color>] $piece_itemstand_take"
+                                                             : ""))
+                        : Localization
+                            .instance.Localize(__instance.m_name + "\n$piece_noaccess"));
+                }
+            }
+        }*/
+
 
         [HarmonyPatch(typeof(CraftingStation), nameof(CraftingStation.GetHoverText))]
         [HarmonyPostfix]
