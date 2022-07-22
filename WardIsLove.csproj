@@ -9,9 +9,9 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>WardIsLove</RootNamespace>
         <AssemblyName>WardIsLove</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>9</LangVersion>
+        <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -83,6 +83,7 @@
         <Compile Include="PatchClasses\Ward.cs" />
         <Compile Include="PatchClasses\WardLimiter.cs" />
         <Compile Include="PatchClasses\WearNTear.cs" />
+        <Compile Include="PatchClasses\ZDODataBuffer.cs" />
         <Compile Include="Util\Bubble\ControlParticlesSpawner.cs" />
         <Compile Include="Util\Bubble\ForceFieldController.cs" />
         <Compile Include="Util\Bubble\WardEntryDetector.cs" />
@@ -109,7 +110,9 @@
         <Content Include="Libs\fastJSON.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Content Include="Libs\Guilds.dll" />
+        <Content Include="Libs\GroupsAPI.dll">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="Libs\GuildsAPI.dll" />
         <Content Include="Libs\ServerSync.dll" />
         <Content Include="README.md" />
@@ -140,11 +143,8 @@
         <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
             <HintPath>Libs\fastJSON.dll</HintPath>
         </Reference>
-        <Reference Include="Guilds, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>Libs\Guilds.dll</HintPath>
-        </Reference>
-        <Reference Include="GuildsAPI, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>Libs\GuildsAPI.dll</HintPath>
+        <Reference Include="Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>Libs\Groups.dll</HintPath>
         </Reference>
         <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>Libs\ServerSync.dll</HintPath>
@@ -214,5 +214,8 @@
     <Target Name="AfterBuild">
     </Target>
     -->
+    <Target Name="Copy" AfterTargets="ILRepack">
+        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PermaTesting\BepInEx\plugins\Azumatt-WardIsLove\$(AssemblyName).dll&quot;" />
+    </Target>
 
 </Project>

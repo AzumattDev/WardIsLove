@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Groups;
 using HarmonyLib;
 using Steamworks;
 using UnityEngine;
@@ -662,7 +663,7 @@ namespace WardIsLove.Util
         public bool IsPermitted(long playerID)
         {
             bool iIsPermitted = false;
-            if (this.m_nview.IsValid())
+            if (m_nview.IsValid())
             {
                 WardIsLovePlugin.WardInteractBehaviorEnums accessMode = this.GetAccessMode();
                 foreach (KeyValuePair<long, string> permittedPlayer in GetPermittedPlayers()
@@ -671,17 +672,52 @@ namespace WardIsLove.Util
 
                 if (WardIsLovePlugin.Admin && WardIsLovePlugin._adminAutoPerm.Value)
                     return true;
-                return accessMode switch
+
+                switch (accessMode)
                 {
-                    WardIsLovePlugin.WardInteractBehaviorEnums.Everyone => true,
-                    /*case WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted ||
-                                                                                m_piece.IsCreator() || WardMonoscriptExt.InGuild():
-                        return true;*/
-                    //WardIsLovePlugin.WardInteractBehaviorEnums.Guild when iIsPermitted || m_piece.IsCreator() => true,
-                    WardIsLovePlugin.WardInteractBehaviorEnums.Default when iIsPermitted || m_piece.GetCreator() == playerID => true,
-                    WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.GetCreator() == playerID => true,
-                    _ => false
-                };
+                    case WardIsLovePlugin.WardInteractBehaviorEnums.Everyone:
+                    case WardIsLovePlugin.WardInteractBehaviorEnums.Default
+                        when (iIsPermitted || m_piece.GetCreator() == playerID):
+                    case WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.GetCreator() == playerID:
+                        return true;
+                    case WardIsLovePlugin.WardInteractBehaviorEnums.Group:
+                    {
+                        if (API.IsLoaded())
+                        {
+                            List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
+                            if (API.GroupPlayers().Contains(Groups.PlayerReference.fromPlayerId(m_piece.GetCreator())))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    if (permittedPlayers.Any(permittedPlayer => API.GroupPlayers()
+                                            .Contains(Groups.PlayerReference.fromPlayerId(permittedPlayer.Key))))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                catch
+                                {
+                                }
+                            }
+
+                            /*if (permittedPlayers.Any(kvp => kvp.Key == playerID) || m_piece.GetCreator() == playerID)
+                            {
+                                if (API.GroupPlayers().Any())
+                                {
+                                    return true;
+                                }
+                            }*/
+                        }
+
+                        break;
+                    }
+                    default:
+                        return false;
+                }
             }
 
             return false;

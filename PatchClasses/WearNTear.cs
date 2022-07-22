@@ -30,12 +30,11 @@ namespace WardIsLove.PatchClasses
                 // ignored
             }
         }
-        
+
         [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
         [HarmonyPostfix]
         private static void WardCreatorNameUpdates(Player __instance)
         {
-
         }
 
         // Alter damage to structure inside of ward
@@ -51,6 +50,7 @@ namespace WardIsLove.PatchClasses
                 WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (paa.GetRaidProtectionOn())
                 {
+                    // Can't check for player here, so the default is just false to not show the message, but should still calculate the damage.
                     if (!OfflineStatus.CheckOfflineStatus(paa))
                     {
                         shouldDamage = false;
@@ -90,9 +90,10 @@ namespace WardIsLove.PatchClasses
                     _wardEnabled.Value)
                 {
                     WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                    if (paa.GetRaidProtectionOn())
+                    // I guess checking for the attacker being a player or it being null might have been a good idea.
+                    if (paa.GetRaidProtectionOn() && hit.GetAttacker() != null)
                     {
-                        if (!OfflineStatus.CheckOfflineStatus(paa))
+                        if (!OfflineStatus.CheckOfflineStatus(paa, hit.GetAttacker().IsPlayer()))
                         {
                             hit.ApplyModifier(0);
                             return false;

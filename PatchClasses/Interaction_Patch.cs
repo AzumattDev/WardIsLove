@@ -170,18 +170,45 @@ namespace WardIsLove.PatchClasses
         {
             if (!_wardEnabled.Value)
                 return true;
-            if (!WardMonoscript.CheckInWardMonoscript(__instance.GetControlledComponent().transform.position) ||
+
+
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.m_attachPoint.position) ||
                 CustomCheck.CheckAccess(
-                    Player.m_localPlayer.GetPlayerID(), __instance.GetControlledComponent().transform.position,
+                    Player.m_localPlayer.GetPlayerID(), __instance.m_attachPoint.position,
                     flash: false)) return true;
-            WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+            WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.m_attachPoint.position);
+            WardIsLovePlugin.WILLogger.LogError(
+                $"Interact from this ward is {pa.GetShipInteractOn()} and player interact distance is {__instance.InUseDistance(Player.m_localPlayer)}");
             if (!pa.GetShipInteractOn())
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
                 return false;
             }
 
-            return false;
+            return true;
+        }
+
+        [HarmonyPatch(typeof(ArmorStand), nameof(ArmorStand.UseItem))]
+        static class ArmorStand_UseItem_Patch
+        {
+            static bool Prefix(ArmorStand __instance, Switch caller, Humanoid user, ItemDrop.ItemData item)
+            {
+                if (!_wardEnabled.Value)
+                    return true;
+                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
+                        Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
+                        flash: false)) return true;
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+
+
+                if (!pa.GetItemStandInteractOn())
+                {
+                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         [HarmonyPatch(typeof(CraftingStation), nameof(CraftingStation.Interact))]

@@ -6,7 +6,7 @@ namespace WardIsLove.Util
 {
     public class OfflineStatus
     {
-        internal static bool CheckOfflineStatus(WardMonoscript ward)
+        internal static bool CheckOfflineStatus(WardMonoscript ward, bool isPlayer = false)
         {
             bool flag = false;
             string message = "";
@@ -63,23 +63,26 @@ namespace WardIsLove.Util
                     bool showmessage = WardIsLovePlugin._showraidableMessage.Value;
                     if (showmessage)
                     {
-                        if (stringList.Contains(ward.GetCreatorName()))
+                        if (isPlayer)
                         {
-                            Chat.m_instance.AddString("[WardIsLove]",
-                                $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline + 1}, NEEDED: {raidProtectionPlayerNeeded}</color>",
-                                Talker.Type.Normal);
-                            Chat.m_instance.AddString("[WardIsLove]",
-                                "<color=\"red\">All structures inside the ward are indestructible</color>",
-                                Talker.Type.Normal);
-                        }
-                        else
-                        {
-                            Chat.m_instance.AddString("[WardIsLove]",
-                                $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline}, NEEDED: {raidProtectionPlayerNeeded}</color>",
-                                Talker.Type.Normal);
-                            Chat.m_instance.AddString("[WardIsLove]",
-                                "<color=\"red\">All structures inside the ward are indestructible</color>",
-                                Talker.Type.Normal);
+                            if (stringList.Contains(ward.GetCreatorName()))
+                            {
+                                Chat.m_instance.AddString("[WardIsLove]",
+                                    $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline + 1}, NEEDED: {raidProtectionPlayerNeeded}</color>",
+                                    Talker.Type.Normal);
+                                Chat.m_instance.AddString("[WardIsLove]",
+                                    "<color=\"red\">All structures inside the ward are indestructible</color>",
+                                    Talker.Type.Normal);
+                            }
+                            else
+                            {
+                                Chat.m_instance.AddString("[WardIsLove]",
+                                    $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline}, NEEDED: {raidProtectionPlayerNeeded}</color>",
+                                    Talker.Type.Normal);
+                                Chat.m_instance.AddString("[WardIsLove]",
+                                    "<color=\"red\">All structures inside the ward are indestructible</color>",
+                                    Talker.Type.Normal);
+                            }
                         }
                     }
 

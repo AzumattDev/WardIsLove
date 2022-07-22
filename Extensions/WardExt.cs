@@ -97,7 +97,7 @@ namespace WardIsLove.Extensions
 
 
         public static void SetDamageType(this WardMonoscript WardMonoscript,
-            HitData.DamageType damageType)
+            WardIsLovePlugin.WardDamageTypes damageType)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 WardMonoscript.m_nview.m_zdo.Set("damageType", (int)damageType);

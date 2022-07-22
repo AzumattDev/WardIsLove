@@ -146,7 +146,7 @@ namespace WardIsLove
                         if (_manager.PlayersWardData[steam] < 0) _manager.PlayersWardData[steam] = 0;
                         WILLogger.LogDebug(
                             $"Player's Ward {steam} destroyed. Player wards count: {_manager.PlayersWardData[steam]}");
-                        foreach (var player in ZNet.instance.m_peers)
+                        foreach (ZNetPeer? player in ZNet.instance.m_peers)
                         {
                             if (player.m_socket.GetHostName() == steam)
                             {

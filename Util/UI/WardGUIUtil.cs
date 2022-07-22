@@ -66,7 +66,7 @@ namespace WardIsLove.Util.UI
 
         public Dropdown m_damageType;
         public Dropdown m_modelType;
-        public Slider m_damageAmount;
+        public InputField m_damageAmount;
         public Toggle m_indestructibleToggle;
         public InputField m_indestructibleList;
         public Slider m_creatureDamageIncrease;
@@ -150,7 +150,7 @@ namespace WardIsLove.Util.UI
             m_showFlashToggle.isOn = false;
 
             /* Additional */
-            //m_damageAmount.value = 0;
+            m_damageAmount.text = WardIsLovePlugin._wardDamageAmount.Value.ToString();
             m_indestructibleToggle.isOn = false;
             m_indestructibleList.text = WardIsLovePlugin._itemStructureNames.Value;
             m_creatureDamageIncrease.value = 0;
@@ -215,7 +215,7 @@ namespace WardIsLove.Util.UI
             m_pushoutCreatures.isOn = paArea.GetPushoutCreaturesOn();
             m_bubbleToggle.isOn = paArea.GetBubbleOn();
             m_noteleportToggle.isOn = paArea.GetNoTeleportOn();
-            //m_damageAmount.value = paArea.GetWardDamageAmount();
+            //m_damageAmount.text = paArea.GetWardDamageAmount();
             m_indestructibleToggle.isOn = paArea.GetIndestructibleOn();
             //m_indestructibleList.text = paArea.GetIndestructList();
             m_creatureDamageIncrease.value = paArea.GetCreatureDamageIncrease();
@@ -346,7 +346,7 @@ namespace WardIsLove.Util.UI
         {
             // if (string.IsNullOrWhiteSpace(m_text.text.ToString())) return;
             long playerId = Game.instance.GetPlayerProfile().m_playerID;
-            string playername = Player.m_localPlayer?.GetPlayerName();
+            string playername = Player.m_localPlayer.GetPlayerName();
 
             string Escaper(string StrIn)
             {
@@ -466,13 +466,13 @@ namespace WardIsLove.Util.UI
         public void SetWardDamageType()
         {
             WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
-            pa.SetDamageType((HitData.DamageType)m_damageType.value);
+            pa.SetDamageType((WardIsLovePlugin.WardDamageTypes)m_damageType.value);
         }
 
         public void SetWardDamageAmount()
         {
             WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
-            pa.SetWardDamageAmount(m_damageAmount.value);
+            pa.SetWardDamageAmount(float.Parse(m_damageAmount.text));
         }
 
         public void SetIndestructibleOn()

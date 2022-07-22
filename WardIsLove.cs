@@ -18,7 +18,8 @@ namespace WardIsLove
 {
     [BepInPlugin(HGUIDLower, ModName, version)]
     [BepInIncompatibility("azumatt.BetterWards")]
-    [BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
+    //[BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     public partial class WardIsLovePlugin : BaseUnityPlugin
     {
         public enum WardBehaviorEnums
@@ -38,7 +39,8 @@ namespace WardIsLove
         {
             Default = 0,
             OwnerOnly = 1,
-            Everyone = 2
+            Everyone = 2,
+            Group = 3
         }
 
         public enum WardModelTypes
@@ -51,6 +53,17 @@ namespace WardIsLove
             BetterWardType2 = 5,
             BetterWardType3 = 6,
             BetterWardType4 = 7,
+        }
+
+        public enum WardDamageTypes
+        {
+            Normal,
+            Frost,
+            Poison,
+            Fire,
+            Lightning,
+            Spirit,
+            Stagger
         }
 
         public const string version = "2.3.9";
@@ -112,17 +125,19 @@ namespace WardIsLove
                 false);
             /* Streamer Mode */
             _streamerMode = config("UI", "StreamerMode", false,
-                "Prevent the display of steam hover text for admins. SteamID and SteamName will be hidden for all users.", false);
+                "Prevent the display of steam hover text for admins. SteamID and SteamName will be hidden for all users.",
+                false);
             _disableGUI = config("UI", "DisableGUI", false,
                 "Prevent the GUI option from being available, even in SinglePlayer - Gratak special request. Also disables the hover text display.");
-            
+
             /* Charge */
             _chargeItem = config("Charge", "Charge Item", "Thunderstone",
                 "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
             _chargeItemAmount = config("Charge", "Charge Item Amount", 5,
                 "Amount of the Item needed to charge the ward. If you set this to 0, the item is not needed and can charge without cost.");
             /* Control GUI */
-            _wardControl = config("Control GUI", "Ward Control", false, "Should ward owners have control of their ward via their own (limited) GUI interface?");
+            _wardControl = config("Control GUI", "Ward Control", false,
+                "Should ward owners have control of their ward via their own (limited) GUI interface?");
             /* General */
             _wardEnabled = config("General", "WardEnabled", true, "Enable WardIsLove Configurations");
             _showMarker = config("General", "ShowMarker", true,
@@ -181,10 +196,12 @@ namespace WardIsLove
                 "Allow non-permitted users to interact with ships inside a ward");
             _noFoodDrain = config("General", "NoFoodDrain", false,
                 "Prevent food loss inside ward for permitted players");
-            /*_wardDamageAmount = config("General", "WardDamageAmount", 0f,
+            _wardDamageAmount = config("General", "WardDamageAmount", 0f,
                 new ConfigDescription(
-                    "Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are in percentage 0% - XXXX%.",
-                    new AcceptableValueRange<float>(0f, 1000f)));*/
+                    "Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are direct values, not percents."));
+            _wardDamageRepeatRate = config("General", "WardDamageRepeatRate", 2f,
+                new ConfigDescription(
+                    "Amount of seconds to wait between damage ticks."));
 
 
             /* Show Flash */
@@ -324,7 +341,7 @@ namespace WardIsLove
         private void OnDestroy()
         {
             localizationFile.Save();
-           // harmony.UnpatchSelf();
+            // harmony.UnpatchSelf();
         }
 
 
@@ -446,78 +463,79 @@ namespace WardIsLove
 
         #region ConfigOptions
 
-        public static ConfigEntry<bool>? _serverConfigLocked;
-        public static ConfigEntry<bool>? _wardEnabled;
+        public static ConfigEntry<bool> _serverConfigLocked = null!;
+        public static ConfigEntry<bool> _wardEnabled = null!;
 
-        public static ConfigEntry<bool>? _streamerMode;
-        public static ConfigEntry<bool>? _wardControl;
-        public static ConfigEntry<string>? _chargeItem;
-        public static ConfigEntry<int>? _chargeItemAmount;
-        public static ConfigEntry<string>? _announcement;
-        public static ConfigEntry<KeyCode>? _wardHotKey;
-        public static ConfigEntry<bool>? _wardRangeEnabled;
-        public static ConfigEntry<float>? _wardRange;
-        public static ConfigEntry<float>? _wardPassiveHealthRegen;
-        public static ConfigEntry<float>? _wardPassiveStaminaRegen;
-        public static ConfigEntry<bool>? _wardOnlyPerm;
-        public static ConfigEntry<bool>? _wardNotPerm;
-        public static ConfigEntry<bool>? _pvpNotPerm;
-        public static ConfigEntry<string>? _ctaMessage;
-        public static ConfigEntry<bool>? _wardPvP;
-        public static ConfigEntry<bool>? _wardPve;
-        public static ConfigEntry<bool>? _showMarker;
-        public static ConfigEntry<bool>? _wardStructures;
-        public static ConfigEntry<bool>? _noWeatherDmg;
-        public static ConfigEntry<string>? _itemStructureNames;
-        public static ConfigEntry<bool>? _autoClose;
-        public static ConfigEntry<float>? _wardDamageAmount;
-        public static ConfigEntry<bool>? _wardNotify;
-        public static ConfigEntry<string>? _wardNotifyMessageEntry;
-        public static ConfigEntry<string>? _wardNotifyMessageExit;
-        public static ConfigEntry<bool>? _wardNoDeathPen;
-        public static ConfigEntry<bool>? _bathingUnlimited;
-        public static ConfigEntry<bool>? _cookingUnlimited;
-        public static ConfigEntry<bool>? _fireplaceUnlimited;
-        public static ConfigEntry<string>? _fireSources;
-        public static ConfigEntry<bool>? _disablePickup;
-        public static ConfigEntry<bool>? _pushoutPlayers;
-        public static ConfigEntry<bool>? _pushoutCreatures;
-        public static ConfigEntry<bool>? _adminAutoPerm;
-        public static ConfigEntry<bool>? _itemStandInteraction;
-        public static ConfigEntry<bool>? _portalInteraction;
-        public static ConfigEntry<bool>? _noTeleport;
-        public static ConfigEntry<bool>? _pickableInteraction;
-        public static ConfigEntry<bool>? _itemInteraction;
-        public static ConfigEntry<bool>? _doorInteraction;
-        public static ConfigEntry<bool>? _chestInteraction;
-        public static ConfigEntry<bool>? _craftingStationInteraction;
-        public static ConfigEntry<bool>? _signInteraction;
-        public static ConfigEntry<bool>? _smelterInteraction;
-        public static ConfigEntry<bool>? _beehiveInteraction;
-        public static ConfigEntry<bool>? _maptableInteraction;
-        public static ConfigEntry<bool>? _enableBubble;
-        public static ConfigEntry<float>? _wardDamageReduction;
-        public static ConfigEntry<float>? _wardDamageIncrease;
-        public static ConfigEntry<int>? _raidablePlayersNeeded;
-        public static ConfigEntry<bool>? _raidProtection;
-        public static ConfigEntry<bool>? _showraidableMessage;
-        public static ConfigEntry<bool>? _autoRepair;
-        public static ConfigEntry<float>? _autoRepairTime;
-        public static ConfigEntry<float>? _autoRepairAmount;
-        public static ConfigEntry<string>? _thorwardItemReqs;
-        public static ConfigEntry<string>? _thorwardReco;
-        public static ConfigEntry<string>? _thorwardItemAmou;
-        public static ConfigEntry<string>? _defaultwardItemReqs;
-        public static ConfigEntry<string>? _defaultwardReco;
-        public static ConfigEntry<string>? _defaultwardItemAmou;
-        public static ConfigEntry<bool>? _shipInteraction;
-        public static ConfigEntry<bool>? _noFoodDrain;
-        public static ConfigEntry<bool>? _showFlash;
-        private static ConfigEntry<int>? MaxWardCountConfig;
-        private static ConfigEntry<int>? MaxWardCountVIPConfig;
-        public static ConfigEntry<int>? MaxDaysDifferenceConfig;
-        public static ConfigEntry<string>? VIPplayersListConfig;
-        public static ConfigEntry<bool>? _disableGUI;
+        public static ConfigEntry<bool> _streamerMode = null!;
+        public static ConfigEntry<bool> _wardControl = null!;
+        public static ConfigEntry<string> _chargeItem = null!;
+        public static ConfigEntry<int> _chargeItemAmount = null!;
+        public static ConfigEntry<string> _announcement = null!;
+        public static ConfigEntry<KeyCode> _wardHotKey = null!;
+        public static ConfigEntry<bool> _wardRangeEnabled = null!;
+        public static ConfigEntry<float> _wardRange = null!;
+        public static ConfigEntry<float> _wardPassiveHealthRegen = null!;
+        public static ConfigEntry<float> _wardPassiveStaminaRegen = null!;
+        public static ConfigEntry<bool> _wardOnlyPerm = null!;
+        public static ConfigEntry<bool> _wardNotPerm = null!;
+        public static ConfigEntry<bool> _pvpNotPerm = null!;
+        public static ConfigEntry<string> _ctaMessage = null!;
+        public static ConfigEntry<bool> _wardPvP = null!;
+        public static ConfigEntry<bool> _wardPve = null!;
+        public static ConfigEntry<bool> _showMarker = null!;
+        public static ConfigEntry<bool> _wardStructures = null!;
+        public static ConfigEntry<bool> _noWeatherDmg = null!;
+        public static ConfigEntry<string> _itemStructureNames = null!;
+        public static ConfigEntry<bool> _autoClose = null!;
+        public static ConfigEntry<float> _wardDamageAmount = null!;
+        public static ConfigEntry<float> _wardDamageRepeatRate = null!;
+        public static ConfigEntry<bool> _wardNotify = null!;
+        public static ConfigEntry<string> _wardNotifyMessageEntry = null!;
+        public static ConfigEntry<string> _wardNotifyMessageExit = null!;
+        public static ConfigEntry<bool> _wardNoDeathPen = null!;
+        public static ConfigEntry<bool> _bathingUnlimited = null!;
+        public static ConfigEntry<bool> _cookingUnlimited = null!;
+        public static ConfigEntry<bool> _fireplaceUnlimited = null!;
+        public static ConfigEntry<string> _fireSources = null!;
+        public static ConfigEntry<bool> _disablePickup = null!;
+        public static ConfigEntry<bool> _pushoutPlayers = null!;
+        public static ConfigEntry<bool> _pushoutCreatures = null!;
+        public static ConfigEntry<bool> _adminAutoPerm = null!;
+        public static ConfigEntry<bool> _itemStandInteraction = null!;
+        public static ConfigEntry<bool> _portalInteraction = null!;
+        public static ConfigEntry<bool> _noTeleport = null!;
+        public static ConfigEntry<bool> _pickableInteraction = null!;
+        public static ConfigEntry<bool> _itemInteraction = null!;
+        public static ConfigEntry<bool> _doorInteraction = null!;
+        public static ConfigEntry<bool> _chestInteraction = null!;
+        public static ConfigEntry<bool> _craftingStationInteraction = null!;
+        public static ConfigEntry<bool> _signInteraction = null!;
+        public static ConfigEntry<bool> _smelterInteraction = null!;
+        public static ConfigEntry<bool> _beehiveInteraction = null!;
+        public static ConfigEntry<bool> _maptableInteraction = null!;
+        public static ConfigEntry<bool> _enableBubble = null!;
+        public static ConfigEntry<float> _wardDamageReduction = null!;
+        public static ConfigEntry<float> _wardDamageIncrease = null!;
+        public static ConfigEntry<int> _raidablePlayersNeeded = null!;
+        public static ConfigEntry<bool> _raidProtection = null!;
+        public static ConfigEntry<bool> _showraidableMessage = null!;
+        public static ConfigEntry<bool> _autoRepair = null!;
+        public static ConfigEntry<float> _autoRepairTime = null!;
+        public static ConfigEntry<float> _autoRepairAmount = null!;
+        public static ConfigEntry<string> _thorwardItemReqs = null!;
+        public static ConfigEntry<string> _thorwardReco = null!;
+        public static ConfigEntry<string> _thorwardItemAmou = null!;
+        public static ConfigEntry<string> _defaultwardItemReqs = null!;
+        public static ConfigEntry<string> _defaultwardReco = null!;
+        public static ConfigEntry<string> _defaultwardItemAmou = null!;
+        public static ConfigEntry<bool> _shipInteraction = null!;
+        public static ConfigEntry<bool> _noFoodDrain = null!;
+        public static ConfigEntry<bool> _showFlash = null!;
+        private static ConfigEntry<int> MaxWardCountConfig = null!;
+        private static ConfigEntry<int> MaxWardCountVIPConfig = null!;
+        public static ConfigEntry<int> MaxDaysDifferenceConfig = null!;
+        public static ConfigEntry<string> VIPplayersListConfig = null!;
+        public static ConfigEntry<bool> _disableGUI = null!;
 
 
         private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description,

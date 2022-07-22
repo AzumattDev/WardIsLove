@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
@@ -21,6 +23,13 @@ namespace WardIsLove.Util.Bubble
         private Coroutine? PushoutPlayersRoutine;
         private Coroutine? PushoutCreaturesRoutine;
 
+        /* Ward Damage things */
+        private HitData hitData = new HitData();
+        [SerializeField] private List<Character> m_character = new List<Character>();
+        [SerializeField] internal WardIsLovePlugin.WardDamageTypes _type;
+        [SerializeField] internal float DamagePerHit = 0f;
+        [SerializeField] internal Vector3 staggerDirection = new Vector3(0f, 0f, 0f);
+
         private void OnTriggerEnter(Collider collider)
         {
             Player component = null;
@@ -37,6 +46,14 @@ namespace WardIsLove.Util.Bubble
             if (component2 != null && Player.m_localPlayer != component2)
             {
                 PushoutCreaturesRoutine = StartCoroutine(PushoutCreature(component2, m_wardEntered));
+                /* Ward Damage */
+                Character? monsterchar = collider.gameObject.GetComponent<Character>();
+                m_character.Add(monsterchar);
+                Humanoid? hum = collider.gameObject.GetComponent<Humanoid>();
+                hum.m_onDeath =
+                    (Action)Delegate.Combine(hum.m_onDeath, new Action(delegate { RemoveFromList(monsterchar); }));
+
+                StartCoroutine(UpdateDamage());
             }
 
             if (component == null || Player.m_localPlayer != component)
@@ -60,6 +77,13 @@ namespace WardIsLove.Util.Bubble
 
         private void OnTriggerExit(Collider collider)
         {
+            collider.TryGetComponent(typeof(Character), out Component test);
+            if (m_character.Contains((Character)test))
+            {
+                StopCoroutine(UpdateDamage());
+                m_character.Remove((Character)test);
+            }
+
             Player component = collider.GetComponent<Player>();
             if (component == null || Player.m_localPlayer != component)
                 return;
@@ -88,6 +112,117 @@ namespace WardIsLove.Util.Bubble
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Exited", component.GetPlayerID());
         }
 
+        private IEnumerator UpdateDamage()
+        {
+            /* TODO Condense this later, if possible. */
+            while (true)
+            {
+                switch (_type)
+                {
+                    case WardIsLovePlugin.WardDamageTypes.Frost:
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_frost = m_wardEntered.GetWardDamageAmount();
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        break;
+                    case WardIsLovePlugin.WardDamageTypes.Poison:
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_poison = m_wardEntered.GetWardDamageAmount();
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        break;
+                    case WardIsLovePlugin.WardDamageTypes.Fire:
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_fire = m_wardEntered.GetWardDamageAmount();
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        break;
+                    case WardIsLovePlugin.WardDamageTypes.Lightning:
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_lightning = m_wardEntered.GetWardDamageAmount();
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        break;
+                    case WardIsLovePlugin.WardDamageTypes.Spirit:
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_spirit = m_wardEntered.GetWardDamageAmount();
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        break;
+                    case WardIsLovePlugin.WardDamageTypes.Stagger:
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_damage = m_wardEntered.GetWardDamageAmount();
+                            staggerDirection = character.transform.rotation.eulerAngles;
+                            character.AddStaggerDamage(DamagePerHit, staggerDirection);
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        break;
+                    case WardIsLovePlugin.WardDamageTypes.Normal:
+                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        foreach (Character? character in m_character)
+                        {
+                            hitData = new HitData
+                            {
+                                m_point = character.GetCenterPoint()
+                            };
+                            hitData.m_damage.m_blunt = m_wardEntered.GetWardDamageAmount();
+                            character.ApplyDamage(hitData, true, false);
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            // ReSharper disable once IteratorNeverReturns
+        }
+
+        private void RemoveFromList(Character character)
+        {
+            m_character.Remove(character);
+        }
 
         public void SendWardMessage(WardMonoscript ward, string playerName, string detection, long playerID)
         {
@@ -143,6 +278,7 @@ namespace WardIsLove.Util.Bubble
                     {
                         Physics.IgnoreCollision(collider, COL, true); // Have to do this, or it glitches for ships.
                     }
+
                     return;
                 }
             }
