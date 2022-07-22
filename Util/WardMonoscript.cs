@@ -300,7 +300,7 @@ namespace WardIsLove.Util
                     AdminAppend(text);
                     _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin.WardHotKey.Value +
                                     $"</b></color>] • $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
-                    if (Input.GetKeyDown(WardIsLovePlugin.WardHotKey.Value))
+                    if (WardIsLovePlugin.WardHotKey.Value.IsDown())
                     {
                         //SetEnabled(!IsEnabled());
                         m_nview.InvokeRPC("ToggleEnabled", m_piece.GetCreator());
@@ -319,7 +319,7 @@ namespace WardIsLove.Util
                     _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin.WardHotKey.Value +
                                     $"</b></color>] • $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
                     _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_remove");
-                    if (Input.GetKeyDown(WardIsLovePlugin.WardHotKey.Value))
+                    if (WardIsLovePlugin.WardHotKey.Value.IsDown())
                     {
                         //SetEnabled(!IsEnabled());
 
@@ -473,7 +473,7 @@ namespace WardIsLove.Util
                 return true;
             }
 
-            if (IsPermitted(player.GetPlayerID()) && Input.GetKeyDown(WardIsLovePlugin.WardHotKey.Value))
+            if (IsPermitted(player.GetPlayerID()) && WardIsLovePlugin.WardHotKey.Value.IsDown())
             {
                 //m_nview.InvokeRPC("ToggleEnabled", player.GetPlayerID());
                 return true;
