@@ -56,7 +56,7 @@ namespace WardIsLove.PatchClasses
                 if (__instance.InPlaceMode() || !Player.m_localPlayer)
                     return;
                 if (!WardMonoscript.CheckInWardMonoscript(Player.m_localPlayer.transform.position) ||
-                    !Game.instance.isActiveAndEnabled || !_wardEnabled.Value) return;
+                    !Game.instance.isActiveAndEnabled || !WardEnabled.Value) return;
                 foreach (WardMonoscript? allArea in WardMonoscript.m_allAreas.Where(allArea => allArea.IsEnabled() &&
                              allArea.IsInside(Player.m_localPlayer.transform.position, 0.0f) &&
                              allArea.GetShowMarkerOn()))
@@ -94,7 +94,7 @@ namespace WardIsLove.PatchClasses
             [HarmonyPrefix]
             private static bool PrefixRemovePiece(ref Player __instance)
             {
-                if (!_wardEnabled.Value)
+                if (!WardEnabled.Value)
                     return true;
                 bool flag = false;
 

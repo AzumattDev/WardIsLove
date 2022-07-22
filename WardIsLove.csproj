@@ -90,9 +90,9 @@
         <Compile Include="Util\CustomCheck.cs" />
         <Compile Include="Util\DamageArea.cs" />
         <Compile Include="Util\GitHubCheck.cs" />
+        <Compile Include="Util\Manager\PieceManager.cs" />
         <Compile Include="Util\ObjectDB.cs" />
         <Compile Include="Util\OfflineStatus.cs" />
-        <Compile Include="Util\RecipeFunction.cs" />
         <Compile Include="Util\RPCShit\ClientSystem.cs" />
         <Compile Include="Util\RPCShit\ServerAdminSystem.cs" />
         <Compile Include="Util\UI\DropdownPopulate.cs" />

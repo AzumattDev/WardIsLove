@@ -12,7 +12,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool SignInteraction(Sign __instance, Humanoid character)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             bool flag = false;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
@@ -32,7 +32,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool ItemStandInteraction(ItemStand __instance, Humanoid user)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             bool flag = false;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
@@ -67,7 +67,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool DoorInteraction(Door __instance, Humanoid character, bool hold)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (hold)
                 return false;
@@ -89,7 +89,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool ContainerInteraction(Container __instance, Humanoid character, bool hold)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (hold)
                 return false;
@@ -113,7 +113,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool RPC_Pick(Pickable __instance, ref bool repeat)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -134,7 +134,7 @@ namespace WardIsLove.PatchClasses
         {
             public static void Prefix(Destructible __instance, HitData hit)
             {
-                if (!_wardEnabled.Value)
+                if (!WardEnabled.Value)
                     return;
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
@@ -149,7 +149,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool Pickup(ItemDrop __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -168,7 +168,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool Ship(ShipControlls __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
 
 
@@ -193,7 +193,7 @@ namespace WardIsLove.PatchClasses
         {
             static bool Prefix(ArmorStand __instance, Switch caller, Humanoid user, ItemDrop.ItemData item)
             {
-                if (!_wardEnabled.Value)
+                if (!WardEnabled.Value)
                     return true;
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                         Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -215,7 +215,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool CraftingStation_InteractionCheck(CraftingStation __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -236,7 +236,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool SmeltingStation_InteractionCheck(Smelter __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -256,7 +256,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool SmeltingStation_InteractionCheck2(Smelter __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -275,7 +275,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool Beehive_InteractionCheck(Beehive __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -294,7 +294,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool MapTable_InteractionCheck(MapTable __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
@@ -313,7 +313,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPrefix]
         private static bool MapTable_InteractionCheckOnRead(MapTable __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return true;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,

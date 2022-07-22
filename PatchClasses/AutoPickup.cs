@@ -12,7 +12,7 @@ namespace WardIsLove.PatchClasses
         {
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return true;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-            if (!_wardEnabled.Value && !pa.GetAutoPickupOn())
+            if (!WardEnabled.Value && !pa.GetAutoPickupOn())
                 return true;
             return
                 CustomCheck.CheckAccess(__instance.GetPlayerID(), __instance.transform.position, flash: false) ||

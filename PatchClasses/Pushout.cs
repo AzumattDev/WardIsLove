@@ -15,7 +15,7 @@ namespace WardIsLove.PatchClasses
         {
             while (true)
             {
-                if (WardIsLovePlugin._wardEnabled != null && ZNetScene.instance && WardIsLovePlugin._wardEnabled.Value)
+                if (WardIsLovePlugin.WardEnabled != null && ZNetScene.instance && WardIsLovePlugin.WardEnabled.Value)
                 {
                     try
                     {
@@ -50,7 +50,7 @@ namespace WardIsLove.PatchClasses
         {
             while (true)
             {
-                if (WardIsLovePlugin._wardEnabled != null && ZNetScene.instance && WardIsLovePlugin._wardEnabled.Value)
+                if (WardIsLovePlugin.WardEnabled != null && ZNetScene.instance && WardIsLovePlugin.WardEnabled.Value)
                 {
                     try
                     {

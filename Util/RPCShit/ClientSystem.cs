@@ -129,7 +129,7 @@ namespace WardIsLove.Util.RPCShit
     {
         private static void Postfix()
         {
-            if (!WardIsLovePlugin._wardEnabled.Value)
+            if (!WardIsLovePlugin.WardEnabled.Value)
                 return;
             Console.SetConsoleEnabled(true);
         }
@@ -143,7 +143,7 @@ namespace WardIsLove.Util.RPCShit
         [HarmonyPatch(typeof(ZNet), nameof(ZNet.RPC_Error))]
         private static void Prefix()
         {
-            if (!WardIsLovePlugin._wardEnabled.Value)
+            if (!WardIsLovePlugin.WardEnabled.Value)
                 return;
             if (WardIsLovePlugin.Admin)
             {

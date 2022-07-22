@@ -120,7 +120,7 @@ namespace WardIsLove.Util.Bubble
                 switch (_type)
                 {
                     case WardIsLovePlugin.WardDamageTypes.Frost:
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -133,7 +133,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Poison:
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -146,7 +146,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Fire:
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -159,7 +159,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Lightning:
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -172,7 +172,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Spirit:
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -197,10 +197,10 @@ namespace WardIsLove.Util.Bubble
                             character.ApplyDamage(hitData, true, false);
                         }
 
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Normal:
-                        yield return new WaitForSeconds(WardIsLovePlugin._wardDamageRepeatRate.Value);
+                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData

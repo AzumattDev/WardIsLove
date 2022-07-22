@@ -20,7 +20,7 @@ namespace WardIsLove.PatchClasses
                 foreach (WardMonoscript? ward in WardMonoscriptExt.WardMonoscriptsINSIDE)
                     try
                     {
-                        if (!ward.GetNoTeleportOn() || !_wardEnabled.Value) return true;
+                        if (!ward.GetNoTeleportOn() || !WardEnabled.Value) return true;
                         if (!CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(),
                                 Player.m_localPlayer.transform.position, flash: false))
                         {

@@ -16,7 +16,7 @@ namespace WardIsLove.PatchClasses
             if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position))
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!_wardEnabled.Value || !pa.GetFireplaceUnlimOn() || ___m_nview.GetZDO() == null ||
+                if (!WardEnabled.Value || !pa.GetFireplaceUnlimOn() || ___m_nview.GetZDO() == null ||
                     !___m_nview.IsOwner()) return;
                 string[] array = pa.GetFireplaceList().ToLower().Trim().Split(',').ToArray();
                 foreach (string item in array)
@@ -32,7 +32,7 @@ namespace WardIsLove.PatchClasses
             if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position))
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!_wardEnabled.Value || !pa.GetBathingUnlimOn() ||
+                if (!WardEnabled.Value || !pa.GetBathingUnlimOn() ||
                     ___m_nview.GetZDO() == null ||
                     !___m_nview.IsOwner()) return;
                 if (__instance.m_name.ToLower().Contains("tub"))
@@ -47,7 +47,7 @@ namespace WardIsLove.PatchClasses
             if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position))
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!_wardEnabled.Value || !pa.GetCookingUnlimOn() ||
+                if (!WardEnabled.Value || !pa.GetCookingUnlimOn() ||
                     ___m_nview.GetZDO() == null ||
                     !___m_nview.IsOwner()) return;
                 if (__instance.m_name.ToLower().Contains("oven"))

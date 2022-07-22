@@ -12,7 +12,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string SignGetHoverTextion(string __result, Sign __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             string localize = !WardMonoscript.CheckAccess(__instance.transform.position, flash: false)
@@ -27,7 +27,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string ItemStandGetHoverText(string __result, ItemStand __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
 
@@ -47,7 +47,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string PortalHoverText(string __result, TeleportWorld __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -66,7 +66,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string DoorGetHoverText(string __result, Door __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -84,7 +84,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string ContainerGetHoverText(string __result, Container __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -104,7 +104,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string PickableGetHoverText(string __result, Pickable __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -123,7 +123,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string IDHoverText(string __result, ItemDrop __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -142,7 +142,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string ShipHoverText(string __result, ShipControlls __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -185,7 +185,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string CraftingStation_HoverTextCheck(string __result, CraftingStation __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -204,7 +204,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static void SmeltingStation_HoverTextCheck(Smelter __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return;
             if (!Player.m_localPlayer) return;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -232,7 +232,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string Beehive_HoverTextCheck(string __result, Beehive __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -251,7 +251,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string MapTable_HoverTextCheck(string __result, MapTable __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
@@ -269,7 +269,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPostfix]
         private static string MapTable_HoverTextCheckOnRead(string __result, MapTable __instance)
         {
-            if (!_wardEnabled.Value)
+            if (!WardEnabled.Value)
                 return __result;
             string hoverText = __result;
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))

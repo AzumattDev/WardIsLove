@@ -122,12 +122,12 @@ namespace WardIsLove.Util.UI
             m_fireplaceunlimited.isOn = false;
             m_bathingunlimited.isOn = false;
             m_cookingunlimited.isOn = false;
-            m_firesourceList.text = WardIsLovePlugin._fireSources.Value;
+            m_firesourceList.text = WardIsLovePlugin.FireSources.Value;
             m_pvpEnforceToggle.isOn = false;
             m_pveEnforceToggle.isOn = false;
             m_onlyPerm.isOn = false;
             m_notPerm.isOn = false;
-            m_ctaMessage.text = WardIsLovePlugin._ctaMessage.Value;
+            m_ctaMessage.text = WardIsLovePlugin.CtaMessage.Value;
 
             /* Access */
             m_autopickup.isOn = false;
@@ -150,9 +150,9 @@ namespace WardIsLove.Util.UI
             m_showFlashToggle.isOn = false;
 
             /* Additional */
-            m_damageAmount.text = WardIsLovePlugin._wardDamageAmount.Value.ToString();
+            m_damageAmount.text = WardIsLovePlugin.WardDamageAmount.Value.ToString();
             m_indestructibleToggle.isOn = false;
-            m_indestructibleList.text = WardIsLovePlugin._itemStructureNames.Value;
+            m_indestructibleList.text = WardIsLovePlugin.ItemStructureNames.Value;
             m_creatureDamageIncrease.value = 0;
             m_structDamageReduction.value = 0;
             m_wardIsLove.isOn = false;
@@ -160,7 +160,7 @@ namespace WardIsLove.Util.UI
             m_autoRepairAmount.value = 0;
             m_autoRepairTime.text = WardIsLovePlugin._autoRepairTime.Value.ToString();*/
             m_raidProtectionToggle.isOn = false;
-            m_raidPlayersNeeded.text = WardIsLovePlugin._raidablePlayersNeeded.Value.ToString();
+            m_raidPlayersNeeded.text = WardIsLovePlugin.RaidablePlayersNeeded.Value.ToString();
         }
 
         private void Show()
