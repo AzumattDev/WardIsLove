@@ -346,7 +346,7 @@ namespace WardIsLove.Util.UI
         {
             // if (string.IsNullOrWhiteSpace(m_text.text.ToString())) return;
             long playerId = Game.instance.GetPlayerProfile().m_playerID;
-            string playername = Player.m_localPlayer?.GetPlayerName();
+            string playername = Player.m_localPlayer.GetPlayerName();
 
             string Escaper(string StrIn)
             {

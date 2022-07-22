@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
@@ -84,7 +85,8 @@ public class ForceFieldController : MonoBehaviour
         controlParticlesPositions = new Vector4[affectorCount];
         controlParticlesSizes = new float[affectorCount];
         psmain.maxParticles = affectorCount;
-        //controlParticleSystem.maxParticles = affectorCount;
+        ParticleSystem.MainModule mainModule = controlParticleSystem.main;
+        mainModule.maxParticles = affectorCount;
         controlParticleSystem.GetParticles(controlParticles);
         for (int i = 0; i < affectorCount; i++)
         {
@@ -127,10 +129,7 @@ public class ForceFieldController : MonoBehaviour
     private void GetNumberOfSpheres()
     {
         //numberOfSpheres = renderers.Length;
-        if (getRenderersCustom.Length > 0)
-            numberOfSpheres = getRenderersCustom.Length;
-        else
-            numberOfSpheres = getRenderersInChildren.transform.childCount;
+        numberOfSpheres = getRenderersCustom.Length > 0 ? getRenderersCustom.Length : getRenderersInChildren.transform.childCount;
     }
 
     private void GetSphereArrays()
@@ -147,6 +146,7 @@ public class ForceFieldController : MonoBehaviour
         }
         catch
         {
+            // ignored
         }
     }
 
@@ -181,8 +181,8 @@ public class ForceFieldController : MonoBehaviour
     // Generating a texture from gradient variable
     private Texture2D GenerateTextureFromGradient(Gradient grad)
     {
-        float width = 256;
-        float height = 1;
+        const float width = 256;
+        const float height = 1;
         Texture2D text = new((int)width, (int)height);
         for (int x = 0; x < width; x++)
         for (int y = 0; y < height; y++)
@@ -207,8 +207,8 @@ public class ForceFieldController : MonoBehaviour
             foreach (Material mat in rend.sharedMaterials)
             {
                 bool isEffect = false;
-                for (int i = 0; i < materialLayers.Length; i++)
-                    if (materialLayers[i].name == mat.name)
+                foreach (Material t in materialLayers)
+                    if (t.name == mat.name)
                         isEffect = true;
 
                 if (isEffect != true) rendererMaterials.Add(mat);
@@ -237,10 +237,7 @@ public class ForceFieldController : MonoBehaviour
     // Getting all renderers for ForceField meshes
     public void GetRenderers()
     {
-        if (getRenderersCustom.Length > 0)
-            renderers = getRenderersCustom;
-        else
-            renderers = getRenderersInChildren.GetComponentsInChildren<Renderer>();
+        renderers = getRenderersCustom.Length > 0 ? getRenderersCustom : getRenderersInChildren.GetComponentsInChildren<Renderer>();
     }
 
     // Update Hit Waves and Control Particles
@@ -275,6 +272,8 @@ public class ForceFieldController : MonoBehaviour
                     }
 
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
     }
 }

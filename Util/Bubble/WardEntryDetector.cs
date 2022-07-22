@@ -141,7 +141,7 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_poison = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, true);
+                            character.ApplyDamage(hitData, true, false);
                         }
 
                         break;
@@ -213,10 +213,10 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     default:
-                        Debug.LogWarning("No Default Set");
-                        break;
+                        throw new ArgumentOutOfRangeException();
                 }
             }
+            // ReSharper disable once IteratorNeverReturns
         }
 
         private void RemoveFromList(Character character)
