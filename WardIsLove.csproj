@@ -111,7 +111,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="Libs\GroupsAPI.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Libs\GuildsAPI.dll" />
         <Content Include="Libs\ServerSync.dll" />
