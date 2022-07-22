@@ -45,7 +45,7 @@ namespace WardIsLove.PatchClasses
             private static bool Prefix(ref WearNTear __instance, ref float damage)
             {
                 bool shouldDamage = true;
-                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || !_wardEnabled.Value)
+                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || !WardEnabled.Value)
                     return shouldDamage;
                 WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (paa.GetRaidProtectionOn())
@@ -87,7 +87,7 @@ namespace WardIsLove.PatchClasses
             private static bool Prefix(WearNTear __instance, ref HitData hit, ZNetView ___m_nview)
             {
                 if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position) && ___m_nview != null &&
-                    _wardEnabled.Value)
+                    WardEnabled.Value)
                 {
                     WardMonoscript paa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                     // I guess checking for the attacker being a player or it being null might have been a good idea.
@@ -102,7 +102,7 @@ namespace WardIsLove.PatchClasses
                 }
 
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || ___m_nview == null ||
-                    !_wardEnabled.Value) return true;
+                    !WardEnabled.Value) return true;
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 hit.ApplyModifier((float)(1.0 - pa.GetStructDamageReduc() / 100.0));
                 return true;
@@ -120,7 +120,7 @@ namespace WardIsLove.PatchClasses
                 __result = false;*/
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!_wardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null ||
+                if (!WardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null ||
                     !__instance.m_nview.IsOwner()) return;
                 __result = true;
             }

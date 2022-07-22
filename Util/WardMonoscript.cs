@@ -298,9 +298,9 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin._wardHotKey.Value +
+                    _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin.WardHotKey.Value +
                                     $"</b></color>] • $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
-                    if (Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
+                    if (Input.GetKeyDown(WardIsLovePlugin.WardHotKey.Value))
                     {
                         //SetEnabled(!IsEnabled());
                         m_nview.InvokeRPC("ToggleEnabled", m_piece.GetCreator());
@@ -316,10 +316,10 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin._wardHotKey.Value +
+                    _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin.WardHotKey.Value +
                                     $"</b></color>] • $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
                     _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_remove");
-                    if (Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
+                    if (Input.GetKeyDown(WardIsLovePlugin.WardHotKey.Value))
                     {
                         //SetEnabled(!IsEnabled());
 
@@ -404,9 +404,9 @@ namespace WardIsLove.Util
                     }
                     else
                     {
-                        if (!WardIsLovePlugin._disableGUI.Value)
+                        if (!WardIsLovePlugin.DisableGUI.Value)
                         {
-                            if (WardIsLovePlugin.Admin || (m_piece.IsCreator() && WardIsLovePlugin._wardControl.Value))
+                            if (WardIsLovePlugin.Admin || (m_piece.IsCreator() && WardIsLovePlugin.WardControl.Value))
                             {
                                 WardGUI.Show(this);
                             }
@@ -426,14 +426,14 @@ namespace WardIsLove.Util
                 if ((m_piece.IsCreator() || IsPermitted(Player.m_localPlayer.GetPlayerID())) &&
                     (EnvMan.instance.GetCurrentDay() != m_nview.m_zdo.GetInt("WILLimitedWardTime")))
                 {
-                    ItemDrop? item = ObjectDB.instance.GetItemPrefab(WardIsLovePlugin._chargeItem.Value)
+                    ItemDrop? item = ObjectDB.instance.GetItemPrefab(WardIsLovePlugin.ChargeItem.Value)
                         .GetComponent<ItemDrop>();
                     WardIsLovePlugin.WILLogger.LogDebug(
                         $":You have {Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name)} of {item.m_itemData.m_shared.m_name}");
                     if (Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name) >=
-                        WardIsLovePlugin._chargeItemAmount.Value)
+                        WardIsLovePlugin.ChargeItemAmount.Value)
                     {
-                        if (WardIsLovePlugin._chargeItemAmount.Value == 0)
+                        if (WardIsLovePlugin.ChargeItemAmount.Value == 0)
                         {
                             Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
                                 Quaternion.identity);
@@ -442,9 +442,9 @@ namespace WardIsLove.Util
                         }
 
                         Player.m_localPlayer.GetInventory().RemoveItem(item.m_itemData.m_shared.m_name,
-                            WardIsLovePlugin._chargeItemAmount.Value);
+                            WardIsLovePlugin.ChargeItemAmount.Value);
                         Player.m_localPlayer.ShowRemovedMessage(item.m_itemData,
-                            WardIsLovePlugin._chargeItemAmount.Value);
+                            WardIsLovePlugin.ChargeItemAmount.Value);
                         Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
                             Quaternion.identity);
                         m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
@@ -473,7 +473,7 @@ namespace WardIsLove.Util
                 return true;
             }
 
-            if (IsPermitted(player.GetPlayerID()) && Input.GetKeyDown(WardIsLovePlugin._wardHotKey.Value))
+            if (IsPermitted(player.GetPlayerID()) && Input.GetKeyDown(WardIsLovePlugin.WardHotKey.Value))
             {
                 //m_nview.InvokeRPC("ToggleEnabled", player.GetPlayerID());
                 return true;
@@ -546,7 +546,7 @@ namespace WardIsLove.Util
             {
                 float time;
                 WardMonoscript? ward = null;
-                if (WardIsLovePlugin._wardEnabled != null && ZNetScene.instance && WardIsLovePlugin._wardEnabled.Value)
+                if (WardIsLovePlugin.WardEnabled != null && ZNetScene.instance && WardIsLovePlugin.WardEnabled.Value)
                 {
                     List<WearNTear> allInstances = WearNTear.GetAllInstaces();
                     if (allInstances.Count > 0)
@@ -600,7 +600,7 @@ namespace WardIsLove.Util
 
         public void AdminAppend(StringBuilder text)
         {
-            if (WardIsLovePlugin.Admin && !WardIsLovePlugin._streamerMode.Value)
+            if (WardIsLovePlugin.Admin && !WardIsLovePlugin.StreamerMode.Value)
             {
                 _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName() +
                                 " <color=orange><b>[Steam Info: " +
@@ -621,7 +621,7 @@ namespace WardIsLove.Util
 
             if (m_piece.IsCreator())
             {
-                if (WardIsLovePlugin._wardControl.Value || WardIsLovePlugin.Admin)
+                if (WardIsLovePlugin.WardControl.Value || WardIsLovePlugin.Admin)
                 {
                     text.Append(Localization.instance.Localize(
                         "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
@@ -636,7 +636,7 @@ namespace WardIsLove.Util
             }
             else
             {
-                if (WardIsLovePlugin.Admin && !WardIsLovePlugin._disableGUI.Value)
+                if (WardIsLovePlugin.Admin && !WardIsLovePlugin.DisableGUI.Value)
                 {
                     text.Append(Localization.instance.Localize(
                         "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
@@ -670,7 +670,7 @@ namespace WardIsLove.Util
                              .Where(permittedPlayer => permittedPlayer.Key == playerID))
                     iIsPermitted = true;
 
-                if (WardIsLovePlugin.Admin && WardIsLovePlugin._adminAutoPerm.Value)
+                if (WardIsLovePlugin.Admin && WardIsLovePlugin.AdminAutoPerm.Value)
                     return true;
 
                 switch (accessMode)

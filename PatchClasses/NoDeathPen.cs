@@ -11,7 +11,7 @@ namespace WardIsLove.PatchClasses
     {
         static void Postfix(Skills __instance)
         {
-            if (!Player.m_localPlayer || !_wardEnabled.Value)
+            if (!Player.m_localPlayer || !WardEnabled.Value)
                 return;
             Vector3 pos = Player.m_localPlayer.transform.position;
             if (!WardMonoscript.CheckInWardMonoscript(pos)) return;
@@ -29,7 +29,7 @@ namespace WardIsLove.PatchClasses
             Vector3 position = Player.m_localPlayer.transform.position;
             return !WardMonoscript.CheckInWardMonoscript(position) || !CustomCheck.CheckAccess(
                 Player.m_localPlayer.GetPlayerID(), position, 1f,
-                false) || !_wardNoDeathPen.Value || !_wardEnabled.Value;
+                false) || !WardNoDeathPen.Value || !WardEnabled.Value;
         }
     }
 }

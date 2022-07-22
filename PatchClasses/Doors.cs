@@ -16,7 +16,7 @@ namespace WardIsLove.PatchClasses
         [HarmonyPatch(typeof(Door), nameof(Door.Interact))]
         private static void Postfix(ref Door __instance, ZNetView ___m_nview)
         {
-            if (!_wardEnabled.Value) return;
+            if (!WardEnabled.Value) return;
             if (WardMonoscriptExt.WardMonoscriptsINSIDE == null) return;
             foreach (WardMonoscript? ward in WardMonoscriptExt.WardMonoscriptsINSIDE)
             {
@@ -28,7 +28,7 @@ namespace WardIsLove.PatchClasses
                     coroutineClose[___m_nview.GetHashCode()] = coroutine;
                 }
 
-                if (_autoClose.Value)
+                if (WardIsLovePlugin.AutoClose.Value)
                 {
                     if (coroutineClose.ContainsKey(___m_nview.GetHashCode()))
                         ___m_nview.StopCoroutine(coroutineClose[___m_nview.GetHashCode()]);

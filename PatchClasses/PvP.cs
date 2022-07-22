@@ -17,7 +17,7 @@ namespace WardIsLove.PatchClasses
             if (!ZNetScene.instance) return;
             if (Game.m_instance && !Player.m_localPlayer) return;
 
-            if (!Game.m_instance || !_wardEnabled.Value) return;
+            if (!Game.m_instance || !WardEnabled.Value) return;
             try
             {
                 if (!InventoryGui.instance) return;

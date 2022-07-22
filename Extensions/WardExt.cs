@@ -21,7 +21,7 @@ namespace WardIsLove.Extensions
                     if (Player.m_localPlayer && WardMonoscript.m_allAreas != null)
                         WardMonoscriptsINSIDE = WardMonoscript.m_allAreas.Where(p => p != null &&
                             Vector3.Distance(Player.m_localPlayer.transform.position, p.transform.position) <=
-                            p.m_nview.m_zdo.GetFloat("wardRadius", WardIsLovePlugin._wardRange.Value));
+                            p.m_nview.m_zdo.GetFloat("wardRadius", WardIsLovePlugin.WardRange.Value));
 
                     if (WardMonoscript.m_allAreas != null)
                         try
@@ -30,7 +30,7 @@ namespace WardIsLove.Extensions
                             foreach (Character? character in C)
                                 WardCharacterINSIDE = WardMonoscript.m_allAreas.Where(p => p != null &&
                                     Vector3.Distance(character.transform.position, p.transform.position) <=
-                                    p.m_nview.m_zdo.GetFloat("wardRadius", WardIsLovePlugin._wardRange.Value));
+                                    p.m_nview.m_zdo.GetFloat("wardRadius", WardIsLovePlugin.WardRange.Value));
                         }
                         catch
                         {
@@ -108,8 +108,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("wardRadius", WardIsLovePlugin._wardRange.Value);
-            return WardIsLovePlugin._wardRange.Value;
+                    .GetFloat("wardRadius", WardIsLovePlugin.WardRange.Value);
+            return WardIsLovePlugin.WardRange.Value;
         }
 
         public static void SetWardRadius(this WardMonoscript WardMonoscript, float wardRadiusSliderVal)
@@ -121,8 +121,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("healthRegen", WardIsLovePlugin._wardPassiveHealthRegen.Value);
-            return WardIsLovePlugin._wardPassiveHealthRegen.Value;
+                    .GetFloat("healthRegen", WardIsLovePlugin.WardPassiveHealthRegen.Value);
+            return WardIsLovePlugin.WardPassiveHealthRegen.Value;
         }
 
         public static void SetHealthBoost(this WardMonoscript WardMonoscript, float healthRegenSliderVal)
@@ -134,8 +134,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("staminaBoost", WardIsLovePlugin._wardPassiveStaminaRegen.Value);
-            return WardIsLovePlugin._wardPassiveStaminaRegen.Value;
+                    .GetFloat("staminaBoost", WardIsLovePlugin.WardPassiveStaminaRegen.Value);
+            return WardIsLovePlugin.WardPassiveStaminaRegen.Value;
         }
 
         public static void SetStaminaBoost(this WardMonoscript WardMonoscript, float staminaBoostSliderVal)
@@ -147,8 +147,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("bubbleOn", WardIsLovePlugin._enableBubble.Value);
-            return WardIsLovePlugin._enableBubble.Value;
+                    .GetBool("bubbleOn", WardIsLovePlugin.EnableBubble.Value);
+            return WardIsLovePlugin.EnableBubble.Value;
         }
 
         public static void SetBubbleOn(this WardMonoscript WardMonoscript, bool bubbleOnVal)
@@ -160,8 +160,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("weatherDmgOn", WardIsLovePlugin._noWeatherDmg.Value);
-            return WardIsLovePlugin._noWeatherDmg.Value;
+                    .GetBool("weatherDmgOn", WardIsLovePlugin.NoWeatherDmg.Value);
+            return WardIsLovePlugin.NoWeatherDmg.Value;
         }
 
         public static void SetWeatherDmgOn(this WardMonoscript WardMonoscript, bool weatherDmgOnVal)
@@ -173,8 +173,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("autoPickupOn", WardIsLovePlugin._disablePickup.Value);
-            return WardIsLovePlugin._disablePickup.Value;
+                    .GetBool("autoPickupOn", WardIsLovePlugin.DisablePickup.Value);
+            return WardIsLovePlugin.DisablePickup.Value;
         }
 
         public static void SetAutoPickupOnOn(this WardMonoscript WardMonoscript, bool autoPickupOnVal)
@@ -186,8 +186,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("autoCloseDoorsOn", WardIsLovePlugin._autoClose.Value);
-            return WardIsLovePlugin._autoClose.Value;
+                    .GetBool("autoCloseDoorsOn", WardIsLovePlugin.AutoClose.Value);
+            return WardIsLovePlugin.AutoClose.Value;
         }
 
         public static void SetAutoCloseDoorsOn(this WardMonoscript WardMonoscript, bool autoCloseDoorsOnVal)
@@ -199,8 +199,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("fireplaceUnlimOn", WardIsLovePlugin._fireplaceUnlimited.Value);
-            return WardIsLovePlugin._fireplaceUnlimited.Value;
+                    .GetBool("fireplaceUnlimOn", WardIsLovePlugin.FireplaceUnlimited.Value);
+            return WardIsLovePlugin.FireplaceUnlimited.Value;
         }
 
         public static void SetFireplaceUnlimOn(this WardMonoscript WardMonoscript, bool fireplaceUnlimOnVal)
@@ -212,8 +212,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("bathingUnlimOn", WardIsLovePlugin._bathingUnlimited.Value);
-            return WardIsLovePlugin._bathingUnlimited.Value;
+                    .GetBool("bathingUnlimOn", WardIsLovePlugin.BathingUnlimited.Value);
+            return WardIsLovePlugin.BathingUnlimited.Value;
         }
 
         public static void SetBathingUnlimOn(this WardMonoscript WardMonoscript, bool bathingUnlimOnVal)
@@ -225,8 +225,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("cookingUnlimOn", WardIsLovePlugin._cookingUnlimited.Value);
-            return WardIsLovePlugin._cookingUnlimited.Value;
+                    .GetBool("cookingUnlimOn", WardIsLovePlugin.CookingUnlimited.Value);
+            return WardIsLovePlugin.CookingUnlimited.Value;
         }
 
         public static void SetCookingUnlimOn(this WardMonoscript WardMonoscript, bool cookingUnlimOnVal)
@@ -238,8 +238,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetString("wardFireplaceList", WardIsLovePlugin._fireSources.Value);
-            return WardIsLovePlugin._fireSources.Value;
+                    .GetString("wardFireplaceList", WardIsLovePlugin.FireSources.Value);
+            return WardIsLovePlugin.FireSources.Value;
         }
 
         public static void SetFireplaceList(this WardMonoscript WardMonoscript, string wardFireplaceListVal)
@@ -251,8 +251,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("noDeathPenOn", WardIsLovePlugin._wardNoDeathPen.Value);
-            return WardIsLovePlugin._wardNoDeathPen.Value;
+                    .GetBool("noDeathPenOn", WardIsLovePlugin.WardNoDeathPen.Value);
+            return WardIsLovePlugin.WardNoDeathPen.Value;
         }
 
         public static void SetNoDeathPenOn(this WardMonoscript WardMonoscript, bool noDeathPenOnVal)
@@ -264,8 +264,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("noFoodDrainOn", WardIsLovePlugin._noFoodDrain.Value);
-            return WardIsLovePlugin._noFoodDrain.Value;
+                    .GetBool("noFoodDrainOn", WardIsLovePlugin.NoFoodDrain.Value);
+            return WardIsLovePlugin.NoFoodDrain.Value;
         }
 
         public static void SetNoFoodDrainOn(this WardMonoscript WardMonoscript, bool noFoodDrainOnVal)
@@ -277,8 +277,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("pushoutPlayersOn", WardIsLovePlugin._pushoutPlayers.Value);
-            return WardIsLovePlugin._pushoutPlayers.Value;
+                    .GetBool("pushoutPlayersOn", WardIsLovePlugin.PushoutPlayers.Value);
+            return WardIsLovePlugin.PushoutPlayers.Value;
         }
 
         public static void SetPushoutPlayersOn(this WardMonoscript WardMonoscript, bool pushoutPlayersOnVal)
@@ -290,8 +290,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("pushoutCreaturesOn", WardIsLovePlugin._pushoutCreatures.Value);
-            return WardIsLovePlugin._pushoutCreatures.Value;
+                    .GetBool("pushoutCreaturesOn", WardIsLovePlugin.PushoutCreatures.Value);
+            return WardIsLovePlugin.PushoutCreatures.Value;
         }
 
         public static void SetPushoutCreaturesOn(this WardMonoscript WardMonoscript, bool pushoutCreaturesOnVal)
@@ -302,8 +302,8 @@ namespace WardIsLove.Extensions
         public static bool GetPvpOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO().GetBool("pvpOn", WardIsLovePlugin._wardPvP.Value);
-            return WardIsLovePlugin._wardPvP.Value;
+                return WardMonoscript.m_nview.GetZDO().GetBool("pvpOn", WardIsLovePlugin.WardPvP.Value);
+            return WardIsLovePlugin.WardPvP.Value;
         }
 
         public static void SetPvpOn(this WardMonoscript WardMonoscript, bool pvpOnVal)
@@ -314,8 +314,8 @@ namespace WardIsLove.Extensions
         public static bool GetPveOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO().GetBool("pveOn", WardIsLovePlugin._wardPve.Value);
-            return WardIsLovePlugin._wardPve.Value;
+                return WardMonoscript.m_nview.GetZDO().GetBool("pveOn", WardIsLovePlugin.WardPve.Value);
+            return WardIsLovePlugin.WardPve.Value;
         }
 
         public static void SetPveOn(this WardMonoscript WardMonoscript, bool PveOnVal)
@@ -327,8 +327,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("teleportOn", WardIsLovePlugin._noTeleport.Value);
-            return WardIsLovePlugin._noTeleport.Value;
+                    .GetBool("teleportOn", WardIsLovePlugin.NoTeleport.Value);
+            return WardIsLovePlugin.NoTeleport.Value;
         }
 
         public static void SetNoTeleportOn(this WardMonoscript WardMonoscript, bool noteleportOnVal)
@@ -340,8 +340,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("showFlashOn", WardIsLovePlugin._showFlash.Value);
-            return WardIsLovePlugin._showFlash.Value;
+                    .GetBool("showFlashOn", WardIsLovePlugin.ShowFlash.Value);
+            return WardIsLovePlugin.ShowFlash.Value;
         }
 
         public static void SetShowFlashOn(this WardMonoscript WardMonoscript, bool showFlashOnVal)
@@ -353,8 +353,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("showMarkerOn", WardIsLovePlugin._showMarker.Value);
-            return WardIsLovePlugin._showMarker.Value;
+                    .GetBool("showMarkerOn", WardIsLovePlugin.ShowMarker.Value);
+            return WardIsLovePlugin.ShowMarker.Value;
         }
 
         public static void SetShowMarkerOn(this WardMonoscript WardMonoscript, bool showMarkerOnVal)
@@ -366,8 +366,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("wardNotificationsOn", WardIsLovePlugin._wardNotify.Value);
-            return WardIsLovePlugin._wardNotify.Value;
+                    .GetBool("wardNotificationsOn", WardIsLovePlugin.WardNotify.Value);
+            return WardIsLovePlugin.WardNotify.Value;
         }
 
         public static void SetWardNotificationsOn(this WardMonoscript WardMonoscript,
@@ -380,8 +380,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO().GetString("wardNotifyMessageEntry",
-                    WardIsLovePlugin._wardNotifyMessageEntry.Value);
-            return WardIsLovePlugin._wardNotifyMessageEntry.Value;
+                    WardIsLovePlugin.WardNotifyMessageEntry.Value);
+            return WardIsLovePlugin.WardNotifyMessageEntry.Value;
         }
 
         public static void SetWardEnterNotifyMessage(this WardMonoscript WardMonoscript,
@@ -394,8 +394,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO().GetString("wardNotifyMessageExit",
-                    WardIsLovePlugin._wardNotifyMessageExit.Value);
-            return WardIsLovePlugin._wardNotifyMessageExit.Value;
+                    WardIsLovePlugin.WardNotifyMessageExit.Value);
+            return WardIsLovePlugin.WardNotifyMessageExit.Value;
         }
 
         public static void SetWardExitNotifyMessage(this WardMonoscript WardMonoscript,
@@ -408,8 +408,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("wardDamageAmount", WardIsLovePlugin._wardDamageAmount.Value);
-            return WardIsLovePlugin._wardDamageAmount.Value;
+                    .GetFloat("wardDamageAmount", WardIsLovePlugin.WardDamageAmount.Value);
+            return WardIsLovePlugin.WardDamageAmount.Value;
         }
 
         public static void SetWardDamageAmount(this WardMonoscript WardMonoscript, float wardDamageAmountVal)
@@ -421,8 +421,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("itemstandInteractOn", WardIsLovePlugin._itemStandInteraction.Value);
-            return WardIsLovePlugin._itemStandInteraction.Value;
+                    .GetBool("itemstandInteractOn", WardIsLovePlugin.ItemStandInteraction.Value);
+            return WardIsLovePlugin.ItemStandInteraction.Value;
         }
 
         public static void SetItemStandInteractOn(this WardMonoscript WardMonoscript,
@@ -435,8 +435,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("indestructibleOn", WardIsLovePlugin._wardStructures.Value);
-            return WardIsLovePlugin._wardStructures.Value;
+                    .GetBool("indestructibleOn", WardIsLovePlugin.WardStructures.Value);
+            return WardIsLovePlugin.WardStructures.Value;
         }
 
         public static void SetIndestructibleOn(this WardMonoscript WardMonoscript, bool indestructibleOnVal)
@@ -448,8 +448,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetString("indestructList", WardIsLovePlugin._itemStructureNames.Value);
-            return WardIsLovePlugin._itemStructureNames.Value;
+                    .GetString("indestructList", WardIsLovePlugin.ItemStructureNames.Value);
+            return WardIsLovePlugin.ItemStructureNames.Value;
         }
 
         public static void SetIndestructList(this WardMonoscript WardMonoscript, string indestructListVal)
@@ -461,8 +461,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO().GetFloat("CreatDamageIncreaseAmount",
-                    WardIsLovePlugin._wardDamageIncrease.Value);
-            return WardIsLovePlugin._wardDamageIncrease.Value;
+                    WardIsLovePlugin.WardDamageIncrease.Value);
+            return WardIsLovePlugin.WardDamageIncrease.Value;
         }
 
         public static void SetCreatureDamageIncrease(this WardMonoscript WardMonoscript,
@@ -475,8 +475,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO().GetFloat("structDamageReducAmount",
-                    WardIsLovePlugin._wardDamageReduction.Value);
-            return WardIsLovePlugin._wardDamageReduction.Value;
+                    WardIsLovePlugin.WardDamageReduction.Value);
+            return WardIsLovePlugin.WardDamageReduction.Value;
         }
 
         public static void SetStructDamageReduc(this WardMonoscript WardMonoscript,
@@ -489,8 +489,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("itemInteractOn", WardIsLovePlugin._itemInteraction.Value);
-            return WardIsLovePlugin._itemInteraction.Value;
+                    .GetBool("itemInteractOn", WardIsLovePlugin.ItemInteraction.Value);
+            return WardIsLovePlugin.ItemInteraction.Value;
         }
 
         public static void SetItemInteractOn(this WardMonoscript WardMonoscript, bool itemInteractionOnVal)
@@ -502,8 +502,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("doorInteractOn", WardIsLovePlugin._doorInteraction.Value);
-            return WardIsLovePlugin._doorInteraction.Value;
+                    .GetBool("doorInteractOn", WardIsLovePlugin.DoorInteraction.Value);
+            return WardIsLovePlugin.DoorInteraction.Value;
         }
 
         public static void SetDoorInteractOn(this WardMonoscript WardMonoscript, bool doorInteractOnVal)
@@ -515,8 +515,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("chestInteractOn", WardIsLovePlugin._chestInteraction.Value);
-            return WardIsLovePlugin._chestInteraction.Value;
+                    .GetBool("chestInteractOn", WardIsLovePlugin.ChestInteraction.Value);
+            return WardIsLovePlugin.ChestInteraction.Value;
         }
 
         public static void SetChestInteractOn(this WardMonoscript WardMonoscript, bool chestInteractOnVal)
@@ -528,8 +528,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("portalInteractOn", WardIsLovePlugin._portalInteraction.Value);
-            return WardIsLovePlugin._portalInteraction.Value;
+                    .GetBool("portalInteractOn", WardIsLovePlugin.PortalInteraction.Value);
+            return WardIsLovePlugin.PortalInteraction.Value;
         }
 
         public static void SetPortalInteractOn(this WardMonoscript WardMonoscript, bool portalInteractionOnVal)
@@ -541,8 +541,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("pickableInteractOn", WardIsLovePlugin._pickableInteraction.Value);
-            return WardIsLovePlugin._pickableInteraction.Value;
+                    .GetBool("pickableInteractOn", WardIsLovePlugin.PickableInteraction.Value);
+            return WardIsLovePlugin.PickableInteraction.Value;
         }
 
         public static void SetPickableInteractOn(this WardMonoscript WardMonoscript, bool pickableInteractOnVal)
@@ -554,8 +554,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("shipInteractOn", WardIsLovePlugin._shipInteraction.Value);
-            return WardIsLovePlugin._shipInteraction.Value;
+                    .GetBool("shipInteractOn", WardIsLovePlugin.ShipInteraction.Value);
+            return WardIsLovePlugin.ShipInteraction.Value;
         }
 
         public static void SetShipInteractOn(this WardMonoscript WardMonoscript, bool shipInteractionOnVal)
@@ -567,8 +567,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("signInteractOn", WardIsLovePlugin._signInteraction.Value);
-            return WardIsLovePlugin._signInteraction.Value;
+                    .GetBool("signInteractOn", WardIsLovePlugin.SignInteraction.Value);
+            return WardIsLovePlugin.SignInteraction.Value;
         }
 
         public static void SetSignInteractOn(this WardMonoscript WardMonoscript, bool signInteractionOnVal)
@@ -580,8 +580,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("craftingStationInteractOn", WardIsLovePlugin._craftingStationInteraction.Value);
-            return WardIsLovePlugin._craftingStationInteraction.Value;
+                    .GetBool("craftingStationInteractOn", WardIsLovePlugin.CraftingStationInteraction.Value);
+            return WardIsLovePlugin.CraftingStationInteraction.Value;
         }
 
         public static void SetCraftingStationInteractOn(this WardMonoscript WardMonoscript,
@@ -594,8 +594,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("smelterInteractOn", WardIsLovePlugin._smelterInteraction.Value);
-            return WardIsLovePlugin._smelterInteraction.Value;
+                    .GetBool("smelterInteractOn", WardIsLovePlugin.SmelterInteraction.Value);
+            return WardIsLovePlugin.SmelterInteraction.Value;
         }
 
         public static void SetSmelterInteractOn(this WardMonoscript WardMonoscript, bool smelterInteractionOnVal)
@@ -607,8 +607,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("beehiveInteractOn", WardIsLovePlugin._beehiveInteraction.Value);
-            return WardIsLovePlugin._beehiveInteraction.Value;
+                    .GetBool("beehiveInteractOn", WardIsLovePlugin.BeehiveInteraction.Value);
+            return WardIsLovePlugin.BeehiveInteraction.Value;
         }
 
         public static void SetBeehiveInteractOn(this WardMonoscript WardMonoscript, bool beehiveInteractionOnVal)
@@ -620,8 +620,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("maptableInteractOn", WardIsLovePlugin._maptableInteraction.Value);
-            return WardIsLovePlugin._maptableInteraction.Value;
+                    .GetBool("maptableInteractOn", WardIsLovePlugin.MaptableInteraction.Value);
+            return WardIsLovePlugin.MaptableInteraction.Value;
         }
 
         public static void SetMapTableInteractOn(this WardMonoscript WardMonoscript, bool maptableInteractionOnVal)
@@ -633,8 +633,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("OnlyPermOn", WardIsLovePlugin._wardOnlyPerm.Value);
-            return WardIsLovePlugin._wardOnlyPerm.Value;
+                    .GetBool("OnlyPermOn", WardIsLovePlugin.WardOnlyPerm.Value);
+            return WardIsLovePlugin.WardOnlyPerm.Value;
         }
 
         public static void SetOnlyPermOn(this WardMonoscript WardMonoscript, bool onlypermOnVal)
@@ -646,8 +646,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("NotPermOn", WardIsLovePlugin._wardNotPerm.Value);
-            return WardIsLovePlugin._wardNotPerm.Value;
+                    .GetBool("NotPermOn", WardIsLovePlugin.WardNotPerm.Value);
+            return WardIsLovePlugin.WardNotPerm.Value;
         }
 
         public static void SetNotPermOn(this WardMonoscript WardMonoscript, bool NotpermOnVal)
@@ -659,8 +659,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetString("ctaMessage", WardIsLovePlugin._ctaMessage.Value);
-            return WardIsLovePlugin._ctaMessage.Value;
+                    .GetString("ctaMessage", WardIsLovePlugin.CtaMessage.Value);
+            return WardIsLovePlugin.CtaMessage.Value;
         }
 
         public static void SetCtaMessage(this WardMonoscript WardMonoscript, string ctaMessageVal)
@@ -672,8 +672,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("autoRepairOn", WardIsLovePlugin._autoRepair.Value);
-            return WardIsLovePlugin._autoRepair.Value;
+                    .GetBool("autoRepairOn", WardIsLovePlugin.AutoRepair.Value);
+            return WardIsLovePlugin.AutoRepair.Value;
         }
 
         public static void SetAutoRepairOn(this WardMonoscript WardMonoscript, bool autorepairOnVal)
@@ -685,8 +685,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("autoRepairAmount", WardIsLovePlugin._autoRepairAmount.Value);
-            return WardIsLovePlugin._autoRepairAmount.Value;
+                    .GetFloat("autoRepairAmount", WardIsLovePlugin.AutoRepairAmount.Value);
+            return WardIsLovePlugin.AutoRepairAmount.Value;
         }
 
         public static void SetAutoRepairAmount(this WardMonoscript WardMonoscript, float autorepairOnVal)
@@ -698,8 +698,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("autoRepairTime", WardIsLovePlugin._autoRepairTime.Value);
-            return WardIsLovePlugin._autoRepairTime.Value;
+                    .GetFloat("autoRepairTime", WardIsLovePlugin.AutoRepairTime.Value);
+            return WardIsLovePlugin.AutoRepairTime.Value;
         }
 
         public static void SetAutoRepairTextTime(this WardMonoscript WardMonoscript, float autoRepairTimeVal)
@@ -711,8 +711,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("raidProtectionOn", WardIsLovePlugin._raidProtection.Value);
-            return WardIsLovePlugin._raidProtection.Value;
+                    .GetBool("raidProtectionOn", WardIsLovePlugin.RaidProtection.Value);
+            return WardIsLovePlugin.RaidProtection.Value;
         }
 
         public static void SetRaidProtectionOn(this WardMonoscript WardMonoscript, bool raidProtectionOnVal)
@@ -724,8 +724,8 @@ namespace WardIsLove.Extensions
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return WardMonoscript.m_nview.GetZDO()
-                    .GetInt("raidablePlayersNeeded", WardIsLovePlugin._raidablePlayersNeeded.Value);
-            return WardIsLovePlugin._raidablePlayersNeeded.Value;
+                    .GetInt("raidablePlayersNeeded", WardIsLovePlugin.RaidablePlayersNeeded.Value);
+            return WardIsLovePlugin.RaidablePlayersNeeded.Value;
         }
         public static void SetRaidProtectionPlayerNeeded(this WardMonoscript WardMonoscript,
             int raidablePlayersNeededVal)

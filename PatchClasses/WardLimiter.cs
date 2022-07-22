@@ -36,17 +36,17 @@ namespace WardIsLove
             if (IsServer)
             {
                 _manager = new WardManager(Path.Combine(Paths.ConfigPath, "wardIsLoveData"));
-                MaxWardCountConfig = Config.Bind("General", "Max Wards Per Player", 3);
-                MaxWardCountVIPConfig = Config.Bind("General", "Max Wards Per Player (VIP)", 5);
+                _maxWardCountConfig = Config.Bind("General", "Max Wards Per Player", 3);
+                _maxWardCountVipConfig = Config.Bind("General", "Max Wards Per Player (VIP)", 5);
                 MaxDaysDifferenceConfig = Config.Bind("General", "Days For Deactivate", 300);
-                VIPplayersListConfig = Config.Bind("General", "VIP players list", "steam ids");
+                ViPplayersListConfig = Config.Bind("General", "VIP players list", "steam ids");
             }
         }
 
         static PlayerStatus GetPlayerStatus(string steam)
         {
             if (ZNet.instance.m_adminList.Contains(steam)) return PlayerStatus.Admin;
-            if (VIPplayersListConfig.Value.Contains(steam)) return PlayerStatus.VIP;
+            if (ViPplayersListConfig.Value.Contains(steam)) return PlayerStatus.VIP;
             return PlayerStatus.User;
         }
 
@@ -270,9 +270,9 @@ namespace WardIsLove
                 int wardCount = GetPlayerStatus(steam) switch
                 {
                     PlayerStatus.Admin => 99999,
-                    PlayerStatus.VIP => MaxWardCountVIPConfig.Value,
-                    PlayerStatus.User => MaxWardCountConfig.Value,
-                    _ => MaxWardCountConfig.Value
+                    PlayerStatus.VIP => _maxWardCountVipConfig.Value,
+                    PlayerStatus.User => _maxWardCountConfig.Value,
+                    _ => _maxWardCountConfig.Value
                 };
                 ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInitialData", wardCount,
                     MaxDaysDifferenceConfig.Value);

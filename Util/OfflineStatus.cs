@@ -60,7 +60,7 @@ namespace WardIsLove.Util
             switch (flag)
             {
                 case false:
-                    bool showmessage = WardIsLovePlugin._showraidableMessage.Value;
+                    bool showmessage = WardIsLovePlugin.ShowraidableMessage.Value;
                     if (showmessage)
                     {
                         if (isPlayer)
