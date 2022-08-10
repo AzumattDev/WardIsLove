@@ -119,7 +119,7 @@ namespace WardIsLove
             ServerConfigLocked = config("General", "Force Server Config", true, "Force Server Config");
             _ = configSync.AddLockingConfigEntry(ServerConfigLocked);
 
-
+            Instance = this;
             /* ANNOUNCEMENT IN CONFIGS */
             Announcement = config("Announcement", "Information about this config file", "",
                 "The values set in this config file are the GLOBAL defaults for each ward placed. Admins and owners (when allowed) can change the individual ward configurations per ward",
@@ -193,7 +193,7 @@ namespace WardIsLove
             PushoutPlayers = config("General", "PushoutPlayers", false,
                 "Prevent non-permitted users from entering the warded area. If they are already inside, you must deal with the consequences.");
             PushoutCreatures = config("General", "PushoutCreatures", false,
-                "Prevent creatures from entering the warded area. If they are already inside, you must deal with the consequences");
+                "Prevent creatures from entering the warded area if the bubble is active. If they are already inside, you must deal with the consequences");
             ShipInteraction = config("General", "ShipInteraction", false,
                 "Allow non-permitted users to interact with ships inside a ward");
             NoFoodDrain = config("General", "NoFoodDrain", false,

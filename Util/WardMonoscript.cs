@@ -685,32 +685,22 @@ namespace WardIsLove.Util
                         if (API.IsLoaded())
                         {
                             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-                            if (API.GroupPlayers().Contains(Groups.PlayerReference.fromPlayerId(m_piece.GetCreator())))
+                            if (API.GroupPlayers().Contains(PlayerReference.fromPlayerId(m_piece.GetCreator())))
                             {
                                 return true;
                             }
-                            else
-                            {
-                                try
-                                {
-                                    if (permittedPlayers.Any(permittedPlayer => API.GroupPlayers()
-                                            .Contains(Groups.PlayerReference.fromPlayerId(permittedPlayer.Key))))
-                                    {
-                                        return true;
-                                    }
-                                }
-                                catch
-                                {
-                                }
-                            }
 
-                            /*if (permittedPlayers.Any(kvp => kvp.Key == playerID) || m_piece.GetCreator() == playerID)
+                            try
                             {
-                                if (API.GroupPlayers().Any())
+                                if (permittedPlayers.Any(permittedPlayer => API.GroupPlayers()
+                                        .Contains(PlayerReference.fromPlayerId(permittedPlayer.Key))))
                                 {
                                     return true;
                                 }
-                            }*/
+                            }
+                            catch
+                            {
+                            }
                         }
 
                         break;
@@ -877,7 +867,7 @@ namespace WardIsLove.Util
 
         public void StopConnectionEffects()
         {
-            foreach (Object connectionInstance in m_connectionInstances)
+            foreach (GameObject connectionInstance in m_connectionInstances)
                 Destroy(connectionInstance);
             m_connectionInstances.Clear();
         }

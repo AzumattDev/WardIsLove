@@ -12,6 +12,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
 using UnityEngine;
+using WardIsLove;
 
 namespace PieceManager;
 
@@ -239,7 +240,7 @@ public class BuildPiece
                 Piece piecePrefab = piece.Prefab.GetComponent<Piece>();
                 string pieceName = piecePrefab.m_name;
                 string englishName = new Regex("['[\"\\]]").Replace(english.Localize(pieceName), "").Trim();
-                string localizedName = Localization.instance.Localize(pieceName).Trim();
+                string localizedName = piece.Prefab.gameObject.transform.root.name;
 
                 int order = 0;
 
@@ -961,6 +962,7 @@ public static class PiecePrefabManager
             if(!__instance.m_prefabs.Contains(prefab))
                 __instance.m_prefabs.Add(prefab);
         }
+        WardIsLovePlugin.WardLimitServerCheck();
     }
 
     [HarmonyPriority(Priority.VeryHigh)]

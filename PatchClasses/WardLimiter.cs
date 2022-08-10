@@ -20,7 +20,8 @@ namespace WardIsLove
         private static WardManager _manager;
 
         private static bool CanPlaceWard => WardCount < MaxWardCount;
-        private static bool IsServer;
+        internal static bool IsServer;
+        internal static bool IsSinglePlayer;
 
         public enum PlayerStatus
         {
@@ -30,16 +31,18 @@ namespace WardIsLove
         }
 
 
-        private void WardLimitServerCheck()
+        internal static void WardLimitServerCheck()
         {
             IsServer = SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
-            if (IsServer)
+            if (ZNet.instance != null)
+                IsSinglePlayer = ZNet.instance.IsServer() && !ZNet.instance.IsDedicated();
+            if (IsServer || (ZNet.instance != null && IsSinglePlayer))
             {
                 _manager = new WardManager(Path.Combine(Paths.ConfigPath, "wardIsLoveData"));
-                _maxWardCountConfig = Config.Bind("General", "Max Wards Per Player", 3);
-                _maxWardCountVipConfig = Config.Bind("General", "Max Wards Per Player (VIP)", 5);
-                MaxDaysDifferenceConfig = Config.Bind("General", "Days For Deactivate", 300);
-                ViPplayersListConfig = Config.Bind("General", "VIP players list", "steam ids");
+                _maxWardCountConfig = Instance.Config.Bind("General", "Max Wards Per Player", 3);
+                _maxWardCountVipConfig = Instance.Config.Bind("General", "Max Wards Per Player (VIP)", 5);
+                MaxDaysDifferenceConfig = Instance.Config.Bind("General", "Days For Deactivate", 300);
+                ViPplayersListConfig = Instance.Config.Bind("General", "VIP players list", "steam ids");
             }
         }
 
@@ -207,7 +210,8 @@ namespace WardIsLove
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 List<CodeInstruction> list = new(instructions);
-                CodeInstruction[] NewInstructions = {
+                CodeInstruction[] NewInstructions =
+                {
                     new(OpCodes.Ldloc_3),
                     new(OpCodes.Call,
                         AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard),

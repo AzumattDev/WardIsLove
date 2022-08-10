@@ -135,9 +135,9 @@ individually configurable. Managed with a simple GUI interface for admins.
 
 `DISCORD:` Azumatt#2625
 
-`STEAM:` https://steamcommunity.com/id/azumatt/﻿
+`STEAM:` https://steamcommunity.com/id/azumatt/
 
-For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
+For Questions or Comments, find me in the Odin Plus Team Discord:
 [![https://i.imgur.com/XXP6HCU.png](https://i.imgur.com/XXP6HCU.png)](https://discord.gg/Pb6bVMnFb2)
 
 ## Ward Model Author (Models were commissioned for this mod and used with permissions)
@@ -149,10 +149,14 @@ For Questions or Comments, find me﻿ in the Odin Plus Team Discord:
 ***
 > # Update Information (Latest listed first)
 > ### v3.0.0
-> - Move the ward recipe over to my PieceManager code.
+> - Move the ward recipe over to my PieceManager code. `You WILL need to regenerate your config file. There are many changes to it, that if you don't will cause issues. I recommend backing up the previous configuration for easy reference to what you had before.`
 > - Attempt to optimize the bubble in Unity and a small bit in the code.
 > - Move the WardHotKey (toggle ward when permitted key) over to a keyboard shortcut. Allows you to choose more than one
     key to be used for the interaction.
+> - Add ZDO data buffer to provide compatibility with Networking mods
+> - Armor stands are now protected
+> - Ship interaction bug/toggle not working as intended has been fixed.
+> - Other changes I can't remember.
 > ### v2.3.8/2.3.9
 > - Fix ongoing/random dropdown population issue.
 > - Fix issue with carts, ships, tames with saddles, etc not making it into bubbles.
