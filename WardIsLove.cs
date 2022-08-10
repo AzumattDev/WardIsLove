@@ -119,7 +119,7 @@ namespace WardIsLove
             ServerConfigLocked = config("General", "Force Server Config", true, "Force Server Config");
             _ = configSync.AddLockingConfigEntry(ServerConfigLocked);
 
-
+            Instance = this;
             /* ANNOUNCEMENT IN CONFIGS */
             Announcement = config("Announcement", "Information about this config file", "",
                 "The values set in this config file are the GLOBAL defaults for each ward placed. Admins and owners (when allowed) can change the individual ward configurations per ward",
@@ -143,8 +143,9 @@ namespace WardIsLove
             WardEnabled = config("General", "WardEnabled", true, "Enable WardIsLove Configurations");
             ShowMarker = config("General", "ShowMarker", true,
                 "Whether or not you want to show the area marker for wards", false);
-            WardHotKey = config("General", "WardHotKey", KeyCode.G,
-                "Personal hotkey to toggle a ward on which you're permitted on/off", false);
+            WardHotKey = config("General", "WardHotKey", new KeyboardShortcut(KeyCode.G),
+                new ConfigDescription("Personal hotkey to toggle a ward on which you're permitted on/off",
+                    new AcceptableShortcuts()), false);
             AutoClose = config("General", "AutoCloseDoors", false,
                 "Whether or not you want to have doors auto close inside the ward.", false);
             WardNotify = config("General", "WardNotify", true,
@@ -192,7 +193,7 @@ namespace WardIsLove
             PushoutPlayers = config("General", "PushoutPlayers", false,
                 "Prevent non-permitted users from entering the warded area. If they are already inside, you must deal with the consequences.");
             PushoutCreatures = config("General", "PushoutCreatures", false,
-                "Prevent creatures from entering the warded area. If they are already inside, you must deal with the consequences");
+                "Prevent creatures from entering the warded area if the bubble is active. If they are already inside, you must deal with the consequences");
             ShipInteraction = config("General", "ShipInteraction", false,
                 "Allow non-permitted users to interact with ships inside a ward");
             NoFoodDrain = config("General", "NoFoodDrain", false,
@@ -333,7 +334,6 @@ namespace WardIsLove
         private void OnDestroy()
         {
             localizationFile.Save();
-            // harmony.UnpatchSelf();
         }
 
 
@@ -404,17 +404,6 @@ namespace WardIsLove
             return (object)field == null ? null : field.GetValue(instance);
         }
 
-
-        [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
-        public static class WardIsLoveZNetScenePrefix
-        {
-            public static void Prefix(ZNetScene __instance)
-            {
-                if (__instance.m_prefabs is not { Count: > 0 }) return;
-                __instance.m_prefabs.Add(LightningVFX);
-            }
-        }
-
         [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
         public static class WardIsLoveZNetPost
         {
@@ -445,7 +434,7 @@ namespace WardIsLove
         public static ConfigEntry<string> ChargeItem = null!;
         public static ConfigEntry<int> ChargeItemAmount = null!;
         public static ConfigEntry<string> Announcement = null!;
-        public static ConfigEntry<KeyCode> WardHotKey = null!;
+        public static ConfigEntry<KeyboardShortcut> WardHotKey = null!;
         public static ConfigEntry<float> WardRange = null!;
         public static ConfigEntry<float> WardPassiveHealthRegen = null!;
         public static ConfigEntry<float> WardPassiveStaminaRegen = null!;
@@ -531,6 +520,19 @@ namespace WardIsLove
         private class ConfigurationManagerAttributes
         {
             public bool? Browsable = false;
+        }
+
+        class AcceptableShortcuts : AcceptableValueBase
+        {
+            public AcceptableShortcuts() : base(typeof(KeyboardShortcut))
+            {
+            }
+
+            public override object Clamp(object value) => value;
+            public override bool IsValid(object value) => true;
+
+            public override string ToDescriptionString() =>
+                "# Acceptable values: " + string.Join(", ", KeyboardShortcut.AllKeyCodes);
         }
 
         #endregion

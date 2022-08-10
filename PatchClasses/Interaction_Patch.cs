@@ -177,8 +177,6 @@ namespace WardIsLove.PatchClasses
                     Player.m_localPlayer.GetPlayerID(), __instance.m_attachPoint.position,
                     flash: false)) return true;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.m_attachPoint.position);
-            WardIsLovePlugin.WILLogger.LogError(
-                $"Interact from this ward is {pa.GetShipInteractOn()} and player interact distance is {__instance.InUseDistance(Player.m_localPlayer)}");
             if (!pa.GetShipInteractOn())
             {
                 MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");

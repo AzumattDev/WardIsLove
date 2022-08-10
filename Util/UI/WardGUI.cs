@@ -28,13 +28,11 @@ namespace WardIsLove.Util.UI
             AssetBundle wardMenuBundle = WardIsLovePlugin.GetAssetBundle("wardislove");
 
             WardIsLovePlugin.Thorward =
-                new BuildPiece(wardMenuBundle,
-                    "Thorward"); // Silver,SurtlingCore,TrophyAbomination,Thunderstone        //15,30,1,1
+                new BuildPiece(wardMenuBundle,"Thorward"); // Silver,SurtlingCore,TrophyAbomination,Thunderstone        //15,30,1,1
             WardIsLovePlugin.Thorward.Name.English("Thorward");
             WardIsLovePlugin.Thorward.Description.English("The power of Thor stored in order to protect you.");
             WardIsLovePlugin.Thorward.RequiredItems.Add("Silver", 15, true);
             WardIsLovePlugin.Thorward.RequiredItems.Add("SurtlingCore", 30, true);
-            WardIsLovePlugin.Thorward.RequiredItems.Add("TrophyAbomination", 1, true);
             WardIsLovePlugin.Thorward.RequiredItems.Add("Thunderstone", 1, true);
             WardIsLovePlugin.Thorward.Category.Add(BuildPieceCategory.Misc);
             WardIsLovePlugin.Thorward.Crafting.Set(CraftingTable.Forge);
@@ -42,7 +40,7 @@ namespace WardIsLove.Util.UI
                 wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUINoAdmin.prefab");
             GameObject go = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUI.prefab");
             WardIsLovePlugin.LightningVFX =
-                wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/wardlightningAOE.prefab");
+                PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningAOE");
             try
             {
                 WardIsLovePlugin.Thorward.Prefab.GetComponent<WardMonoscript>().m_bubble
