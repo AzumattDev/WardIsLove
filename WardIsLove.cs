@@ -67,7 +67,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "2.3.9";
+        public const string version = "3.0.1";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
