@@ -409,8 +409,20 @@ namespace WardIsLove
         {
             public static void Postfix(ZNetScene __instance)
             {
+                GameObject? hammer = ZNetScene.instance.GetPrefab("Hammer");
+                PieceTable? hammerTable = hammer.GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
+                _hammer = hammerTable;
                 _hammer?.m_pieces.Remove(ZNetScene.instance.GetPrefab("guard_stone").gameObject);
                 ZNetScene.instance.GetPrefab("guard_stone").GetComponent<Piece>().enabled = false;
+            }
+        }
+        
+        [HarmonyPatch(typeof(PrivateArea), nameof(PrivateArea.IsEnabled))]
+        static class PrivateAreaIsEnabledPatch
+        {
+            static bool Prefix(PrivateArea __instance)
+            {
+                return false;
             }
         }
 
