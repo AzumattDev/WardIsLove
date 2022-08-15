@@ -67,7 +67,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.0.1";
+        public const string version = "3.0.2";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -109,8 +109,6 @@ namespace WardIsLove
 
         private readonly ConfigSync configSync = new(ModName)
             { DisplayName = ModName, CurrentVersion = version, MinimumRequiredVersion = version };
-
-        private string hashCheck = "";
         public static WardIsLovePlugin Instance { get; private set; }
 
 
@@ -409,8 +407,20 @@ namespace WardIsLove
         {
             public static void Postfix(ZNetScene __instance)
             {
+                GameObject? hammer = ZNetScene.instance.GetPrefab("Hammer");
+                PieceTable? hammerTable = hammer.GetComponent<ItemDrop>().m_itemData.m_shared.m_buildPieces;
+                _hammer = hammerTable;
                 _hammer?.m_pieces.Remove(ZNetScene.instance.GetPrefab("guard_stone").gameObject);
                 ZNetScene.instance.GetPrefab("guard_stone").GetComponent<Piece>().enabled = false;
+            }
+        }
+        
+        [HarmonyPatch(typeof(PrivateArea), nameof(PrivateArea.IsEnabled))]
+        static class PrivateAreaIsEnabledPatch
+        {
+            static bool Prefix(PrivateArea __instance)
+            {
+                return false;
             }
         }
 

@@ -18,6 +18,7 @@ namespace WardIsLove.Util.Bubble
         public WardMonoscript m_wardEntered;
         private Coroutine? Heal;
         private Coroutine? Stamina;
+        private Coroutine? DamageUpdate;
 
         /* Pushout Routines */
         private Coroutine? PushoutPlayersRoutine;
@@ -27,7 +28,6 @@ namespace WardIsLove.Util.Bubble
         private HitData hitData = new HitData();
         [SerializeField] private List<Character> m_character = new List<Character>();
         [SerializeField] internal WardIsLovePlugin.WardDamageTypes _type;
-        [SerializeField] internal float DamagePerHit = 0f;
         [SerializeField] internal Vector3 staggerDirection = new Vector3(0f, 0f, 0f);
 
         private void OnTriggerEnter(Collider collider)
@@ -53,7 +53,7 @@ namespace WardIsLove.Util.Bubble
                 hum.m_onDeath =
                     (Action)Delegate.Combine(hum.m_onDeath, new Action(delegate { RemoveFromList(monsterchar); }));
 
-                StartCoroutine(UpdateDamage());
+                DamageUpdate = StartCoroutine(UpdateDamage());
             }
 
             if (component == null || Player.m_localPlayer != component)
@@ -80,7 +80,10 @@ namespace WardIsLove.Util.Bubble
             collider.TryGetComponent(typeof(Character), out Component test);
             if (m_character.Contains((Character)test))
             {
-                StopCoroutine(UpdateDamage());
+                if (DamageUpdate != null)
+                {
+                    StopCoroutine(DamageUpdate);
+                }
                 m_character.Remove((Character)test);
             }
 
@@ -109,6 +112,10 @@ namespace WardIsLove.Util.Bubble
             {
                 StopCoroutine(PushoutCreaturesRoutine);
             }
+            if (DamageUpdate != null)
+            {
+                StopCoroutine(DamageUpdate);
+            }
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Exited", component.GetPlayerID());
         }
 
@@ -117,10 +124,10 @@ namespace WardIsLove.Util.Bubble
             /* TODO Condense this later, if possible. */
             while (true)
             {
+                yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                 switch (_type)
                 {
                     case WardIsLovePlugin.WardDamageTypes.Frost:
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -133,7 +140,6 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Poison:
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -146,7 +152,6 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Fire:
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -159,7 +164,6 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Lightning:
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -172,7 +176,6 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Spirit:
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -193,14 +196,11 @@ namespace WardIsLove.Util.Bubble
                             };
                             hitData.m_damage.m_damage = m_wardEntered.GetWardDamageAmount();
                             staggerDirection = character.transform.rotation.eulerAngles;
-                            character.AddStaggerDamage(DamagePerHit, staggerDirection);
+                            character.AddStaggerDamage(hitData.m_damage.m_damage, staggerDirection);
                             character.ApplyDamage(hitData, true, false);
                         }
-
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Normal:
-                        yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
@@ -210,13 +210,11 @@ namespace WardIsLove.Util.Bubble
                             hitData.m_damage.m_blunt = m_wardEntered.GetWardDamageAmount();
                             character.ApplyDamage(hitData, true, false);
                         }
-
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            // ReSharper disable once IteratorNeverReturns
         }
 
         private void RemoveFromList(Character character)
