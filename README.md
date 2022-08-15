@@ -148,12 +148,14 @@ For Questions or Comments, find me in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
-> ### v 3.0.1
+> ### v 3.0.2
 > - Fixed where the GetCharacterPoint() function would fail, I was not ending the the coroutine properly.
 > - Fixed damage timing issue where the damage interval time was triggering hits too quickly.
-> - Fixed stagger damage not staggering.
-> ### v3.0.0
-> - Move the ward recipe over to my PieceManager code. `You WILL need to regenerate your config file. There are many changes to it, that if you don't will cause issues. I recommend backing up the previous configuration for easy reference to what you had before.`
+> - Re-added my deleted code from the previous version. I deleted too much when moving to my PieceManager. This should
+    mean the original wards are removed like they should be, and other things related to the hammer.
+> ### v3.0.0/v3.0.1
+> - Move the ward recipe over to my PieceManager
+    code. `You WILL need to regenerate your config file. There are many changes to it, that if you don't will cause issues. I recommend backing up the previous configuration for easy reference to what you had before.`
 > - Attempt to optimize the bubble in Unity and a small bit in the code.
 > - Move the WardHotKey (toggle ward when permitted key) over to a keyboard shortcut. Allows you to choose more than one
     key to be used for the interaction.

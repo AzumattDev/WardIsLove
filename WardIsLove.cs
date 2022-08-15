@@ -109,8 +109,6 @@ namespace WardIsLove
 
         private readonly ConfigSync configSync = new(ModName)
             { DisplayName = ModName, CurrentVersion = version, MinimumRequiredVersion = version };
-
-        private string hashCheck = "";
         public static WardIsLovePlugin Instance { get; private set; }
 
 

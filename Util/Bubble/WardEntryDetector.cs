@@ -28,7 +28,6 @@ namespace WardIsLove.Util.Bubble
         private HitData hitData = new HitData();
         [SerializeField] private List<Character> m_character = new List<Character>();
         [SerializeField] internal WardIsLovePlugin.WardDamageTypes _type;
-        [SerializeField] internal float DamagePerHit = 0f;
         [SerializeField] internal Vector3 staggerDirection = new Vector3(0f, 0f, 0f);
 
         private void OnTriggerEnter(Collider collider)
@@ -129,7 +128,6 @@ namespace WardIsLove.Util.Bubble
                 switch (_type)
                 {
                     case WardIsLovePlugin.WardDamageTypes.Frost:
-                        
                         foreach (Character? character in m_character)
                         {
                             hitData = new HitData
