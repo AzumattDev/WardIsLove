@@ -148,7 +148,10 @@ For Questions or Comments, find me in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
-> ### v 3.0.2
+> ### v3.0.3
+> - Don't damage tames.
+> - NOTE: `Next update will change how the time on wards works to real time, not in game time.`
+> ### v3.0.2
 > - Fixed where the GetCharacterPoint() function would fail, I was not ending the the coroutine properly.
 > - Fixed damage timing issue where the damage interval time was triggering hits too quickly.
 > - Re-added my deleted code from the previous version. I deleted too much when moving to my PieceManager. This should

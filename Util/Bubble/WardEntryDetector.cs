@@ -135,7 +135,10 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_frost = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                            {
+                                character.ApplyDamage(hitData, true, false);
+                            }
                         }
 
                         break;
@@ -147,7 +150,10 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_poison = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                            {
+                                character.ApplyDamage(hitData, true, false);
+                            }
                         }
 
                         break;
@@ -159,7 +165,10 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_fire = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                            {
+                                character.ApplyDamage(hitData, true, false);
+                            }
                         }
 
                         break;
@@ -171,7 +180,10 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_lightning = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                            {
+                                character.ApplyDamage(hitData, true, false);
+                            }
                         }
 
                         break;
@@ -183,7 +195,10 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_spirit = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                            {
+                                character.ApplyDamage(hitData, true, false);
+                            }
                         }
 
                         break;
@@ -196,9 +211,11 @@ namespace WardIsLove.Util.Bubble
                             };
                             hitData.m_damage.m_damage = m_wardEntered.GetWardDamageAmount();
                             staggerDirection = character.transform.rotation.eulerAngles;
+                            if (character.IsTamed()) continue;
                             character.AddStaggerDamage(hitData.m_damage.m_damage, staggerDirection);
                             character.ApplyDamage(hitData, true, false);
                         }
+
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Normal:
                         foreach (Character? character in m_character)
@@ -208,8 +225,10 @@ namespace WardIsLove.Util.Bubble
                                 m_point = character.GetCenterPoint()
                             };
                             hitData.m_damage.m_blunt = m_wardEntered.GetWardDamageAmount();
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                                character.ApplyDamage(hitData, true, false);
                         }
+
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
