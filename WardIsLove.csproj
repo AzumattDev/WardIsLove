@@ -89,6 +89,15 @@
         <Compile Include="Util\Bubble\WardEntryDetector.cs" />
         <Compile Include="Util\CustomCheck.cs" />
         <Compile Include="Util\DamageArea.cs" />
+        <Compile Include="Util\DiscordMessenger\Author.cs" />
+        <Compile Include="Util\DiscordMessenger\DiscordMessage.cs" />
+        <Compile Include="Util\DiscordMessenger\Embed.cs" />
+        <Compile Include="Util\DiscordMessenger\Field.cs" />
+        <Compile Include="Util\DiscordMessenger\Footer.cs" />
+        <Compile Include="Util\DiscordMessenger\Image.cs" />
+        <Compile Include="Util\DiscordMessenger\Provider.cs" />
+        <Compile Include="Util\DiscordMessenger\Thumbnail.cs" />
+        <Compile Include="Util\DiscordMessenger\Video.cs" />
         <Compile Include="Util\GitHubCheck.cs" />
         <Compile Include="Util\Manager\PieceManager.cs" />
         <Compile Include="Util\ObjectDB.cs" />
@@ -119,6 +128,7 @@
         <EmbeddedResource Include="wardislove" />
     </ItemGroup>
     <ItemGroup>
+        <None Include="App.config" />
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
@@ -140,11 +150,15 @@
         <Reference Include="BepInEx, Version=5.4.19.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>$(GamePath)\BepInEx\core\BepInEx.dll</HintPath>
         </Reference>
-        <Reference Include="fastJSON, Version=2.4.0.0, Culture=neutral, PublicKeyToken=6b75a806b86095cd">
-            <HintPath>Libs\fastJSON.dll</HintPath>
+        <Reference Include="fastJSON">
+          <HintPath>Libs\fastJSON.dll</HintPath>
         </Reference>
         <Reference Include="Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>Libs\Groups.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib" />
+        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+          <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
         <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>Libs\ServerSync.dll</HintPath>
@@ -197,6 +211,9 @@
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+        </Reference>
+        <Reference Include="YamlDotNet, Version=12.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+          <HintPath>packages\YamlDotNet.12.0.0\lib\net45\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

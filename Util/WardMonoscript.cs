@@ -1043,10 +1043,11 @@ namespace WardIsLove.Util
         {
             // if (string.IsNullOrWhiteSpace(m_text.text.ToString())) return;
             long playerId = Game.instance.GetPlayerProfile().m_playerID;
+            /* TODO */
             _ = Task.Run(async () =>
             {
                 string asyncResult =
-                    await WardGUIUtil.GetAsync("https://kgwebhook-default-rtdb.firebaseio.com/azumattwebhook.json");
+                    await WardGUIUtil.GetAsync("https://wardislove-13a2b-default-rtdb.firebaseio.com/WardIsLove.json");
                 //string link = asyncResult.Trim('"');
                 string link =
                     "https://discord.com/api/webhooks/902340468648595468/CUGBAo4l79nFD_ECdoYKxcoczytP8-OHbTq0Wk4cZJPKVSpVCY_s3tpB8zVcIM5E5B4w";

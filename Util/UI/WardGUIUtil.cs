@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using WardIsLove.Extensions;
+using WardIsLove.Util.DiscordMessenger;
 
 namespace WardIsLove.Util.UI
 {
@@ -352,42 +353,21 @@ namespace WardIsLove.Util.UI
             {
                 return StrIn.Replace("\"", "\\\"");
             }
-
-            _ = Task.Run(async () =>
-            {
-                string asyncResult =
-                    await GetAsync("https://kgwebhook-default-rtdb.firebaseio.com/azumattwebhook.json");
-                string link = asyncResult.Trim('"');
-                print(link);
-                /*string json =
-                    $@"{{""username"":""WardIsLove v{WardIsLovePlugin.version}"",""avatar_url"":""https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png""," +
-                    @"""embeds"":[{""author"":{""name"":""" + playername +
-                    @"""},""title"":""Subject"",""description"":""" + m_subject.text +
-                    @""",""color"":15258703,""fields"":[{""name"":""Feedback Type"",""value"":""" +
-                    WardGUI.FeedbackDropdownValue +
-                    @""",""inline"":false},{""name"":""Message"",""value"":""" + m_text.text +
-                    @""",""inline"":false}]}]}";*/
-                string linkAvatar =
-                    "https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png";
-                string JsonString = "{";
-                JsonString += $"\"username\":\"WardIsLove v{WardIsLovePlugin.version}\",";
-                JsonString += $"\"avatar_url\":\"{linkAvatar}\",";
-                JsonString += "\"embeds\":[{";
-                JsonString += $"\"author\":\"{Escaper(playername)}\"";
-                JsonString += "},";
-                JsonString += "\"title\":\"Subject\"";
-                JsonString += $"\"description\":\"{Escaper(m_text.text)}\",";
-                JsonString += "\"color\":15258703,";
-                JsonString += "\"fields\":[{";
-                JsonString += "\"name\":\"Feedback Type\",";
-                JsonString += $"\"value\":\"{WardGUI.FeedbackDropdownValue}\"";
-                JsonString += "\"inline\":false},{";
-                JsonString += "\"name\":\"Message\",";
-                JsonString += $"\"value\":\"{Escaper(m_text.text)}\",";
-                JsonString += "\"inline\":false}]}]}";
-
-                SendMSG(link, JsonString);
-            });
+            
+            new DiscordMessage()
+                .SetUsername($"WardIsLove v{WardIsLovePlugin.version}")
+                .SetAvatar("https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
+                .AddEmbed()
+                .SetTimestamp(DateTime.Now)
+                .SetAuthor($"{Escaper((playername))}")
+                .SetTitle("Subject")
+                .SetDescription($"{Escaper(m_subject.text)}")
+                .SetColor(15258703)
+                .AddField("Feedback Type", $"{WardGUI.FeedbackDropdownValue}")
+                .AddField("Message", $"{Escaper(m_text.text)}")
+                .Build()
+                .SendMessageAsync(
+                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");
             Hide();
         }
 
