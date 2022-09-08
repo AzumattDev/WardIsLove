@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+using WardIsLove.Util.DiscordMessenger;
 using HarmonyLib;
 using PieceManager;
 using ServerSync;
@@ -109,6 +111,7 @@ namespace WardIsLove
 
         private readonly ConfigSync configSync = new(ModName)
             { DisplayName = ModName, CurrentVersion = version, MinimumRequiredVersion = version };
+
         public static WardIsLovePlugin Instance { get; private set; }
 
 
@@ -285,7 +288,38 @@ namespace WardIsLove
             _ = StartCoroutine(WardMonoscriptExt.UpdateAreas());
             WardGUI.Init();
             WardLimitServerCheck();
+            //GetWebHook();
+            new DiscordMessage()
+                .SetUsername("Test Message")
+                .SetAvatar("https://i.imgur.com/xNGfbn3.png")
+                .SetContent("Azumatt testing YAML based discord webhook")
+                .AddEmbed()
+                .SetTimestamp(DateTime.Now)
+                .SetAuthor("Feli", "https://i.imgur.com/xNGfbn3.png", "https://i.imgur.com/xNGfbn3.png")
+                .SetTitle("Test Embed")
+                .SetDescription(
+                    "Modified version of DiscordMessenger. This is a test embedding with projects that use YamlDotNet.")
+                .SetColor(14177041)
+                .AddField("Test Field", "Test Value")
+                .AddField("Test Field", "Test Value Inline", true)
+                .SetFooter("Test Footer", "https://i.imgur.com/xNGfbn3.png")
+                .Build()
+                .SendMessageAsync(
+                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");
+
+
             SetupWatcher();
+        }
+
+        private static void GetWebHook()
+        {
+            Task.Run(async () =>
+            {
+                string asyncResult =
+                    //await WardGUIUtil.GetAsync("https://wardislove-13a2b-default-rtdb.firebaseio.com/WardIsLove.json");
+                    await WardGUIUtil.GetAsync("https://kgwebhook-default-rtdb.firebaseio.com/azumattwebhook.json");
+                string link = asyncResult.Trim('"');
+            });
         }
 
         private void SetupWatcher()
@@ -414,7 +448,7 @@ namespace WardIsLove
                 ZNetScene.instance.GetPrefab("guard_stone").GetComponent<Piece>().enabled = false;
             }
         }
-        
+
         [HarmonyPatch(typeof(PrivateArea), nameof(PrivateArea.IsEnabled))]
         static class PrivateAreaIsEnabledPatch
         {

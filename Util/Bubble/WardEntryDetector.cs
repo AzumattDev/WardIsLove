@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
+using WardIsLove.Util.DiscordMessenger;
 using WardIsLove.Util.UI;
 using static WardIsLove.PatchClasses.PlayerHealthUpdatePatch;
 using static WardIsLove.PatchClasses.PlayerStaminaUpdatePatch;
@@ -245,24 +246,24 @@ namespace WardIsLove.Util.Bubble
         {
             // if (string.IsNullOrWhiteSpace(m_text.text.ToString())) return;
             long playerId = Game.instance.GetPlayerProfile().m_playerID;
-            _ = Task.Run(async () =>
-            {
-                string asyncResult =
-                    await WardGUIUtil.GetAsync("https://wardislove-13a2b-default-rtdb.firebaseio.com/WardIsLove.json");
-                string link = asyncResult.Trim('"');
-                string messageSent = detection == "Exited"
-                    ? string.Format(m_wardEntered.GetWardExitNotifyMessage(), playerName)
-                    : string.Format(m_wardEntered.GetWardEnterNotifyMessage(), m_wardEntered.GetCreatorName());
-                print(link);
-                string json =
-                    $@"{{""username"":""WardIsLove v{WardIsLovePlugin.version}"",""avatar_url"":""https://i.imgur.com/CzwaEed.png""," +
-                    $@"""embeds"":[{{""title"":""{playerName}"",""description"":""" + detection + " ward" +
-                    @""",""color"":15258703,""fields"":[{""name"":""Ward Owner"",""value"":""" + ward.GetCreatorName() +
-                    @""",""inline"":true},{""name"":""Permitted"",""value"":""" + ward.IsPermitted(playerID) +
-                    @""",""inline"":true},{""name"":""Message Shown To Player"",""value"":""" + messageSent +
-                    @""",""inline"":false}]}]}";
-                WardGUIUtil.SendMSG(link, json);
-            });
+            string messageSent = detection == "Exited"
+                ? string.Format(m_wardEntered.GetWardExitNotifyMessage(), playerName)
+                : string.Format(m_wardEntered.GetWardEnterNotifyMessage(), m_wardEntered.GetCreatorName());
+            new DiscordMessage()
+                .SetUsername($"WardIsLove v{WardIsLovePlugin.version}")
+                .SetAvatar("https://i.imgur.com/CzwaEed.png")
+                .AddEmbed()
+                .SetTimestamp(DateTime.Now)
+                .SetTitle($"{playerName}")
+                .SetDescription(
+                    $"{detection} ward")
+                .SetColor(15258703)
+                .AddField("Ward Owner", $"{ward.GetCreatorName()}", true)
+                .AddField("Permitted", $"{ward.IsPermitted(playerID)}", true)
+                .AddField("Message Shown To Player", $"{messageSent}")
+                .Build()
+                .SendMessageAsync(
+                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");
         }
     }
 
