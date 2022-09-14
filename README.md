@@ -151,7 +151,7 @@ For Questions or Comments, find me in the Odin Plus Team Discord:
 > ### v3.0.4
 > - <strong>Performance for the bubble has been improved. It should be less intensive on your machine. Vertices have been reduced by over half!</strong>
 > - Fixed the feedback gui, it wasn't sending to discord initially if you typed too much, or had some weird special characters in the inputs.
-> - Fixed the inputs on the feeback panel for the GUI. They should now wrap text properly and look a bit better. Also, limit the input to the size discord accepts.
+> - Fixed the inputs on the feedback panel for the GUI. They should now wrap text properly and look a bit better. Also, limit the input to the size discord accepts.
 > - Attempt to fix the issue with ward entry. I have never been able to replicate the issue, but after working with multiple people who make custom creatures, I'm pretty sure this is the fix we have been waiting for.
 > - Fixed the recipe changing back to the forge even when the setting was set to None.
 > - Only disable vanilla wards, not other mods pieces should they have a PrivateArea component.
