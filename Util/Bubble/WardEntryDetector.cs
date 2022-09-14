@@ -27,32 +27,31 @@ namespace WardIsLove.Util.Bubble
 
         /* Ward Damage things */
         private HitData hitData = new HitData();
-        [SerializeField] private List<Character> m_character = new List<Character>();
+        [SerializeField] private List<Humanoid> m_character = new List<Humanoid>();
         [SerializeField] internal WardIsLovePlugin.WardDamageTypes _type;
         [SerializeField] internal Vector3 staggerDirection = new Vector3(0f, 0f, 0f);
 
         private void OnTriggerEnter(Collider collider)
         {
             Player component = null;
-            Character component2 = null;
+            Humanoid component2 = null;
             if (collider.GetComponent<Player>())
             {
                 component = collider.GetComponent<Player>();
             }
-            else if (collider.GetComponent<Character>())
+            else if (collider.GetComponent<Humanoid>())
             {
-                component2 = collider.GetComponent<Character>();
+                component2 = collider.GetComponent<Humanoid>();
             }
 
             if (component2 != null && Player.m_localPlayer != component2)
             {
                 PushoutCreaturesRoutine = StartCoroutine(PushoutCreature(component2, m_wardEntered));
                 /* Ward Damage */
-                Character? monsterchar = collider.gameObject.GetComponent<Character>();
+                Humanoid? monsterchar = collider.gameObject.GetComponent<Humanoid>();
                 m_character.Add(monsterchar);
-                Humanoid? hum = collider.gameObject.GetComponent<Humanoid>();
-                hum.m_onDeath =
-                    (Action)Delegate.Combine(hum.m_onDeath, new Action(delegate { RemoveFromList(monsterchar); }));
+                monsterchar.m_onDeath =
+                    (Action)Delegate.Combine(monsterchar.m_onDeath, new Action(delegate { RemoveFromList(monsterchar); }));
 
                 DamageUpdate = StartCoroutine(UpdateDamage());
             }
@@ -78,14 +77,14 @@ namespace WardIsLove.Util.Bubble
 
         private void OnTriggerExit(Collider collider)
         {
-            collider.TryGetComponent(typeof(Character), out Component test);
-            if (m_character.Contains((Character)test))
+            collider.TryGetComponent(typeof(Humanoid), out Component test);
+            if (m_character.Contains((Humanoid)test))
             {
                 if (DamageUpdate != null)
                 {
                     StopCoroutine(DamageUpdate);
                 }
-                m_character.Remove((Character)test);
+                m_character.Remove((Humanoid)test);
             }
 
             Player component = collider.GetComponent<Player>();
@@ -129,7 +128,7 @@ namespace WardIsLove.Util.Bubble
                 switch (_type)
                 {
                     case WardIsLovePlugin.WardDamageTypes.Frost:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -144,7 +143,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Poison:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -159,7 +158,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Fire:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -174,7 +173,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Lightning:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -189,7 +188,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Spirit:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -204,7 +203,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Stagger:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -219,7 +218,7 @@ namespace WardIsLove.Util.Bubble
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Normal:
-                        foreach (Character? character in m_character)
+                        foreach (Humanoid? character in m_character)
                         {
                             hitData = new HitData
                             {
@@ -237,7 +236,7 @@ namespace WardIsLove.Util.Bubble
             }
         }
 
-        private void RemoveFromList(Character character)
+        private void RemoveFromList(Humanoid character)
         {
             m_character.Remove(character);
         }

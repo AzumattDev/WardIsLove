@@ -11,6 +11,7 @@ using WardIsLove.Util.DiscordMessenger;
 using HarmonyLib;
 using PieceManager;
 using ServerSync;
+using Steamworks;
 using UnityEngine;
 using WardIsLove.Extensions;
 using WardIsLove.PatchClasses;
@@ -86,6 +87,8 @@ namespace WardIsLove
         public static int EffectTick = 0;
         public static BuildPiece Thorward;
         public static GameObject LightningVFX;
+        internal static string CachedID = "";
+        internal static string CachedPersona = "";
 
         private static Sprite icon;
         public static readonly ManualLogSource WILLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
@@ -289,24 +292,23 @@ namespace WardIsLove
             WardGUI.Init();
             WardLimitServerCheck();
             //GetWebHook();
-            new DiscordMessage()
+            /*new DiscordMessage()
                 .SetUsername("Test Message")
-                .SetAvatar("https://i.imgur.com/xNGfbn3.png")
+                .SetAvatar("https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
                 .SetContent("Azumatt testing YAML based discord webhook")
                 .AddEmbed()
                 .SetTimestamp(DateTime.Now)
-                .SetAuthor("Feli", "https://i.imgur.com/xNGfbn3.png", "https://i.imgur.com/xNGfbn3.png")
+                .SetAuthor("Feli", "https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png", "https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
                 .SetTitle("Test Embed")
                 .SetDescription(
                     "Modified version of DiscordMessenger. This is a test embedding with projects that use YamlDotNet.")
                 .SetColor(14177041)
                 .AddField("Test Field", "Test Value")
                 .AddField("Test Field", "Test Value Inline", true)
-                .SetFooter("Test Footer", "https://i.imgur.com/xNGfbn3.png")
+                .SetFooter("Test Footer", "https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
                 .Build()
                 .SendMessageAsync(
-                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");
-
+                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");*/
 
             SetupWatcher();
         }
@@ -454,7 +456,7 @@ namespace WardIsLove
         {
             static bool Prefix(PrivateArea __instance)
             {
-                return false;
+                return __instance.gameObject.name != "guard_stone";
             }
         }
 

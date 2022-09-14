@@ -315,7 +315,8 @@ public class BuildPiece
 							attributes.Browsable = cfg.table.Value != CraftingTable.None;
 						}
                         ReloadConfigDisplay();
-					}
+                        plugin.Config.Save();
+                    }
 					cfg.table.SettingChanged += TableConfigChanged;
 					cfg.customTable.SettingChanged += TableConfigChanged;
 
@@ -392,7 +393,18 @@ public class BuildPiece
                 }
                 else
                 {
-                    piece.Prefab.GetComponent<Piece>().m_craftingStation = ZNetScene.instance.GetPrefab(((InternalName)typeof(CraftingTable).GetMember((cfg == null || piece.Crafting.Stations.Count > 0 ? station.Table : cfg.table.Value).ToString())[0].GetCustomAttributes(typeof(InternalName)).First()).internalName).GetComponent<CraftingStation>();
+                    if (cfg != null && cfg.table.Value == CraftingTable.None)
+                    {
+                        piece.Prefab.GetComponent<Piece>().m_craftingStation = null;
+                    }
+                    else
+                    {
+                        piece.Prefab.GetComponent<Piece>().m_craftingStation = ZNetScene.instance
+                            .GetPrefab(((InternalName)typeof(CraftingTable).GetMember(
+                                (cfg == null || piece.Crafting.Stations.Count > 0 ? station.Table : cfg.table.Value)
+                                .ToString())[0].GetCustomAttributes(typeof(InternalName)).First()).internalName)
+                            .GetComponent<CraftingStation>();
+                    }
                 }
             }
 
