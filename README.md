@@ -154,6 +154,7 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 > - Update ServerSync internally
 > - Make GUID of the mod be the same as my other mods (Azumatt vs azumatt as the prefix)
 > - Update PieceManager code to my latest.
+> - Update Admin check for crossplay
 > - `NOTE:` A real update will be coming to this mod soon. This is just a quick fix to get it working again.
 > ### v3.0.4
 > - <strong>Performance for the bubble has been improved. It should be less intensive on your machine. Vertices have been reduced by over half!</strong>
