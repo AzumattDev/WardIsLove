@@ -20,8 +20,8 @@ using WardIsLove.Util.UI;
 
 namespace WardIsLove
 {
-    [BepInPlugin(HGUIDLower, ModName, version)]
-    [BepInIncompatibility("azumatt.BetterWards")]
+    [BepInPlugin(HGUID, ModName, version)]
+    [BepInIncompatibility("Azumatt.BetterWards")]
     //[BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     public partial class WardIsLovePlugin : BaseUnityPlugin
@@ -70,13 +70,12 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.0.4";
+        public const string version = "3.0.5";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
-        internal const string HGUIDLower = "azumatt.WardIsLove";
         private const string HarmonyGUID = "Harmony." + Author + "." + ModName;
-        private static string ConfigFileName = HGUIDLower + ".cfg";
+        private static string ConfigFileName = HGUID + ".cfg";
         private static string ConfigFileFullPath = Paths.ConfigPath + Path.DirectorySeparatorChar + ConfigFileName;
         public static string ConnectionError = "";
         public static bool IsUpToDate;
@@ -273,7 +272,7 @@ namespace WardIsLove
 
             localizationFile =
                 new ConfigFile(
-                    Path.Combine(Paths.ConfigPath, HGUIDLower + ".Localization.cfg"), false);
+                    Path.Combine(Paths.ConfigPath, HGUID + ".Localization.cfg"), false);
 
             // send log
             WILLogger.LogDebug("Loading WardIsLove configuration file");
