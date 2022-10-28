@@ -22,7 +22,7 @@ namespace WardIsLove.Util.RPCShit
                 }
 
                 //string str = ((ZSteamSocket)peer.m_socket).GetPeerID().m_SteamID.ToString();
-                if (ZNet.instance.m_adminList == null || !ZNet.instance.m_adminList.Contains(str))
+                if (ZNet.instance.m_adminList == null || !ZNet.instance.ListContainsId(ZNet.instance.m_adminList, str))
                     return;
                 WardIsLovePlugin.WILLogger.LogInfo($"Admin Detected: {str}");
                 ZRoutedRpc.instance.InvokeRoutedRPC(sender, "EventAdminSync", pkg);
@@ -76,7 +76,7 @@ namespace WardIsLove.Util.RPCShit
                 ZRoutedRpc.instance.InvokeRoutedRPC(sender, "BadRequestMsg", zpackage);
             }
         }
-        
+
         public static void RPC_RequestDropdownPlayers(long sender, ZPackage pkg)
         {
             if (ZNet.instance.m_peers.Count <= 0)
@@ -92,9 +92,11 @@ namespace WardIsLove.Util.RPCShit
                 zpackage.Write(player.m_publicPosition);
                 if (player.m_publicPosition)
                     zpackage.Write(player.m_position);
-                
-                WardIsLovePlugin.WILLogger.LogDebug($"Server Data being sent to Dropdown list:\nName:{player.m_name}\nCharacterID:{player.m_characterID}\nHost:{player.m_host}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong("playerID")}");
+
+                WardIsLovePlugin.WILLogger.LogDebug(
+                    $"Server Data being sent to Dropdown list:\nName:{player.m_name}\nCharacterID:{player.m_characterID}\nHost:{player.m_host}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong("playerID")}");
             }
+
             ZRoutedRpc.instance.InvokeRoutedRPC(sender, "DropdownListEvent", zpackage);
         }
 
@@ -134,7 +136,7 @@ namespace WardIsLove.Util.RPCShit
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_RequestAdminSync));
             ZRoutedRpc.instance.Register("EventAdminSync",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_EventAdminSync));
-            
+
             /* Dropdown list fix */
             ZRoutedRpc.instance.Register("DropdownListRequest",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_RequestDropdownPlayers));
