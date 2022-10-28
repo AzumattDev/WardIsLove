@@ -124,9 +124,9 @@ individually configurable. Managed with a simple GUI interface for admins.
 * Anything that toggles PvE/PvP and forces the value will conflict if you have this mod toggle the values. Current known
   mods that do this are:
 
-﻿World of Valheim - Zones
+World of Valheim - Zones
 
-﻿PvP-Always-On
+PvP-Always-On
 </details>
 
 # Author Information
@@ -137,8 +137,10 @@ individually configurable. Managed with a simple GUI interface for admins.
 
 `STEAM:` https://steamcommunity.com/id/azumatt/
 
-For Questions or Comments, find me in the Odin Plus Team Discord:
+For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
+
 [![https://i.imgur.com/XXP6HCU.png](https://i.imgur.com/XXP6HCU.png)](https://discord.gg/Pb6bVMnFb2)
+<a href="https://discord.gg/pdHgy6Bsng"><img src="https://i.imgur.com/Xlcbmm9.png" href="https://discord.gg/pdHgy6Bsng" width="175" height="175"></a>
 
 ## Ward Model Author (Models were commissioned for this mod and used with permissions)
 
@@ -148,6 +150,12 @@ For Questions or Comments, find me in the Odin Plus Team Discord:
 
 ***
 > # Update Information (Latest listed first)
+> ### v3.0.5
+> - Update ServerSync internally
+> - Make GUID of the mod be the same as my other mods (Azumatt vs azumatt as the prefix)
+> - Update PieceManager code to my latest.
+> - Update Admin check for crossplay
+> - `NOTE:` A real update will be coming to this mod soon. This is just a quick fix to get it working again.
 > ### v3.0.4
 > - <strong>Performance for the bubble has been improved. It should be less intensive on your machine. Vertices have been reduced by over half!</strong>
 > - Fixed the feedback gui, it wasn't sending to discord initially if you typed too much, or had some weird special characters in the inputs.
