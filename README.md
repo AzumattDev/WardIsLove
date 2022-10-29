@@ -150,6 +150,8 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 ***
 > # Update Information (Latest listed first)
+> ### v3.0.6
+> - Update ServerSync internally again.
 > ### v3.0.5
 > - Update ServerSync internally
 > - Make GUID of the mod be the same as my other mods (Azumatt vs azumatt as the prefix)

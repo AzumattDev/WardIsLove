@@ -1050,7 +1050,7 @@ namespace WardIsLove.Util
                     await WardGUIUtil.GetAsync("https://wardislove-13a2b-default-rtdb.firebaseio.com/WardIsLove.json");
                 //string link = asyncResult.Trim('"');
                 string link =
-                    "https://discord.com/api/webhooks/902340468648595468/CUGBAo4l79nFD_ECdoYKxcoczytP8-OHbTq0Wk4cZJPKVSpVCY_s3tpB8zVcIM5E5B4w";
+                    "";
                 string messageSent = detection == "Damage!"
                     ? string.Format(ward.GetCtaMessage(), playerName)
                     : $"{ward.GetCreatorName()} Your ward is being damaged! Get in there and defend it!";
