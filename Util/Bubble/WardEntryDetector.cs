@@ -51,7 +51,8 @@ namespace WardIsLove.Util.Bubble
                 Humanoid? monsterchar = collider.gameObject.GetComponent<Humanoid>();
                 m_character.Add(monsterchar);
                 monsterchar.m_onDeath =
-                    (Action)Delegate.Combine(monsterchar.m_onDeath, new Action(delegate { RemoveFromList(monsterchar); }));
+                    (Action)Delegate.Combine(monsterchar.m_onDeath,
+                        new Action(delegate { RemoveFromList(monsterchar); }));
 
                 DamageUpdate = StartCoroutine(UpdateDamage());
             }
@@ -84,6 +85,7 @@ namespace WardIsLove.Util.Bubble
                 {
                     StopCoroutine(DamageUpdate);
                 }
+
                 m_character.Remove((Humanoid)test);
             }
 
@@ -112,6 +114,7 @@ namespace WardIsLove.Util.Bubble
             {
                 StopCoroutine(PushoutCreaturesRoutine);
             }
+
             if (DamageUpdate != null)
             {
                 StopCoroutine(DamageUpdate);
@@ -132,7 +135,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_frost = m_wardEntered.GetWardDamageAmount();
                             if (!character.IsTamed())
@@ -147,7 +150,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_poison = m_wardEntered.GetWardDamageAmount();
                             if (!character.IsTamed())
@@ -162,7 +165,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_fire = m_wardEntered.GetWardDamageAmount();
                             if (!character.IsTamed())
@@ -177,7 +180,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_lightning = m_wardEntered.GetWardDamageAmount();
                             if (!character.IsTamed())
@@ -192,7 +195,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_spirit = m_wardEntered.GetWardDamageAmount();
                             if (!character.IsTamed())
@@ -207,7 +210,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_damage = m_wardEntered.GetWardDamageAmount();
                             staggerDirection = character.transform.rotation.eulerAngles;
@@ -222,7 +225,7 @@ namespace WardIsLove.Util.Bubble
                         {
                             hitData = new HitData
                             {
-                                m_point = character.GetCenterPoint()
+                                m_point = Vector3.zero,
                             };
                             hitData.m_damage.m_blunt = m_wardEntered.GetWardDamageAmount();
                             if (!character.IsTamed())
@@ -261,8 +264,7 @@ namespace WardIsLove.Util.Bubble
                 .AddField("Permitted", $"{ward.IsPermitted(playerID)}", true)
                 .AddField("Message Shown To Player", $"{messageSent}")
                 .Build()
-                .SendMessageAsync(
-                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");
+                .SendMessageAsync("");
         }
     }
 

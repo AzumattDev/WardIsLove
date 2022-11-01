@@ -70,7 +70,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.0.5";
+        public const string version = "3.0.7";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -307,7 +307,7 @@ namespace WardIsLove
                 .SetFooter("Test Footer", "https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
                 .Build()
                 .SendMessageAsync(
-                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");*/
+                    "");*/
 
             SetupWatcher();
         }
@@ -317,8 +317,8 @@ namespace WardIsLove
             Task.Run(async () =>
             {
                 string asyncResult =
-                    //await WardGUIUtil.GetAsync("https://wardislove-13a2b-default-rtdb.firebaseio.com/WardIsLove.json");
-                    await WardGUIUtil.GetAsync("https://kgwebhook-default-rtdb.firebaseio.com/azumattwebhook.json");
+                    //await WardGUIUtil.GetAsync("");
+                    await WardGUIUtil.GetAsync("");
                 string link = asyncResult.Trim('"');
             });
         }

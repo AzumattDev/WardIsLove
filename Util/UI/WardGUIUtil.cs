@@ -367,7 +367,7 @@ namespace WardIsLove.Util.UI
                 .AddField("Message", $"{Escaper(m_text.text)}")
                 .Build()
                 .SendMessageAsync(
-                    "https://discord.com/api/webhooks/1013108653454266418/LWzwvOcLZwJ-QbtPq49VxJ9yMNc2sP2v17fuG8fpBGj10ZDKn6GW_AqJ3-6B8h0Ox_pj");
+                    "redacted");
             Hide();
         }
 

@@ -150,6 +150,11 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 ***
 > # Update Information (Latest listed first)
+> ### v3.0.7
+> - Minor fix to PieceManager to prevent a null reference exception
+> - Remove GetCenterPoint function all together. Just attempt to hit Vector3.Zero, should fix that NRE with custom creatures, but damage text will no longer show.
+> ### v3.0.6
+> - Update ServerSync internally again.
 > ### v3.0.5
 > - Update ServerSync internally
 > - Make GUID of the mod be the same as my other mods (Azumatt vs azumatt as the prefix)
