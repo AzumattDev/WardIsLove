@@ -367,7 +367,7 @@ namespace WardIsLove.Util.UI
                 .AddField("Message", $"{Escaper(m_text.text)}")
                 .Build()
                 .SendMessageAsync(
-                    "redacted");
+                    "");
             Hide();
         }
 

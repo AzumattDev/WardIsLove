@@ -69,7 +69,7 @@ namespace WardIsLove.PatchClasses
                 string[] array = paa.GetIndestructList().ToLower().Trim().Split(',').ToArray();
                 if (!array.Any()) return shouldDamage;
                 foreach (string item in array)
-                    if (__instance.m_nview.GetPrefabName().Contains(item))
+                    if (__instance.m_nview.GetPrefabName().ToLower().Contains(item))
                     {
                         shouldDamage = false;
                         return shouldDamage;
