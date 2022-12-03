@@ -56,13 +56,13 @@ namespace WardIsLove.PatchClasses
                         shouldDamage = false;
                     }
 
-                    return shouldDamage;
+                    //return shouldDamage;
                 }
 
                 if (paa.GetStructDamageReduc() > 0)
                 {
                     damage *= (float)(1.0 - paa.GetStructDamageReduc() / 100.0);
-                    return shouldDamage;
+                    //return shouldDamage;
                 }
 
                 if (!paa.GetIndestructibleOn()) return shouldDamage;

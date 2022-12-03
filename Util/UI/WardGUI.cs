@@ -66,7 +66,7 @@ namespace WardIsLove.Util.UI
                 // ignored
             }
 
-            for (int i = 0; i < Enum.GetNames(typeof(WardIsLovePlugin.WardGUIFeedbackEnums)).Length; i++)
+            for (int i = 0; i < Enum.GetNames(typeof(WardIsLovePlugin.WardGUIFeedbackEnums)).Length; ++i)
             {
                 string en = GetString((WardIsLovePlugin.WardGUIFeedbackEnums)i);
 
