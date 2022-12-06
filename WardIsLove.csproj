@@ -233,6 +233,7 @@
     -->
     <Target Name="Copy" AfterTargets="ILRepack">
         <!--<Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PermaTesting\BepInEx\plugins\Azumatt-WardIsLove\$(AssemblyName).dll&quot;" />-->
+        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PTB\BepInEx\plugins\_TESTINGMODS\$(AssemblyName).dll&quot;" />
       <!--  <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\testepi\BepInEx\plugins\$(AssemblyName).dll&quot;" />-->
     </Target>
 
