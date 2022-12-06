@@ -56,20 +56,20 @@ namespace WardIsLove.PatchClasses
                         shouldDamage = false;
                     }
 
-                    return shouldDamage;
+                    //return shouldDamage;
                 }
 
                 if (paa.GetStructDamageReduc() > 0)
                 {
                     damage *= (float)(1.0 - paa.GetStructDamageReduc() / 100.0);
-                    return shouldDamage;
+                    //return shouldDamage;
                 }
 
                 if (!paa.GetIndestructibleOn()) return shouldDamage;
                 string[] array = paa.GetIndestructList().ToLower().Trim().Split(',').ToArray();
                 if (!array.Any()) return shouldDamage;
                 foreach (string item in array)
-                    if (__instance.m_nview.GetPrefabName().Contains(item))
+                    if (__instance.m_nview.GetPrefabName().ToLower().Contains(item))
                     {
                         shouldDamage = false;
                         return shouldDamage;

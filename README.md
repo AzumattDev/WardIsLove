@@ -150,6 +150,8 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 ***
 > # Update Information (Latest listed first)
+> ### v3.0.8
+> - Mistlands Update
 > ### v3.0.7
 > - Minor fix to PieceManager to prevent a null reference exception
 > - Remove GetCenterPoint function all together. Just attempt to hit Vector3.Zero, should fix that NRE with custom creatures, but damage text will no longer show.
