@@ -147,6 +147,7 @@ namespace WardIsLove.Util
                 m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
                     gradient.colorKeys[1].color;
             }
+            
         }
 
         private void SwapWardModel(long sender, int index)
@@ -1032,7 +1033,7 @@ namespace WardIsLove.Util
             if (!IsEnabled())
                 return;
             FlashShield(false);
-            if (m_nview.GetZDO().GetFloat("health") < (GetComponent<WearNTear>().m_health / 2))
+            if (m_nview.GetZDO().GetFloat("health", GetComponent<WearNTear>().m_health) < (GetComponent<WearNTear>().m_health / 2))
             {
                 this.SetBubbleOn(false);
             }

@@ -150,6 +150,8 @@ For Questions or Comments, find me in the Odin Plus Team Discord or in mine:
 
 ***
 > # Update Information (Latest listed first)
+> ### v3.0.9
+> - Update to the health of the ward to fix instant bubble pop
 > ### v3.0.8
 > - Mistlands Update
 > ### v3.0.7
