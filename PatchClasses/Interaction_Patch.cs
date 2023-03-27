@@ -8,6 +8,39 @@ namespace WardIsLove.PatchClasses
     [HarmonyPatch]
     public static class Interaction_Patch
     {
+        /*[HarmonyPatch(typeof(Hud), nameof(Hud.UpdateCrosshair))]
+        static class HudUpdateCrosshairPatch
+        {
+            static void Prefix(Hud __instance)
+            {
+                if (Player.m_localPlayer == null) return;
+                var player = Player.m_localPlayer;
+                GameObject hoverObject = player.GetHoverObject();
+                Hoverable hoverable = hoverObject
+                    ? hoverObject.GetComponentInParent<Hoverable>()
+                    : null;
+                if (hoverable != null && !TextViewer.instance.IsVisible())
+                {
+                    // Check the layer of the hoverable object
+                    if (hoverObject.layer == LayerMask.NameToLayer("piece"))
+                    {
+                        if (!WardEnabled.Value)
+                            return;
+                        if (!WardMonoscript.CheckInWardMonoscript(hoverObject.transform.position) ||
+                            CustomCheck.CheckAccess(
+                                player.GetPlayerID(), hoverObject.transform.position,
+                                flash: false)) return;
+                        WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(hoverObject.transform.position);
+                        if (pa.GetChestInteractOn()) return;
+                        
+                        player.Message(MessageHud.MessageType.Center, "$msg_privatezone");
+                        return;
+                    }
+                }
+            }
+        }*/
+
+
         [HarmonyPatch(typeof(Sign), nameof(Sign.Interact))]
         [HarmonyPrefix]
         private static bool SignInteraction(Sign __instance, Humanoid character)

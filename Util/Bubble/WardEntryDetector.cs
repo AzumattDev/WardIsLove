@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
 using WardIsLove.Util.DiscordMessenger;
-using WardIsLove.Util.UI;
 using static WardIsLove.PatchClasses.PlayerHealthUpdatePatch;
 using static WardIsLove.PatchClasses.PlayerStaminaUpdatePatch;
 using static WardIsLove.PatchClasses.PushoutNonPermitted;
@@ -33,51 +31,54 @@ namespace WardIsLove.Util.Bubble
 
         private void OnTriggerEnter(Collider collider)
         {
-            Player component = null;
-            Humanoid component2 = null;
-            if (collider.GetComponent<Player>())
-            {
-                component = collider.GetComponent<Player>();
-            }
-            else if (collider.GetComponent<Humanoid>())
-            {
-                component2 = collider.GetComponent<Humanoid>();
-            }
+            if (collider == null) { return; }
+
+            Player component = collider.GetComponent<Player>();
+            Humanoid component2 = collider.GetComponent<Humanoid>();
 
             if (component2 != null && Player.m_localPlayer != component2)
             {
                 PushoutCreaturesRoutine = StartCoroutine(PushoutCreature(component2, m_wardEntered));
-                /* Ward Damage */
-                Humanoid? monsterchar = collider.gameObject.GetComponent<Humanoid>();
-                m_character.Add(monsterchar);
-                monsterchar.m_onDeath =
-                    (Action)Delegate.Combine(monsterchar.m_onDeath,
-                        new Action(delegate { RemoveFromList(monsterchar); }));
 
-                DamageUpdate = StartCoroutine(UpdateDamage());
+                // Ward Damage
+                Humanoid monsterchar = collider.gameObject.GetComponent<Humanoid>();
+                if (monsterchar != null)
+                {
+                    m_character.Add(monsterchar);
+                    monsterchar.m_onDeath = (Action)Delegate.Combine(monsterchar.m_onDeath, new Action(delegate { RemoveFromList(monsterchar); }));
+                    DamageUpdate = StartCoroutine(UpdateDamage());
+                }
             }
 
             if (component == null || Player.m_localPlayer != component)
                 return;
-            if (m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
+
+            if (m_wardEntered != null && m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
+            {
                 Player.m_localPlayer.Message(MessageHud.MessageType.Center,
                     string.Format(m_wardEntered.GetWardEnterNotifyMessage(), m_wardEntered.GetCreatorName()));
+            }
 
-            /* Send the player a message about the raidable status on entry as well */
-            if (m_wardEntered.GetRaidProtectionOn())
+            // Send the player a message about the raidable status on entry as well
+            if (m_wardEntered != null && m_wardEntered.GetRaidProtectionOn())
+            {
                 OfflineStatus.CheckOfflineStatus(m_wardEntered);
+            }
 
-            Heal = StartCoroutine(DelayedHeal(component, m_wardEntered));
-            Stamina = StartCoroutine(DelayedStaminaRegen(component, m_wardEntered));
-
-            PushoutPlayersRoutine = StartCoroutine(PushoutPlayer(component, m_wardEntered));
-
+            if (component != null && m_wardEntered != null)
+            {
+                Heal = StartCoroutine(DelayedHeal(component, m_wardEntered));
+                Stamina = StartCoroutine(DelayedStaminaRegen(component, m_wardEntered));
+                PushoutPlayersRoutine = StartCoroutine(PushoutPlayer(component, m_wardEntered));
+            }
 
             //SendWardMessage(m_wardEntered, component.GetPlayerName(), "Entered", component.GetPlayerID());
         }
 
+
         private void OnTriggerExit(Collider collider)
         {
+            if(collider == null) { return; }
             collider.TryGetComponent(typeof(Humanoid), out Component test);
             if (m_character.Contains((Humanoid)test))
             {
@@ -86,7 +87,7 @@ namespace WardIsLove.Util.Bubble
                     StopCoroutine(DamageUpdate);
                 }
 
-                m_character.Remove((Humanoid)test);
+                RemoveFromList((Humanoid)test);
             }
 
             Player component = collider.GetComponent<Player>();
@@ -124,112 +125,144 @@ namespace WardIsLove.Util.Bubble
 
         private IEnumerator UpdateDamage()
         {
-            /* TODO Condense this later, if possible. */
+            // TODO Condense this later, if possible.
             while (true)
             {
                 yield return new WaitForSeconds(WardIsLovePlugin.WardDamageRepeatRate.Value);
                 switch (_type)
                 {
                     case WardIsLovePlugin.WardDamageTypes.Frost:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_frost = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_frost = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             if (!character.IsTamed())
                             {
-                                character.ApplyDamage(hitData, true, false);
+                                if (!character.IsPlayer())
+                                {
+                                    character.ApplyDamage(hitData, true, false);
+                                }
                             }
                         }
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Poison:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_poison = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_poison = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             if (!character.IsTamed())
                             {
-                                character.ApplyDamage(hitData, true, false);
+                                if (!character.IsPlayer())
+                                {
+                                    character.ApplyDamage(hitData, true, false);
+                                }
                             }
                         }
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Fire:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_fire = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_fire = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             if (!character.IsTamed())
                             {
-                                character.ApplyDamage(hitData, true, false);
+                                if (!character.IsPlayer())
+                                {
+                                    character.ApplyDamage(hitData, true, false);
+                                }
                             }
                         }
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Lightning:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_lightning = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_lightning = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             if (!character.IsTamed())
                             {
-                                character.ApplyDamage(hitData, true, false);
+                                if (!character.IsPlayer())
+                                {
+                                    character.ApplyDamage(hitData, true, false);
+                                }
                             }
                         }
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Spirit:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_spirit = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_spirit = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             if (!character.IsTamed())
                             {
-                                character.ApplyDamage(hitData, true, false);
+                                if (!character.IsPlayer())
+                                {
+                                    character.ApplyDamage(hitData, true, false);
+                                }
                             }
                         }
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Stagger:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_damage = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_damage = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             staggerDirection = character.transform.rotation.eulerAngles;
-                            if (character.IsTamed()) continue;
-                            character.AddStaggerDamage(hitData.m_damage.m_damage, staggerDirection);
-                            character.ApplyDamage(hitData, true, false);
+                            if (!character.IsTamed())
+                            {
+                                if (!character.IsPlayer())
+                                {
+                                    character.AddStaggerDamage(hitData.m_damage.m_damage, staggerDirection);
+                                    character.ApplyDamage(hitData, true, false);
+                                }
+                            }
                         }
 
                         break;
                     case WardIsLovePlugin.WardDamageTypes.Normal:
-                        foreach (Humanoid? character in m_character)
+                        foreach (Humanoid character in m_character)
                         {
+                            if (character == null) continue;
                             hitData = new HitData
                             {
                                 m_point = Vector3.zero,
                             };
-                            hitData.m_damage.m_blunt = m_wardEntered.GetWardDamageAmount();
+                            hitData.m_damage.m_blunt = m_wardEntered?.GetWardDamageAmount() ?? 0f;
                             if (!character.IsTamed())
-                                character.ApplyDamage(hitData, true, false);
+                            {
+                                if (!character.IsPlayer())
+                                {
+                                    character.ApplyDamage(hitData, true, false);
+                                }
+                            }
                         }
 
                         break;
@@ -241,6 +274,7 @@ namespace WardIsLove.Util.Bubble
 
         private void RemoveFromList(Humanoid character)
         {
+            if(character == null) return;
             m_character.Remove(character);
         }
 

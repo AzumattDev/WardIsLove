@@ -284,13 +284,13 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_deactivate");
+                    _ = text.Append("\n[<color=#FFFF00><b>$KEY_Use</b></color>] • $piece_guardstone_deactivate");
                 }
                 else
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_activate");
+                    _ = text.Append("\n[<color=#FFFF00><b>$KEY_Use</b></color>] • $piece_guardstone_activate");
                 }
             }
             else if (IsPermitted(Player.m_localPlayer.GetPlayerID()))
@@ -299,7 +299,7 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin.WardHotKey.Value +
+                    _ = text.Append("\n[<color=#FFFF00><b>" + WardIsLovePlugin.WardHotKey.Value +
                                     $"</b></color>] • $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
                     if (WardIsLovePlugin.WardHotKey.Value.IsDown())
                     {
@@ -317,9 +317,9 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=yellow><b>" + WardIsLovePlugin.WardHotKey.Value +
+                    _ = text.Append("\n[<color=#FFFF00><b>" + WardIsLovePlugin.WardHotKey.Value +
                                     $"</b></color>] • $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
-                    _ = text.Append("\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_remove");
+                    _ = text.Append("\n[<color=#FFFF00><b>$KEY_Use</b></color>] • $piece_guardstone_remove");
                     if (WardIsLovePlugin.WardHotKey.Value.IsDown())
                     {
                         //SetEnabled(!IsEnabled());
@@ -344,23 +344,23 @@ namespace WardIsLove.Util
                 AppendNameText(text);
                 AdminAppend(text);
                 _ = text.Append(IsPermitted(Player.m_localPlayer.GetPlayerID())
-                    ? "\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_remove"
-                    : "\n[<color=yellow><b>$KEY_Use</b></color>] • $piece_guardstone_add");
+                    ? "\n[<color=#FFFF00><b>$KEY_Use</b></color>] • $piece_guardstone_remove"
+                    : "\n[<color=#FFFF00><b>$KEY_Use</b></color>] • $piece_guardstone_add");
             }
 
             AddUserList(text);
             int timeto = m_nview.m_zdo.GetInt("WILLimitedWardTime") + WardIsLovePlugin.MaxDaysDifference;
             int difference = timeto - EnvMan.instance.GetCurrentDay();
             string tf = EnvMan.instance.GetCurrentDay() >= timeto
-                ? "<color=red>No</color>\n"
-                : "<color=lime>Yes</color>";
+                ? "<color=#FF0000>No</color>\n"
+                : "<color=#00FF00>Yes</color>";
             string isEnabled = $"Is ward charged • {tf}";
             if (difference < 0)
             {
                 difference = 0;
             }
 
-            string daysTillExpire = $"\nDays Till Expiration • <color=lime>{difference}</color>\n";
+            string daysTillExpire = $"\nDays Till Expiration • <color=#00FF00>{difference}</color>\n";
             if (EnvMan.instance.GetCurrentDay() >= timeto)
             {
                 daysTillExpire = "";
@@ -372,11 +372,11 @@ namespace WardIsLove.Util
                 creatorText = m_piece.IsCreator() ||
                               IsPermitted(Player.m_localPlayer.GetPlayerID())
                     ? Localization.instance.Localize(
-                        "[<color=yellow><b>LAlt + $KEY_Use</b></color>] <color=lime>Recharge Ward</color>\n\n")
+                        "[<color=#FFFF00><b>LAlt + $KEY_Use</b></color>] <color=#00FF00>Recharge Ward</color>\n\n")
                     : "";
             }
 
-            string result = "<color=cyan>" + isEnabled + daysTillExpire + "</color>" +
+            string result = "<color=#00FFFF>" + isEnabled + daysTillExpire + "</color>" +
                             creatorText;
             return result + Localization.instance.Localize(text.ToString());
         }
@@ -604,7 +604,7 @@ namespace WardIsLove.Util
             if (WardIsLovePlugin.Admin && !WardIsLovePlugin.StreamerMode.Value)
             {
                 _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName() +
-                                " <color=orange><b>[Steam Info: " +
+                                " <color=#FFA500><b>[Steam Info: " +
                                 m_nview.GetZDO().GetString("steamName") + " " +
                                 m_nview.GetZDO().GetString("steamID") + "]</b></color>");
             }
@@ -625,7 +625,7 @@ namespace WardIsLove.Util
                 if (WardIsLovePlugin.WardControl.Value || WardIsLovePlugin.Admin)
                 {
                     text.Append(Localization.instance.Localize(
-                        "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
+                        "\n[<color=#FFFF00><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
                 }
 
                 text.Append(Localization.instance.Localize(
@@ -640,7 +640,7 @@ namespace WardIsLove.Util
                 if (WardIsLovePlugin.Admin && !WardIsLovePlugin.DisableGUI.Value)
                 {
                     text.Append(Localization.instance.Localize(
-                        "\n[<color=yellow><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
+                        "\n[<color=#FFFF00><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
                 }
 
                 text.Append(Localization.instance.Localize(
@@ -1098,20 +1098,20 @@ namespace WardIsLove.Util
                 }
                 else if (m_modelDefault.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=orange>Odin</color>" + " ($piece_guardstone_active)");
+                    _ = text.Append("<color=#FFA500>Odin</color>" + " ($piece_guardstone_active)");
                 }
                 else if (m_modelLoki.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=green>Loki</color>" + " ($piece_guardstone_active)");
+                    _ = text.Append("<color=#00FF00>Loki</color>" + " ($piece_guardstone_active)");
                 }
                 else if (m_modelHel.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=red>Hel</color>" + " ($piece_guardstone_active)");
+                    _ = text.Append("<color=#FF0000>Hel</color>" + " ($piece_guardstone_active)");
                 }
                 else if (m_modelBetterWard.gameObject.activeSelf || m_modelBetterWard_Type2.gameObject.activeSelf ||
                          m_modelBetterWard_Type3.gameObject.activeSelf || m_modelBetterWard_Type4.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=white>Better Ward</color>" + " ($piece_guardstone_active)");
+                    _ = text.Append("<color=#FFFFFF>Better Ward</color>" + " ($piece_guardstone_active)");
                 }
             }
             else
@@ -1122,20 +1122,20 @@ namespace WardIsLove.Util
                 }
                 else if (m_modelDefault.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=orange>Odin</color>" + " ($piece_guardstone_inactive)");
+                    _ = text.Append("<color=#FFA500>Odin</color>" + " ($piece_guardstone_inactive)");
                 }
                 else if (m_modelLoki.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=green>Loki</color>" + " ($piece_guardstone_inactive)");
+                    _ = text.Append("<color=#00FF00>Loki</color>" + " ($piece_guardstone_inactive)");
                 }
                 else if (m_modelHel.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=red>Hel</color>" + " ($piece_guardstone_inactive)");
+                    _ = text.Append("<color=#FF0000>Hel</color>" + " ($piece_guardstone_inactive)");
                 }
                 else if (m_modelBetterWard.gameObject.activeSelf || m_modelBetterWard_Type2.gameObject.activeSelf ||
                          m_modelBetterWard_Type3.gameObject.activeSelf || m_modelBetterWard_Type4.gameObject.activeSelf)
                 {
-                    _ = text.Append("<color=white>Better Ward</color>" + " ($piece_guardstone_inactive)");
+                    _ = text.Append("<color=#FFFFFF>Better Ward</color>" + " ($piece_guardstone_inactive)");
                 }
             }
         }

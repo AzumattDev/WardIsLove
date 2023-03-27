@@ -39,8 +39,8 @@ namespace WardIsLove.Util.UI
             GameObject go2 =
                 wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUINoAdmin.prefab");
             GameObject go = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUI.prefab");
-            WardIsLovePlugin.LightningVFX =
-                PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningAOE");
+            WardIsLovePlugin.LightningVFX = PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningAOE");
+            PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningActivation");
             try
             {
                 WardIsLovePlugin.Thorward.Prefab.GetComponent<WardMonoscript>().m_bubble

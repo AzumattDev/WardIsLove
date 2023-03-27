@@ -94,14 +94,14 @@ namespace WardIsLove.PatchClasses
             _ = LocalizeWord("wardmenu_raidplayersneeded", "Players Needed");
 
             /* Ward Tab Feedback */
-            _ = LocalizeWord("wardmenu_optionfeedback", "<color=yellow>Feedback</color>");
-            _ = LocalizeWord("wardmenu_optionbug", "<color=red>Bug</color>");
-            _ = LocalizeWord("wardmenu_optionidea", "<color=green>Idea</color>");
+            _ = LocalizeWord("wardmenu_optionfeedback", "<color=#FFFF00>Feedback</color>");
+            _ = LocalizeWord("wardmenu_optionbug", "<color=#FF0000>Bug</color>");
+            _ = LocalizeWord("wardmenu_optionidea", "<color=#00FF00>Idea</color>");
 
             _ = LocalizeWord("wardmenu_wardislove", "Ward Is Love?");
 
             /* Thor ward */
-            _ = LocalizeWord("piece_thorward", "<color=cyan>Thor</color>");
+            _ = LocalizeWord("piece_thorward", "<color=#00FFFF>Thor</color>");
             _ = LocalizeWord("piece_thorward_description", "The power of Thor stored in order to protect you.");
         }
 

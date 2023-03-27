@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="environment.props" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -47,6 +48,7 @@
                 <GamePath Condition="!Exists('$(GamePath)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 892970', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GamePath>
                 <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
                 <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\Valheim</GamePath>
+                <GamePath Condition="!Exists('$(GamePath)')">$(ValheimGamePath)</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
             </PropertyGroup>
@@ -58,6 +60,7 @@
         <Compile Include="Extensions\ColorPicker.cs" />
         <Compile Include="Extensions\DragControl.cs" />
         <Compile Include="Extensions\GradientPicker.cs" />
+        <Compile Include="Extensions\PieceChecker.cs" />
         <Compile Include="Extensions\SliderValueToText.cs" />
         <Compile Include="Extensions\SliderWithText.cs" />
         <Compile Include="Extensions\TabSwitcher.cs" />
@@ -99,6 +102,7 @@
         <Compile Include="Util\DiscordMessenger\Thumbnail.cs" />
         <Compile Include="Util\DiscordMessenger\Video.cs" />
         <Compile Include="Util\GitHubCheck.cs" />
+        <Compile Include="Util\Manager\MaterialReplacer.cs" />
         <Compile Include="Util\Manager\PieceManager.cs" />
         <Compile Include="Util\ObjectDB.cs" />
         <Compile Include="Util\OfflineStatus.cs" />
@@ -115,6 +119,7 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include=".gitignore" />
+        <Content Include="environment.props" />
         <Content Include="ILRepack.targets" />
         <Content Include="Libs\fastJSON.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -125,9 +130,11 @@
         <Content Include="Libs\GuildsAPI.dll" />
         <Content Include="Libs\ServerSync.dll" />
         <Content Include="README.md" />
+        <Content Include="Thunderstore\CHANGELOG.md" />
         <Content Include="Thunderstore\icon.png" />
         <Content Include="Thunderstore\manifest.json" />
         <Content Include="Thunderstore\README.md" />
+        <Content Include="UpdateManifest.ps1" />
         <EmbeddedResource Include="wardislove" />
     </ItemGroup>
     <ItemGroup>
@@ -136,7 +143,7 @@
     </ItemGroup>
     <ItemGroup>
         <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\BepInEx\core\0Harmony.dll</HintPath>
+            <HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="assembly_guiutils, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
@@ -150,7 +157,7 @@
         <Reference Include="assembly_valheim, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
             <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
         </Reference>
-        <Reference Include="BepInEx, Version=5.4.19.0, Culture=neutral, PublicKeyToken=null">
+        <Reference Include="BepInEx">
             <HintPath>$(GamePath)\BepInEx\core\BepInEx.dll</HintPath>
         </Reference>
         <Reference Include="fastJSON">
@@ -234,7 +241,7 @@
     <Target Name="AfterBuild">
     </Target>
     -->
-    <Target Name="GetAssemblyVersion" AfterTargets="ILRepack">
+    <Target Name="GetAssemblyVersion" AfterTargets="ILRepacker">
         <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
             <Output TaskParameter="Assemblies" ItemName="Targets" />
         </GetAssemblyIdentity>
@@ -247,16 +254,28 @@
             <Minor>$(AssemblyVersion.Split('.')[1])</Minor>
             <Patch>$(AssemblyVersion.Split('.')[2])</Patch>
             <PackageName>$(AssemblyName)_v$(Major).$(Minor).$(Patch)</PackageName>
+            <PackageVersion>$(Major).$(Minor).$(Patch)</PackageVersion>
+            <VersionString>$(Major).$(Minor).$(Patch)</VersionString>
             <PackageDir>Thunderstore\$(PackageName)</PackageDir>
         </PropertyGroup>
     </Target>
     <Target Name="Copy" AfterTargets="GetAssemblyVersion">
-        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PTB\BepInEx\plugins\_TESTINGMODS\$(AssemblyName).dll&quot;" />
+        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(CopyOutputDLLPath)\$(AssemblyName).dll&quot;" />
         <Exec Command="copy /Y &quot;README.md&quot; &quot;Thunderstore\README.md&quot;" />
     </Target>
-    <Target Name="MakeThunderstorePackage" AfterTargets="Copy">
+    <Target Name="UpdateManifestVersion" AfterTargets="Copy" Condition="'$(OS)' == 'Windows_NT'">
         <ItemGroup>
-            <PackageFiles Include="$(TargetDir)$(AssemblyName).dll; Thunderstore\README.md; Thunderstore\manifest.json; Thunderstore\icon.png;" />
+            <ManifestFile Include="$(ProjectDir)Thunderstore\manifest.json" />
+        </ItemGroup>
+
+        <Message Text="ManifestFile is @(ManifestFile)" />
+        <Error Text="Thunderstore\manifest.json not found" Condition="!Exists(@(ManifestFile))" />
+        <Message Text="Updating version number in Thunderstore\manifest.json" Condition="Exists(@(ManifestFile))" />
+        <Exec Command="powershell.exe -ExecutionPolicy Bypass -Command &quot;&amp; { &amp; '$(ProjectDir)UpdateManifest.ps1' -manifestFile '@(ManifestFile)' -versionString '$(PackageVersion)' }&quot;" />
+    </Target>
+    <Target Name="MakeThunderstorePackage" AfterTargets="UpdateManifestVersion" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <ItemGroup>
+            <PackageFiles Include="$(TargetDir)$(AssemblyName).dll; Thunderstore\README.md; Thunderstore\CHANGELOG.md; Thunderstore\manifest.json; Thunderstore\icon.png;" />
         </ItemGroup>
         <MakeDir Directories="$(PackageDir)" />
         <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(PackageDir)" />

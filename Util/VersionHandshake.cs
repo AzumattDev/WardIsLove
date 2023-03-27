@@ -37,7 +37,7 @@ namespace WardIsLove.Util
 
         private static void Postfix(ZNet __instance)
         {
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestAdminSync",
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "WILRequestAdminSync",
                 new ZPackage());
         }
     }

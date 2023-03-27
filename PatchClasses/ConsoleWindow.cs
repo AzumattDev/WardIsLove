@@ -50,7 +50,7 @@ namespace WardIsLove.PatchClasses
                             if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                             gameObjectList.Add(componentInParent.gameObject);
                             args.Context?.AddString(
-                                $"<color=green>Ward in position: {componentInParent.transform.position} now permitted for {playerProfile.m_playerName}</color>");
+                                $"<color=#00FF00>Ward in position: {componentInParent.transform.position} now permitted for {playerProfile.m_playerName}</color>");
                         }
                     }, true);
 
@@ -82,7 +82,7 @@ namespace WardIsLove.PatchClasses
                                 if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                                 gameObjectList.Add(componentInParent.gameObject);
                                 args.Context?.AddString(
-                                    $"<color=yellow>Ward in position: {componentInParent.transform.position} removed permitted for {playerProfile.m_playerName}</color>");
+                                    $"<color=#FFFF00>Ward in position: {componentInParent.transform.position} removed permitted for {playerProfile.m_playerName}</color>");
                             }
                         });
 
@@ -113,7 +113,7 @@ namespace WardIsLove.PatchClasses
                                 if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                                 gameObjectList.Add(componentInParent.gameObject);
                                 args.Context?.AddString(
-                                    $"<color=orange>Ward in position: {componentInParent.transform.position} now disabled</color>");
+                                    $"<color=#FFA500>Ward in position: {componentInParent.transform.position} now disabled</color>");
                             }
                         });
                 /* Enable */
@@ -173,7 +173,7 @@ namespace WardIsLove.PatchClasses
                                 if (gameObjectList.Contains(componentInParent.gameObject)) continue;
                                 gameObjectList.Add(componentInParent.gameObject);
                                 args.Context?.AddString(
-                                    $"<color=yellow>Flashing Shield for ward in position: {componentInParent.transform.position}</color>");
+                                    $"<color=#FFFF00>Flashing Shield for ward in position: {componentInParent.transform.position}</color>");
                             }
                         });
             }

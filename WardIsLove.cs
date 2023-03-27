@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using WardIsLove.Util.DiscordMessenger;
 using HarmonyLib;
 using PieceManager;
 using ServerSync;
-using Steamworks;
 using UnityEngine;
 using WardIsLove.Extensions;
 using WardIsLove.PatchClasses;
@@ -70,7 +68,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.0.9";
+        public const string version = "3.1.0";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";

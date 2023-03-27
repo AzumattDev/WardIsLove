@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Util;
-using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
