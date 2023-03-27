@@ -2,8 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
-using fastJSON;
 using HarmonyLib;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;

@@ -25,13 +25,13 @@ namespace WardIsLove.Util.RPCShit
                 if (ZNet.instance.m_adminList == null || !ZNet.instance.ListContainsId(ZNet.instance.m_adminList, str))
                     return;
                 WardIsLovePlugin.WILLogger.LogInfo($"Admin Detected: {str}");
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "EventAdminSync", pkg);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILEventAdminSync", pkg);
             }
             else
             {
                 ZPackage zpackage = new();
                 zpackage.Write("You aren't an Admin!");
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "BadRequestMsg", zpackage);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILBadRequestMsg", zpackage);
             }
         }
 
@@ -46,13 +46,13 @@ namespace WardIsLove.Util.RPCShit
                 string debugEnv = EnvMan.instance.m_debugEnv;
                 zpackage2.Write(debugEnv);
                 WardIsLovePlugin.WILLogger.LogDebug("Syncing with clients...");
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "EventTestConnection", new ZPackage());
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILEventTestConnection", new ZPackage());
             }
             else
             {
                 ZPackage zpackage = new();
                 zpackage.Write("Peer doesn't exist");
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "BadRequestMsg", zpackage);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILBadRequestMsg", zpackage);
             }
         }
 
@@ -67,13 +67,13 @@ namespace WardIsLove.Util.RPCShit
                 string debugEnv = EnvMan.instance.m_debugEnv;
                 zpackage2.Write(debugEnv);
                 WardIsLovePlugin.WILLogger.LogInfo("Syncing with clients...");
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "EventTestConnection", new ZPackage());
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILEventTestConnection", new ZPackage());
             }
             else
             {
                 ZPackage zpackage = new();
                 zpackage.Write("Peer doesn't exist");
-                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "BadRequestMsg", zpackage);
+                ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILBadRequestMsg", zpackage);
             }
         }
 
@@ -97,7 +97,7 @@ namespace WardIsLove.Util.RPCShit
                     $"Server Data being sent to Dropdown list:\nName:{player.m_name}\nCharacterID:{player.m_characterID}\nHost:{player.m_host}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong("playerID")}");
             }
 
-            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "DropdownListEvent", zpackage);
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILDropdownListEvent", zpackage);
         }
 
         /// <summary>
@@ -132,15 +132,15 @@ namespace WardIsLove.Util.RPCShit
             ZRoutedRpc.instance.Register("RequestSync",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_RequestSync));
             ZRoutedRpc.instance.Register("EventSync", new Action<long, ZPackage>(ServerAdminSystem.RPC_EventSync));
-            ZRoutedRpc.instance.Register("RequestAdminSync",
+            ZRoutedRpc.instance.Register("WILRequestAdminSync",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_RequestAdminSync));
-            ZRoutedRpc.instance.Register("EventAdminSync",
+            ZRoutedRpc.instance.Register("WILEventAdminSync",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_EventAdminSync));
 
             /* Dropdown list fix */
-            ZRoutedRpc.instance.Register("DropdownListRequest",
+            ZRoutedRpc.instance.Register("WILDropdownListRequest",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_RequestDropdownPlayers));
-            ZRoutedRpc.instance.Register("DropdownListEvent",
+            ZRoutedRpc.instance.Register("WILDropdownListEvent",
                 new Action<long, ZPackage>(ServerAdminSystem.RPC_EventDropdownPlayers));
         }
     }

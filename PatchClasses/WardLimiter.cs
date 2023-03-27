@@ -8,6 +8,8 @@ using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Rendering;
 using WardIsLove.Util;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace WardIsLove
 {
@@ -38,7 +40,7 @@ namespace WardIsLove
                 IsSinglePlayer = ZNet.instance.IsServer() && !ZNet.instance.IsDedicated();
             if (IsServer || (ZNet.instance != null && IsSinglePlayer))
             {
-                _manager = new WardManager(Path.Combine(Paths.ConfigPath, "wardIsLoveData"));
+                _manager = new WardManager(Path.Combine(Paths.ConfigPath, "Azumatt.WardIsLoveData.yml"));
                 _maxWardCountConfig = Instance.Config.Bind("General", "Max Wards Per Player", 3);
                 _maxWardCountVipConfig = Instance.Config.Bind("General", "Max Wards Per Player (VIP)", 5);
                 MaxDaysDifferenceConfig = Instance.Config.Bind("General", "Days For Deactivate", 300);
@@ -48,7 +50,7 @@ namespace WardIsLove
 
         static PlayerStatus GetPlayerStatus(string steam)
         {
-            if (ZNet.instance.m_adminList.Contains(steam)) return PlayerStatus.Admin;
+            if(ZNet.instance.ListContainsId(ZNet.instance.m_adminList, steam)) return PlayerStatus.Admin;
             if (ViPplayersListConfig.Value.Contains(steam)) return PlayerStatus.VIP;
             return PlayerStatus.User;
         }
@@ -61,9 +63,26 @@ namespace WardIsLove
             public WardManager(string path)
             {
                 _path = path;
+                ReadWardData:
                 if (!File.Exists(_path))
                 {
                     File.Create(_path).Dispose();
+                    if (File.Exists(_path.Replace("Azumatt.WardIsLoveData.yml", "wardIsLoveData")))
+                    {
+                        ConvertJsonToYamlAndDelete(_path.Replace("Azumatt.WardIsLoveData.yml", "wardIsLoveData"));
+                        goto ReadWardData;
+                    }
+                }
+                else if (File.Exists(_path))
+                {
+                    string data = File.ReadAllText(_path);
+                    if (!string.IsNullOrEmpty(data))
+                    {
+                        var deserializer = new DeserializerBuilder()
+                            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                            .Build();
+                        PlayersWardData = deserializer.Deserialize<Dictionary<string, int>>(data);
+                    }
                 }
                 else
                 {
@@ -75,7 +94,47 @@ namespace WardIsLove
 
             public void Save()
             {
-                File.WriteAllText(_path, JSON.ToJSON(PlayersWardData));
+                /*File.WriteAllText(_path, JSON.ToJSON(PlayersWardData));*/
+                var serializer = new SerializerBuilder().Build();
+
+                var yaml = serializer.Serialize(PlayersWardData);
+
+                using var writer = new StreamWriter(_path);
+                writer.Write(yaml);
+            }
+
+            public static void ConvertJsonToYamlAndDelete(string jsonFilePath)
+            {
+                // Read the JSON data from the file
+                string jsonData = File.ReadAllText(jsonFilePath);
+
+                if (string.IsNullOrEmpty(jsonData)) return;
+                
+                // Deserialize the JSON data into a dictionary
+                var deserializer = new DeserializerBuilder()
+                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                    .Build();
+
+                var data = deserializer.Deserialize<Dictionary<string, int>>(jsonData);
+
+                // Serialize the dictionary to YAML
+                var serializer = new SerializerBuilder()
+                    .DisableAliases()
+                    .Build();
+
+                string yamlData = serializer.Serialize(data);
+
+                // Write the YAML data to a new file
+                string yamlFilePath =
+                    Path.Combine(Path.GetDirectoryName(jsonFilePath), "Azumatt.WardIsLoveData.yml");
+
+                using (var writer = new StreamWriter(yamlFilePath))
+                {
+                    writer.Write(yamlData);
+                }
+
+                // Delete the original JSON file
+                File.Delete(jsonFilePath);
             }
         }
 
@@ -200,7 +259,7 @@ namespace WardIsLove
                 if (piece.gameObject.name == "Thorward" && !CanPlaceWard)
                 {
                     MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                        "<color=red>Ward Limit</color>");
+                        "<color=#FF0000>Ward Limit</color>");
                     return false;
                 }
 

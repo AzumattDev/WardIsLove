@@ -92,7 +92,7 @@ namespace WardIsLove.Util.UI
         {
             if (!PlayerDropdown || !ZNet.instance || !Player.m_localPlayer) return;
 
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "DropdownListRequest",
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "WILDropdownListRequest",
                 new ZPackage());
 
             if (External_list.Count > 0)
