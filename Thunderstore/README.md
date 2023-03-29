@@ -84,7 +84,7 @@ individually configurable. Managed with a simple GUI interface for admins.
     3. Steam should open your game folder
 2. Extract the contents of the archive. Put the DLL into BepInEx\plugins the other files are needed for the thunderstore
    upload and can be ignored.
-3. Locate azumatt.WardIsLove.cfg under BepInEx\config and configure the mod to your needs
+3. Locate Azumatt.WardIsLove.cfg under BepInEx\config and configure the mod to your needs
 
 #### Server
 
@@ -93,7 +93,7 @@ individually configurable. Managed with a simple GUI interface for admins.
 1. Locate your main folder manually and :
     1. Extract the contents of the archive into BepInEx\plugins.
     2. Launch your game at least once to generate the config file needed if you haven't already done so.
-    3. Locate azumatt.WardIsLove.cfg under BepInEx\config on your machine and configure the mod to your needs
+    3. Locate Azumatt.WardIsLove.cfg under BepInEx\config on your machine and configure the mod to your needs
 2. Reboot your server. All clients will now sync to the server's config file even if theirs differs. Config Manager mod
    changes will only change the client config, not what the server is enforcing.
 

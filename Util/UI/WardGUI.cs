@@ -107,6 +107,10 @@ namespace WardIsLove.Util.UI
 
         public static void Show(WardMonoscript ward)
         {
+            Utils.FindChild(wardGUINoAdmin.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode =
+                WardIsLovePlugin.CanvasScaleMode.Value;
+            Utils.FindChild(wardGUI.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode =
+                WardIsLovePlugin.CanvasScaleMode.Value;
             SetInteractedPa(ward);
 
             if (ward.m_piece.IsCreator() && !WardIsLovePlugin.Admin)

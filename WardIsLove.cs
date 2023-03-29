@@ -11,6 +11,7 @@ using HarmonyLib;
 using PieceManager;
 using ServerSync;
 using UnityEngine;
+using UnityEngine.UI;
 using WardIsLove.Extensions;
 using WardIsLove.PatchClasses;
 using WardIsLove.Util;
@@ -68,7 +69,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.1.0";
+        public const string version = "3.1.1";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -131,7 +132,20 @@ namespace WardIsLove
                 false);
             DisableGUI = config("UI", "DisableGUI", false,
                 "Prevent the GUI option from being available, even in SinglePlayer - Gratak special request. Also disables the hover text display.");
+            CanvasScaleMode = config("UI", "UI Scale Mode", CanvasScaler.ScaleMode.ScaleWithScreenSize,
+                "Change the scale mode of the UI. This tends to help with screens bigger than 1080p. Default is ScaleWithScreenSize", false);
+            CanvasScaleMode.SettingChanged += (sender, args) =>
+            {
+                if (WardGUI.wardGUINoAdmin != null)
+                {
+                    Utils.FindChild(WardGUI.wardGUINoAdmin.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode = CanvasScaleMode.Value;
+                }
 
+                if (WardGUI.wardGUI != null)
+                {
+                    Utils.FindChild(WardGUI.wardGUI.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode = CanvasScaleMode.Value;   
+                }
+            };
             /* Charge */
             ChargeItem = config("Charge", "Charge Item", "Thunderstone",
                 "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
@@ -535,6 +549,7 @@ namespace WardIsLove
         public static ConfigEntry<int> MaxDaysDifferenceConfig = null!;
         public static ConfigEntry<string> ViPplayersListConfig = null!;
         public static ConfigEntry<bool> DisableGUI = null!;
+        public static ConfigEntry<CanvasScaler.ScaleMode> CanvasScaleMode = null!;
 
 
         private ConfigEntry<T> config<T>(string group, string name, T value, ConfigDescription description,
