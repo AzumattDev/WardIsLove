@@ -1,4 +1,7 @@
 > # Update Information (Latest listed first)
+> ### v3.1.1
+> - Fix some visual effects on the ward when placed.
+> - Add a new configuration option under the UI section to change the Canvas Scalar. This should help with screens bigger than 1080p.
 > ### v3.1.0
 > - Various internal updates that related to RPCs so that they are a bit more unique to this mod. Mainly because I think I copied them too much into others :)
     >   - This hopefully will prevent other mods from calling the RPCs and causing repeated ward messages. If this doesn't fix it, I'll have to look into it more.

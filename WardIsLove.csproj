@@ -70,6 +70,7 @@
         <Compile Include="PatchClasses\ConsoleWindow.cs" />
         <Compile Include="PatchClasses\Creatures.cs" />
         <Compile Include="PatchClasses\Doors.cs" />
+        <Compile Include="PatchClasses\EffectFix.cs" />
         <Compile Include="PatchClasses\FireplaceUnlimited.cs" />
         <Compile Include="PatchClasses\Passive.cs" />
         <Compile Include="PatchClasses\HoverTextPatches.cs" />
