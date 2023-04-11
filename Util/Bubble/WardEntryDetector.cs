@@ -144,7 +144,8 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                        character.ApplyDamage(hitData, true, false);
                                 }
                             }
                         }
@@ -163,7 +164,8 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                        character.ApplyDamage(hitData, true, false);
                                 }
                             }
                         }
@@ -182,7 +184,8 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                        character.ApplyDamage(hitData, true, false);
                                 }
                             }
                         }
@@ -201,7 +204,8 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                        character.ApplyDamage(hitData, true, false);
                                 }
                             }
                         }
@@ -220,7 +224,8 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                        character.ApplyDamage(hitData, true, false);
                                 }
                             }
                         }
@@ -240,8 +245,11 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.AddStaggerDamage(hitData.m_damage.m_damage, staggerDirection);
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                    {
+                                        character.AddStaggerDamage(hitData.m_damage.m_damage, staggerDirection);
+                                        character.ApplyDamage(hitData, true, false);
+                                    }
                                 }
                             }
                         }
@@ -260,7 +268,8 @@ namespace WardIsLove.Util.Bubble
                             {
                                 if (!character.IsPlayer())
                                 {
-                                    character.ApplyDamage(hitData, true, false);
+                                    if (character.m_faction != Character.Faction.Players)
+                                        character.ApplyDamage(hitData, true, false);
                                 }
                             }
                         }
@@ -359,7 +368,8 @@ namespace WardIsLove.Util.Bubble
 
             if (!ward.GetPushoutCreaturesOn() || collision.collider == Player.m_localPlayer?.m_collider) return;
             if (!collision.collider.gameObject.GetComponent<Character>()) return;
-            if (!collision.collider.gameObject.GetComponent<Character>().IsTamed()) return;
+            if (!collision.collider.gameObject.GetComponent<Character>().IsTamed() &&
+                collision.collider.gameObject.GetComponent<Character>().m_faction != Character.Faction.Players) return;
             Physics.IgnoreCollision(collision.collider, COL, true);
         }
 

@@ -44,6 +44,7 @@ namespace WardIsLove.Util
                 if (hitcollider.gameObject.GetComponent<MonsterAI>() != null)
                 {
                     if (hitcollider.gameObject.GetComponent<Humanoid>().m_tamed) return;
+                    if (hitcollider.gameObject.GetComponent<Humanoid>().m_faction == Character.Faction.Players) return;
                     try
                     {
                         Tameable? tame = hitcollider.GetComponent<Tameable>();
