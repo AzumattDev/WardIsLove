@@ -549,7 +549,7 @@ namespace WardIsLove.Util
                 WardMonoscript? ward = null;
                 if (WardIsLovePlugin.WardEnabled != null && ZNetScene.instance && WardIsLovePlugin.WardEnabled.Value)
                 {
-                    List<WearNTear> allInstances = WearNTear.GetAllInstaces();
+                    List<WearNTear> allInstances = WearNTear.GetAllInstances();
                     if (allInstances.Count > 0)
                     {
                         foreach (WearNTear instance in allInstances)
@@ -686,7 +686,7 @@ namespace WardIsLove.Util
                         if (API.IsLoaded())
                         {
                             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-                            if (API.GroupPlayers().Contains(PlayerReference.fromPlayerId(m_piece.GetCreator())))
+                            if (API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null)
                             {
                                 return true;
                             }

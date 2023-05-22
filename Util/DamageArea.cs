@@ -89,7 +89,7 @@ namespace WardIsLove.Util
                             m_pushForce = 3.5f,
                             m_staggerMultiplier = 0.01f,
                             m_toolTier = 10,
-                            m_statusEffect = "",
+                            m_statusEffectHash = 0,
                             m_point = Vector3.zero
                         };
                     }

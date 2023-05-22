@@ -15,9 +15,9 @@ namespace WardIsLove.PatchClasses
         private static void Postfix(Player __instance)
         {
             if (!ZNetScene.instance) return;
-            if (Game.m_instance && !Player.m_localPlayer) return;
+            if (Game.instance && !Player.m_localPlayer) return;
 
-            if (!Game.m_instance || !WardEnabled.Value) return;
+            if (!Game.instance || !WardEnabled.Value) return;
             try
             {
                 if (!InventoryGui.instance) return;
