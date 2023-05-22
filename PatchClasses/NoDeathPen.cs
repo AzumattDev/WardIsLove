@@ -1,4 +1,9 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using HarmonyLib;
+using JetBrains.Annotations;
 using UnityEngine;
 using WardIsLove.Extensions;
 using WardIsLove.Util;
@@ -6,20 +11,6 @@ using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
-    [HarmonyPatch(typeof(Skills), nameof(Skills.Awake))]
-    static class Skills_Awake_Patch
-    {
-        static void Postfix(Skills __instance)
-        {
-            if (!Player.m_localPlayer || !WardEnabled.Value)
-                return;
-            Vector3 pos = Player.m_localPlayer.transform.position;
-            if (!WardMonoscript.CheckInWardMonoscript(pos)) return;
-            WardMonoscript ward = WardMonoscriptExt.GetWardMonoscript(pos);
-            if (ward.GetNoDeathPenOn())
-                __instance.m_DeathLowerFactor = 0f;
-        }
-    }
 
     [HarmonyPatch(typeof(Skills), nameof(Skills.OnDeath))]
     static class Skills_OnDeath_Patch
@@ -30,6 +21,35 @@ namespace WardIsLove.PatchClasses
             return !WardMonoscript.CheckInWardMonoscript(position) || !CustomCheck.CheckAccess(
                 Player.m_localPlayer.GetPlayerID(), position, 1f,
                 false) || !WardNoDeathPen.Value || !WardEnabled.Value;
+        }
+        
+        
+        [UsedImplicitly]
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> instrs = instructions.ToList();
+            for (int i = 0; i < instrs.Count; ++i)
+            {
+                if (instrs[i].opcode == OpCodes.Ldc_R4 && Math.Abs((float)instrs[i].operand - 0.25f) < 0.01)
+                {
+                    // Replace the ldc.r4 operation with a call to Skills_OnDeath_Patch.GetDeathValue
+                    instrs[i] = new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Skills_OnDeath_Patch), nameof(GetDeathValue)));
+                }
+            }
+
+            return instrs.AsEnumerable();
+        }
+        
+        private static float GetDeathValue()
+        {
+            if(Player.m_localPlayer == null) return 0.25f;
+            Vector3 position = Player.m_localPlayer.transform.position;
+            if (!WardMonoscript.CheckInWardMonoscript(position) || !CustomCheck.CheckAccess(
+                Player.m_localPlayer.GetPlayerID(), position, 1f,
+                false) || !WardEnabled.Value)
+                return 0.25f;
+            WardMonoscript ward = WardMonoscriptExt.GetWardMonoscript(position);
+            return ward.GetNoDeathPenOn() ? 0f : 0.25f;
         }
     }
 }
