@@ -58,6 +58,7 @@ individually configurable. Managed with a simple GUI interface for admins.
 * Visual Bubble
 * Offline Raid protection for PvP servers
 * Configurable ward recipe to craft
+* Auto repair structures inside ward
 * No food drain inside ward
   ... and much more! Give the mod a try!
 
