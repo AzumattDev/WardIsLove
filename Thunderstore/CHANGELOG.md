@@ -1,6 +1,8 @@
 > # Update Information (Latest listed first)
-> ### v3.2.2
-> - Updated for Valheim  0.216.5
+> ### v3.2.1
+> - Minor fix
+> ### v3.2.0
+> - Updated for Valheim  0.216.9
 > ### v3.1.2
 > - Don't pushout/damage creatures if they are in the Player faction. This should fix an issue with Cheb's mods that add creatures to the player faction.
 > ### v3.1.1
