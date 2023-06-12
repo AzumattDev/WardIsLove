@@ -4,6 +4,6 @@
         <BepInExPath>$(ValheimGamePath)\BepInEx</BepInExPath>
         <CorlibPath>$(ValheimGamePath)\unstripped_corelibs</CorlibPath>
         <PublicizedAssembliesPath>$(ValheimGamePath)\valheim_Data\Managed\publicized_assemblies</PublicizedAssembliesPath>
-        <CopyOutputDLLPath>C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PTB\BepInEx\plugins\_TESTINGMODS</CopyOutputDLLPath>
+        <CopyOutputDLLPath>C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PTB\BepInEx\plugins\Azumatt-WardIsLove</CopyOutputDLLPath>
     </PropertyGroup>
 </Project>

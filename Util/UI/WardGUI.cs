@@ -26,7 +26,7 @@ namespace WardIsLove.Util.UI
         public static void Init()
         {
             AssetBundle wardMenuBundle = WardIsLovePlugin.GetAssetBundle("wardislove");
-
+            
             WardIsLovePlugin.Thorward =
                 new BuildPiece(wardMenuBundle,"Thorward"); // Silver,SurtlingCore,TrophyAbomination,Thunderstone        //15,30,1,1
             WardIsLovePlugin.Thorward.Name.English("Thorward");
