@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.2.2
+> - Update for Hildir's Request. 0.217.5
 > ### v3.2.1
 > - Minor fix
 > ### v3.2.0

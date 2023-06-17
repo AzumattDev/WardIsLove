@@ -199,8 +199,32 @@ namespace WardIsLove.PatchClasses
 
             return __result;
         }
-        
-        [HarmonyPatch(typeof(Smelter),nameof(Smelter.OnHoverAddOre))]
+
+        [HarmonyPatch(typeof(Smelter), nameof(Smelter.UpdateHoverTexts))]
+        static class SmelterUpdateHoverTextsPatch
+        {
+            static void Postfix(Smelter __instance)
+            {
+                if (!WardEnabled.Value)
+                    return;
+                if (!Player.m_localPlayer) return;
+                if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
+                {
+                    WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                    if (pa.GetSmelterInteractOn()) return;
+                    var holdThisPlease = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                    if (__instance.m_addWoodSwitch)
+                        __instance.m_addWoodSwitch.m_hoverText = holdThisPlease;
+
+                    if (__instance.m_addOreSwitch)
+                        __instance.m_addOreSwitch.m_hoverText = holdThisPlease;
+
+                    if (__instance.m_emptyOreSwitch)
+                        __instance.m_emptyOreSwitch.m_hoverText = holdThisPlease;
+                }
+            }
+        }
+        /*[HarmonyPatch(typeof(Smelter),nameof(Smelter.OnHoverAddOre))]
         static class SmelterOnHoverAddOrePatch
         {
             static void Postfix(Smelter __instance, ref string __result)
@@ -250,7 +274,7 @@ namespace WardIsLove.PatchClasses
                         __result = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
                 }
             }
-        }
+        }*/
 
         [HarmonyPatch(typeof(Beehive), nameof(Beehive.GetHoverText))]
         [HarmonyPostfix]

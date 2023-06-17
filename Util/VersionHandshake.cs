@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Security.Cryptography;
 using HarmonyLib;
 
 namespace WardIsLove.Util
@@ -11,13 +14,13 @@ namespace WardIsLove.Util
         {
             // Register version check call
             WardIsLovePlugin.WILLogger.LogDebug("Registering version RPC handler");
-            peer.m_rpc.Register($"{WardIsLovePlugin.ModName}_VersionChecking",
-                new Action<ZRpc, ZPackage>(RpcHandlers.RPC_WardIsLove_Version));
+            peer.m_rpc.Register($"{WardIsLovePlugin.ModName}_VersionChecking", new Action<ZRpc, ZPackage>(RpcHandlers.RPC_WardIsLove_Version));
 
             // Make calls to check versions
             WardIsLovePlugin.WILLogger.LogDebug("Invoking version check");
             ZPackage zpackage = new();
             zpackage.Write(WardIsLovePlugin.version);
+            zpackage.Write(RpcHandlers.ComputeHashForMod().Replace("-", ""));
             peer.m_rpc.Invoke($"{WardIsLovePlugin.ModName}_VersionChecking", zpackage);
         }
     }
@@ -29,16 +32,14 @@ namespace WardIsLove.Util
         {
             if (!__instance.IsServer() || RpcHandlers.ValidatedPeers.Contains(rpc)) return true;
             // Disconnect peer if they didn't send mod version at all
-            WardIsLovePlugin.WILLogger.LogWarning(
-                $"Peer ({rpc.m_socket.GetHostName()}) never sent version or couldn't due to previous disconnect, disconnecting");
+            WardIsLovePlugin.WILLogger.LogWarning($"Peer ({rpc.m_socket.GetHostName()}) never sent version or couldn't due to previous disconnect, disconnecting");
             rpc.Invoke("Error", 3);
             return false; // Prevent calling underlying method
         }
 
         private static void Postfix(ZNet __instance)
         {
-            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "WILRequestAdminSync",
-                new ZPackage());
+            ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "WILRequestAdminSync", new ZPackage());
         }
     }
 
@@ -48,7 +49,11 @@ namespace WardIsLove.Util
         private static void Postfix(FejdStartup __instance)
         {
             if (__instance.m_connectionFailedPanel.activeSelf)
+            {
+                __instance.m_connectionFailedError.resizeTextMaxSize = 25;
+                __instance.m_connectionFailedError.resizeTextMinSize = 15;
                 __instance.m_connectionFailedError.text += "\n" + WardIsLovePlugin.ConnectionError;
+            }
         }
     }
 
@@ -59,8 +64,7 @@ namespace WardIsLove.Util
         {
             if (!__instance.IsServer()) return;
             // Remove peer from validated list
-            WardIsLovePlugin.WILLogger.LogInfo(
-                $"Peer ({peer.m_rpc.m_socket.GetHostName()}) disconnected, removing from validated list");
+            WardIsLovePlugin.WILLogger.LogInfo($"Peer ({peer.m_rpc.m_socket.GetHostName()}) disconnected, removing from validated list");
             _ = RpcHandlers.ValidatedPeers.Remove(peer.m_rpc);
         }
     }
@@ -72,17 +76,17 @@ namespace WardIsLove.Util
         public static void RPC_WardIsLove_Version(ZRpc rpc, ZPackage pkg)
         {
             string? version = pkg.ReadString();
-            string[] versionTest = version.Split(' ');
-            WardIsLovePlugin.WILLogger.LogInfo("Version check, local: " + WardIsLovePlugin.version +
-                                               ",  remote: " + version);
-            if (version != WardIsLovePlugin.version)
+            string? hash = pkg.ReadString();
+
+            var hashForAssembly = ComputeHashForMod().Replace("-", "");
+
+            WardIsLovePlugin.WILLogger.LogInfo($"Hash/Version check, local: {WardIsLovePlugin.version} {hashForAssembly} remote: {version} {hash}");
+            if (hash != hashForAssembly || version != WardIsLovePlugin.version)
             {
-                WardIsLovePlugin.ConnectionError =
-                    $"WardIsLove Installed: {WardIsLovePlugin.version}\n Needed: {version}";
+                WardIsLovePlugin.ConnectionError = $"WardIsLove Installed: {WardIsLovePlugin.version} {hashForAssembly}\n Needed: {version} {hash}";
                 if (!ZNet.instance.IsServer()) return;
                 // Different versions - force disconnect client from server
-                WardIsLovePlugin.WILLogger.LogWarning(
-                    $"Peer ({rpc.m_socket.GetHostName()}) has incompatible version, disconnecting");
+                WardIsLovePlugin.WILLogger.LogWarning($"Peer ({rpc.m_socket.GetHostName()}) has incompatible version, disconnecting...");
                 rpc.Invoke("Error", 3);
             }
             else
@@ -95,11 +99,25 @@ namespace WardIsLove.Util
                 else
                 {
                     // Add client to validated list
-                    WardIsLovePlugin.WILLogger.LogInfo(
-                        $"Adding peer ({rpc.m_socket.GetHostName()}) to validated list");
+                    WardIsLovePlugin.WILLogger.LogInfo($"Adding peer ({rpc.m_socket.GetHostName()}) to validated list");
                     ValidatedPeers.Add(rpc);
                 }
             }
+        }
+
+        public static string ComputeHashForMod()
+        {
+            using SHA256 sha256Hash = SHA256.Create();
+            // ComputeHash - returns byte array  
+            byte[] bytes = sha256Hash.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location));
+            // Convert byte array to a string   
+            System.Text.StringBuilder builder = new();
+            foreach (byte b in bytes)
+            {
+                builder.Append(b.ToString("X2"));
+            }
+
+            return builder.ToString();
         }
     }
 }
