@@ -1,287 +1,286 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <Import Project="environment.props" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="environment.props" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6EE17CF2-CC95-4750-A069-9CFF1DD68716}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WardIsLove</RootNamespace>
+    <AssemblyName>WardIsLove</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>10</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="($(OS) == 'Unix' OR $(OS) == 'OSX') AND $(GamePath) == ''">
+      <PropertyGroup>
+        <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/Valheim</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/Library/Application Support/Steam/steamapps/common/Valheim/Contents/MacOS</GamePath>
+      </PropertyGroup>
+    </When>
+    <When Condition="($(OS) == 'Windows_NT') AND $(GamePath) == ''">
+      <PropertyGroup>
+        <GamePath Condition="!Exists('$(GamePath)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 892970', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GamePath>
+        <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
+        <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\Valheim</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">$(ValheimGamePath)</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
+        <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
+      </PropertyGroup>
+    </When>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="Extensions\CirclesProjector.cs" />
+    <Compile Include="Extensions\ColorHelper.cs" />
+    <Compile Include="Extensions\ColorPicker.cs" />
+    <Compile Include="Extensions\DragControl.cs" />
+    <Compile Include="Extensions\GradientPicker.cs" />
+    <Compile Include="Extensions\PieceChecker.cs" />
+    <Compile Include="Extensions\SliderValueToText.cs" />
+    <Compile Include="Extensions\SliderWithText.cs" />
+    <Compile Include="Extensions\TabSwitcher.cs" />
+    <Compile Include="WardAPI.cs" />
+    <Compile Include="Extensions\WardExt.cs" />
+    <Compile Include="PatchClasses\AutoPickup.cs" />
+    <Compile Include="PatchClasses\ChatWindow.cs" />
+    <Compile Include="PatchClasses\ConsoleWindow.cs" />
+    <Compile Include="PatchClasses\Creatures.cs" />
+    <Compile Include="PatchClasses\Doors.cs" />
+    <Compile Include="PatchClasses\EffectFix.cs" />
+    <Compile Include="PatchClasses\FireplaceUnlimited.cs" />
+    <Compile Include="PatchClasses\Passive.cs" />
+    <Compile Include="PatchClasses\HoverTextPatches.cs" />
+    <Compile Include="PatchClasses\Interaction_Patch.cs" />
+    <Compile Include="PatchClasses\Local.cs" />
+    <Compile Include="PatchClasses\MonsterAI.cs" />
+    <Compile Include="PatchClasses\NoDeathPen.cs" />
+    <Compile Include="PatchClasses\NoFoodDrain.cs" />
+    <Compile Include="PatchClasses\NoTeleport.cs" />
+    <Compile Include="PatchClasses\PlaceWard.cs" />
+    <Compile Include="PatchClasses\Pushout.cs" />
+    <Compile Include="PatchClasses\PvP.cs" />
+    <Compile Include="PatchClasses\TerrainChecking.cs" />
+    <Compile Include="PatchClasses\Ward.cs" />
+    <Compile Include="PatchClasses\WardLimiter.cs" />
+    <Compile Include="PatchClasses\WearNTear.cs" />
+    <Compile Include="PatchClasses\ZDODataBuffer.cs" />
+    <Compile Include="Util\Bubble\ControlParticlesSpawner.cs" />
+    <Compile Include="Util\Bubble\ForceFieldController.cs" />
+    <Compile Include="Util\Bubble\WardEntryDetector.cs" />
+    <Compile Include="Util\CustomCheck.cs" />
+    <Compile Include="Util\DamageArea.cs" />
+    <Compile Include="Util\DiscordMessenger\Author.cs" />
+    <Compile Include="Util\DiscordMessenger\DiscordMessage.cs" />
+    <Compile Include="Util\DiscordMessenger\Embed.cs" />
+    <Compile Include="Util\DiscordMessenger\Field.cs" />
+    <Compile Include="Util\DiscordMessenger\Footer.cs" />
+    <Compile Include="Util\DiscordMessenger\Image.cs" />
+    <Compile Include="Util\DiscordMessenger\Provider.cs" />
+    <Compile Include="Util\DiscordMessenger\Thumbnail.cs" />
+    <Compile Include="Util\DiscordMessenger\Video.cs" />
+    <Compile Include="Util\GitHubCheck.cs" />
+    <Compile Include="Util\Manager\MaterialReplacer.cs" />
+    <Compile Include="Util\Manager\PieceManager.cs" />
+    <Compile Include="Util\ObjectDB.cs" />
+    <Compile Include="Util\OfflineStatus.cs" />
+    <Compile Include="Util\RPCShit\ClientSystem.cs" />
+    <Compile Include="Util\RPCShit\ServerAdminSystem.cs" />
+    <Compile Include="Util\UI\DropdownPopulate.cs" />
+    <Compile Include="Util\UI\TabToggle_OnOff.cs" />
+    <Compile Include="Util\UI\WardGUI.cs" />
+    <Compile Include="Util\UI\WardGUIUtil.cs" />
+    <Compile Include="Util\VersionHandshake.cs" />
+    <Compile Include="Util\WardMonoscript.cs" />
+    <Compile Include="WardIsLove.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="environment.props" />
+    <Content Include="ILRepack.targets" />
+    <Content Include="Libs\fastJSON.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libs\GroupsAPI.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libs\GuildsAPI.dll" />
+    <Content Include="Libs\ServerSync.dll" />
+    <Content Include="README.md" />
+    <Content Include="Thunderstore\CHANGELOG.md" />
+    <Content Include="Thunderstore\icon.png" />
+    <Content Include="Thunderstore\manifest.json" />
+    <Content Include="Thunderstore\README.md" />
+    <Content Include="UpdateManifest.ps1" />
+    <EmbeddedResource Include="wardislove" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_guiutils, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_steamworks, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_steamworks_publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_utils, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="assembly_valheim, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>$(GamePath)\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="fastJSON">
+      <HintPath>Libs\fastJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Libs\Groups.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Libs\ServerSync.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AudioModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.InputModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.Physics2DModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+    </Reference>
+    <Reference Include="YamlDotNet, Version=13.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+      <HintPath>packages\YamlDotNet.13.1.0\lib\net45\YamlDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{6EE17CF2-CC95-4750-A069-9CFF1DD68716}</ProjectGuid>
-        <OutputType>Library</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>WardIsLove</RootNamespace>
-        <AssemblyName>WardIsLove</AssemblyName>
-        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
-        <Nullable>enable</Nullable>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
-    <Choose>
-        <When Condition="($(OS) == 'Unix' OR $(OS) == 'OSX') AND $(GamePath) == ''">
-            <PropertyGroup>
-                <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/Valheim</GamePath>
-                <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/Library/Application Support/Steam/steamapps/common/Valheim/Contents/MacOS</GamePath>
-            </PropertyGroup>
-        </When>
-        <When Condition="($(OS) == 'Windows_NT') AND $(GamePath) == ''">
-            <PropertyGroup>
-                <GamePath Condition="!Exists('$(GamePath)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 892970', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GamePath>
-                <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
-                <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\Valheim</GamePath>
-                <GamePath Condition="!Exists('$(GamePath)')">$(ValheimGamePath)</GamePath>
-                <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
-                <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
-            </PropertyGroup>
-        </When>
-    </Choose>
-    <ItemGroup>
-        <Compile Include="Extensions\CirclesProjector.cs" />
-        <Compile Include="Extensions\ColorHelper.cs" />
-        <Compile Include="Extensions\ColorPicker.cs" />
-        <Compile Include="Extensions\DragControl.cs" />
-        <Compile Include="Extensions\GradientPicker.cs" />
-        <Compile Include="Extensions\PieceChecker.cs" />
-        <Compile Include="Extensions\SliderValueToText.cs" />
-        <Compile Include="Extensions\SliderWithText.cs" />
-        <Compile Include="Extensions\TabSwitcher.cs" />
-        <Compile Include="Extensions\WardExt.cs" />
-        <Compile Include="PatchClasses\AutoPickup.cs" />
-        <Compile Include="PatchClasses\ChatWindow.cs" />
-        <Compile Include="PatchClasses\ConsoleWindow.cs" />
-        <Compile Include="PatchClasses\Creatures.cs" />
-        <Compile Include="PatchClasses\Doors.cs" />
-        <Compile Include="PatchClasses\EffectFix.cs" />
-        <Compile Include="PatchClasses\FireplaceUnlimited.cs" />
-        <Compile Include="PatchClasses\Passive.cs" />
-        <Compile Include="PatchClasses\HoverTextPatches.cs" />
-        <Compile Include="PatchClasses\Interaction_Patch.cs" />
-        <Compile Include="PatchClasses\Local.cs" />
-        <Compile Include="PatchClasses\MonsterAI.cs" />
-        <Compile Include="PatchClasses\NoDeathPen.cs" />
-        <Compile Include="PatchClasses\NoFoodDrain.cs" />
-        <Compile Include="PatchClasses\NoTeleport.cs" />
-        <Compile Include="PatchClasses\PlaceWard.cs" />
-        <Compile Include="PatchClasses\Pushout.cs" />
-        <Compile Include="PatchClasses\PvP.cs" />
-        <Compile Include="PatchClasses\TerrainChecking.cs" />
-        <Compile Include="PatchClasses\Ward.cs" />
-        <Compile Include="PatchClasses\WardLimiter.cs" />
-        <Compile Include="PatchClasses\WearNTear.cs" />
-        <Compile Include="PatchClasses\ZDODataBuffer.cs" />
-        <Compile Include="Util\Bubble\ControlParticlesSpawner.cs" />
-        <Compile Include="Util\Bubble\ForceFieldController.cs" />
-        <Compile Include="Util\Bubble\WardEntryDetector.cs" />
-        <Compile Include="Util\CustomCheck.cs" />
-        <Compile Include="Util\DamageArea.cs" />
-        <Compile Include="Util\DiscordMessenger\Author.cs" />
-        <Compile Include="Util\DiscordMessenger\DiscordMessage.cs" />
-        <Compile Include="Util\DiscordMessenger\Embed.cs" />
-        <Compile Include="Util\DiscordMessenger\Field.cs" />
-        <Compile Include="Util\DiscordMessenger\Footer.cs" />
-        <Compile Include="Util\DiscordMessenger\Image.cs" />
-        <Compile Include="Util\DiscordMessenger\Provider.cs" />
-        <Compile Include="Util\DiscordMessenger\Thumbnail.cs" />
-        <Compile Include="Util\DiscordMessenger\Video.cs" />
-        <Compile Include="Util\GitHubCheck.cs" />
-        <Compile Include="Util\Manager\MaterialReplacer.cs" />
-        <Compile Include="Util\Manager\PieceManager.cs" />
-        <Compile Include="Util\ObjectDB.cs" />
-        <Compile Include="Util\OfflineStatus.cs" />
-        <Compile Include="Util\RPCShit\ClientSystem.cs" />
-        <Compile Include="Util\RPCShit\ServerAdminSystem.cs" />
-        <Compile Include="Util\UI\DropdownPopulate.cs" />
-        <Compile Include="Util\UI\TabToggle_OnOff.cs" />
-        <Compile Include="Util\UI\WardGUI.cs" />
-        <Compile Include="Util\UI\WardGUIUtil.cs" />
-        <Compile Include="Util\VersionHandshake.cs" />
-        <Compile Include="Util\WardMonoscript.cs" />
-        <Compile Include="WardIsLove.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include=".gitignore" />
-        <Content Include="environment.props" />
-        <Content Include="ILRepack.targets" />
-        <Content Include="Libs\fastJSON.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Libs\GroupsAPI.dll">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Libs\GuildsAPI.dll" />
-        <Content Include="Libs\ServerSync.dll" />
-        <Content Include="README.md" />
-        <Content Include="Thunderstore\CHANGELOG.md" />
-        <Content Include="Thunderstore\icon.png" />
-        <Content Include="Thunderstore\manifest.json" />
-        <Content Include="Thunderstore\README.md" />
-        <Content Include="UpdateManifest.ps1" />
-        <EmbeddedResource Include="wardislove" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config" />
-        <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-        <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath>
-        </Reference>
-        <Reference Include="assembly_guiutils, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_guiutils_publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="assembly_steamworks, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_steamworks_publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="assembly_utils, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_utils_publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="assembly_valheim, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\valheim_Data\Managed\publicized_assemblies\assembly_valheim_publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="BepInEx">
-            <HintPath>$(GamePath)\BepInEx\core\BepInEx.dll</HintPath>
-        </Reference>
-        <Reference Include="fastJSON">
-          <HintPath>Libs\fastJSON.dll</HintPath>
-        </Reference>
-        <Reference Include="Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>Libs\Groups.dll</HintPath>
-        </Reference>
-        <Reference Include="mscorlib" />
-        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-          <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="ServerSync, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>Libs\ServerSync.dll</HintPath>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Xml" />
-        <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AssetBundleModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AudioModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.IMGUIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.InputLegacyModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.InputModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.InputModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.ParticleSystemModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.Physics2DModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.PhysicsModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.TextRenderingModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UI.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UIModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestModule.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.UnityWebRequestWWWModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-        </Reference>
-        <Reference Include="YamlDotNet, Version=13.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-          <HintPath>packages\YamlDotNet.13.1.0\lib\net45\YamlDotNet.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <Import Project="packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" />
-    <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-        <PropertyGroup>
-            <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them. For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-        </PropertyGroup>
-        <Error Condition="!Exists('packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
-    </Target>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+    <Error Condition="!Exists('packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\ILRepack.Lib.MSBuild.Task.2.0.18.2\build\ILRepack.Lib.MSBuild.Task.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
     <Target Name="BeforeBuild">
     </Target>
     <Target Name="AfterBuild">
     </Target>
     -->
-    <Target Name="GetAssemblyVersion" AfterTargets="ILRepacker">
-        <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-            <Output TaskParameter="Assemblies" ItemName="Targets" />
-        </GetAssemblyIdentity>
-        <ItemGroup>
-            <AssemblyVersions Include="@(Targets->'%(Version)')" />
-        </ItemGroup>
-        <PropertyGroup>
-            <AssemblyVersion>%(AssemblyVersions.Identity)</AssemblyVersion>
-            <Major>$(AssemblyVersion.Split('.')[0])</Major>
-            <Minor>$(AssemblyVersion.Split('.')[1])</Minor>
-            <Patch>$(AssemblyVersion.Split('.')[2])</Patch>
-            <PackageName>$(AssemblyName)_v$(Major).$(Minor).$(Patch)</PackageName>
-            <PackageVersion>$(Major).$(Minor).$(Patch)</PackageVersion>
-            <VersionString>$(Major).$(Minor).$(Patch)</VersionString>
-            <PackageDir>Thunderstore\$(PackageName)</PackageDir>
-        </PropertyGroup>
-    </Target>
-    <Target Name="Copy" AfterTargets="GetAssemblyVersion">
-        <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(CopyOutputDLLPath)\$(AssemblyName).dll&quot;" />
-        <Exec Command="copy /Y &quot;README.md&quot; &quot;Thunderstore\README.md&quot;" />
-    </Target>
-    <Target Name="UpdateManifestVersion" AfterTargets="Copy" Condition="'$(OS)' == 'Windows_NT'">
-        <ItemGroup>
-            <ManifestFile Include="$(ProjectDir)Thunderstore\manifest.json" />
-        </ItemGroup>
-
-        <Message Text="ManifestFile is @(ManifestFile)" />
-        <Error Text="Thunderstore\manifest.json not found" Condition="!Exists(@(ManifestFile))" />
-        <Message Text="Updating version number in Thunderstore\manifest.json" Condition="Exists(@(ManifestFile))" />
-        <Exec Command="powershell.exe -ExecutionPolicy Bypass -Command &quot;&amp; { &amp; '$(ProjectDir)UpdateManifest.ps1' -manifestFile '@(ManifestFile)' -versionString '$(PackageVersion)' }&quot;" />
-    </Target>
-    <Target Name="MakeThunderstorePackage" AfterTargets="UpdateManifestVersion" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <ItemGroup>
-            <PackageFiles Include="$(TargetDir)$(AssemblyName).dll; Thunderstore\README.md; Thunderstore\CHANGELOG.md; Thunderstore\manifest.json; Thunderstore\icon.png;" />
-        </ItemGroup>
-        <MakeDir Directories="$(PackageDir)" />
-        <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(PackageDir)" />
-        <ZipDirectory SourceDirectory="$(PackageDir)" DestinationFile="Thunderstore\$(PackageName).zip" Overwrite="true" />
-        <RemoveDir Directories="$(PackageDir)" />
-    </Target>
-
+  <Target Name="GetAssemblyVersion" AfterTargets="ILRepacker">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="Targets" />
+    </GetAssemblyIdentity>
+    <ItemGroup>
+      <AssemblyVersions Include="@(Targets->'%(Version)')" />
+    </ItemGroup>
+    <PropertyGroup>
+      <AssemblyVersion>%(AssemblyVersions.Identity)</AssemblyVersion>
+      <Major>$(AssemblyVersion.Split('.')[0])</Major>
+      <Minor>$(AssemblyVersion.Split('.')[1])</Minor>
+      <Patch>$(AssemblyVersion.Split('.')[2])</Patch>
+      <PackageName>$(AssemblyName)_v$(Major).$(Minor).$(Patch)</PackageName>
+      <PackageVersion>$(Major).$(Minor).$(Patch)</PackageVersion>
+      <VersionString>$(Major).$(Minor).$(Patch)</VersionString>
+      <PackageDir>Thunderstore\$(PackageName)</PackageDir>
+    </PropertyGroup>
+  </Target>
+  <Target Name="Copy" AfterTargets="GetAssemblyVersion">
+    <Exec Command="copy /Y &quot;$(TargetDir)$(AssemblyName).dll&quot; &quot;$(CopyOutputDLLPath)\$(AssemblyName).dll&quot;" />
+    <Exec Command="copy /Y &quot;README.md&quot; &quot;Thunderstore\README.md&quot;" />
+  </Target>
+  <Target Name="UpdateManifestVersion" AfterTargets="Copy" Condition="'$(OS)' == 'Windows_NT'">
+    <ItemGroup>
+      <ManifestFile Include="$(ProjectDir)Thunderstore\manifest.json" />
+    </ItemGroup>
+    <Message Text="ManifestFile is @(ManifestFile)" />
+    <Error Text="Thunderstore\manifest.json not found" Condition="!Exists(@(ManifestFile))" />
+    <Message Text="Updating version number in Thunderstore\manifest.json" Condition="Exists(@(ManifestFile))" />
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -Command &quot;&amp; { &amp; '$(ProjectDir)UpdateManifest.ps1' -manifestFile '@(ManifestFile)' -versionString '$(PackageVersion)' }&quot;" />
+  </Target>
+  <Target Name="MakeThunderstorePackage" AfterTargets="UpdateManifestVersion" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <ItemGroup>
+      <PackageFiles Include="$(TargetDir)$(AssemblyName).dll; Thunderstore\README.md; Thunderstore\CHANGELOG.md; Thunderstore\manifest.json; Thunderstore\icon.png;" />
+    </ItemGroup>
+    <MakeDir Directories="$(PackageDir)" />
+    <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(PackageDir)" />
+    <ZipDirectory SourceDirectory="$(PackageDir)" DestinationFile="Thunderstore\$(PackageName).zip" Overwrite="true" />
+    <RemoveDir Directories="$(PackageDir)" />
+  </Target>
 </Project>
