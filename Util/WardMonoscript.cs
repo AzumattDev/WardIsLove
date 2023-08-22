@@ -147,7 +147,6 @@ namespace WardIsLove.Util
                 m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
                     gradient.colorKeys[1].color;
             }
-            
         }
 
         private void SwapWardModel(long sender, int index)
@@ -730,7 +729,7 @@ namespace WardIsLove.Util
         public void SetPermittedPlayers(List<KeyValuePair<long, string>> users)
         {
             m_nview.ClaimOwnership();
-            m_nview.GetZDO().Set("permitted", users.Count);
+            m_nview.GetZDO().Set(ZDOVars.s_permitted, users.Count, false);
             for (int index = 0; index < users.Count; ++index)
             {
                 KeyValuePair<long, string> user = users[index];
@@ -742,7 +741,7 @@ namespace WardIsLove.Util
         public List<KeyValuePair<long, string>> GetPermittedPlayers()
         {
             List<KeyValuePair<long, string>> keyValuePairList = new();
-            int num = m_nview.GetZDO().GetInt("permitted");
+            int num = m_nview.GetZDO().GetInt(ZDOVars.s_permitted);
             for (int index = 0; index < num; ++index)
             {
                 long key = m_nview.GetZDO().GetLong("pu_id" + index);
@@ -788,7 +787,7 @@ namespace WardIsLove.Util
 
         public bool IsEnabled()
         {
-            return m_nview.IsValid() && m_nview.GetZDO().GetBool("enabled") && this.WILWardLimitCheck();
+            return m_nview.IsValid() && m_nview.GetZDO().GetBool(ZDOVars.s_enabled) && this.WILWardLimitCheck();
         }
 
         public void SetEnabled(bool enabled)
@@ -803,7 +802,7 @@ namespace WardIsLove.Util
 
         public void Setup(string name)
         {
-            m_nview.GetZDO().Set("creatorName", name);
+            m_nview.GetZDO().Set(ZDOVars.s_creatorName, name);
             m_nview.GetZDO().Set("steamName", SteamFriends.GetPersonaName());
             m_nview.GetZDO().Set("steamID", SteamUser.GetSteamID().ToString());
             m_nview.GetZDO().Set("wardFresh", true);
@@ -875,7 +874,7 @@ namespace WardIsLove.Util
 
         public string GetCreatorName()
         {
-            return m_nview.GetZDO().GetString("creatorName");
+            return m_nview.GetZDO().GetString(ZDOVars.s_creatorName);
         }
 
         public static bool CheckInWardMonoscript(Vector3 point, bool flash = false)
@@ -1007,6 +1006,11 @@ namespace WardIsLove.Util
         public bool IsInside(Vector3 point, float radius)
         {
             return Utils.DistanceXZ(transform.position, point) < m_radius + (double)radius;
+        }
+
+        public static bool InsideFactionArea(Vector3 point, Character.Faction faction)
+        {
+            return PrivateArea.m_allAreas.Any(allArea => allArea.m_ownerFaction == faction && allArea.IsInside(point, 0.0f));
         }
 
         public void ShowAreaMarker()
