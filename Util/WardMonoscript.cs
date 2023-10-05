@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Groups;
 using HarmonyLib;
 using Steamworks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WardIsLove.Extensions;
@@ -1083,7 +1084,7 @@ namespace WardIsLove.Util
                     m_worldPos = pos,
                     m_gui = Instantiate(DamageText.instance.m_worldTextBase, DamageText.instance.transform)
                 };
-                worldTextInstance.m_textField = worldTextInstance.m_gui.GetComponent<Text>();
+                worldTextInstance.m_textField = worldTextInstance.m_gui.GetComponent<TMP_Text>();
                 DamageText.instance.m_worldTexts.Add(worldTextInstance);
                 worldTextInstance.m_textField.color = Color.cyan;
                 worldTextInstance.m_textField.fontSize = 24;

@@ -353,7 +353,6 @@ namespace WardIsLove.Util.UI
             {
                 return StrIn.Replace("\"", "\\\"");
             }
-            
             new DiscordMessage()
                 .SetUsername($"WardIsLove v{WardIsLovePlugin.version}")
                 .SetAvatar("https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
