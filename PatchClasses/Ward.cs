@@ -10,40 +10,6 @@ namespace WardIsLove.PatchClasses
     [HarmonyPatch]
     internal class Ward
     {
-        private static void WardRangeEffect(Component parent, EffectArea.Type includedTypes, float newRadius)
-        {
-            if (parent == null) return;
-            EffectArea effectArea = parent.GetComponentInChildren<EffectArea>();
-            if (effectArea == null) return;
-            if ((effectArea.m_type & includedTypes) == 0) return;
-            SphereCollider collision = effectArea.GetComponent<SphereCollider>();
-            //WardIsLovePlugin.WILLogger.LogError(collision.transform.name);
-            if (collision != null) collision.radius = newRadius;
-        }
-
-        [HarmonyPatch(typeof(WardMonoscript), nameof(WardMonoscript.RPC_ToggleEnabled))]
-        public class HarmonyPatch_RPC_ToggleEnabled
-        {
-            [HarmonyPrefix]
-            public static bool RPC_ToggleEnabled(long uid, long playerID, WardMonoscript __instance)
-            {
-                // If ward interaction should be the original behavior, then just return true and run the original code.
-                if (__instance.GetAccessMode() == WardInteractBehaviorEnums.Default) return true;
-#if DEBUG
-                WILLogger.LogDebug("Toggle enabled from " + playerID + "  creator is " +
-                                   __instance.m_piece.GetCreator());
-#endif
-                if (__instance.m_nview.IsOwner() &&
-                    (__instance.IsPermitted(playerID) &&
-                     __instance.GetAccessMode() == WardInteractBehaviorEnums.Default ||
-                     __instance.GetAccessMode() == WardInteractBehaviorEnums.Everyone ||
-                     __instance.m_piece.IsCreator()))
-                    __instance.SetEnabled(!__instance.IsEnabled());
-
-                return false;
-            }
-        }
-
         // Show area marker patch. Separated this out due to issues of it not showing when put in player update patch above.
         // Also gives more control
         [HarmonyPatch]
@@ -58,32 +24,9 @@ namespace WardIsLove.PatchClasses
                 if (!WardMonoscript.CheckInWardMonoscript(Player.m_localPlayer.transform.position) ||
                     !Game.instance.isActiveAndEnabled || !WardEnabled.Value) return;
                 foreach (WardMonoscript? allArea in WardMonoscript.m_allAreas.Where(allArea => allArea.IsEnabled() &&
-                             allArea.IsInside(Player.m_localPlayer.transform.position, 0.0f) &&
-                             allArea.GetShowMarkerOn()))
+                                                                                               allArea.IsInside(Player.m_localPlayer.transform.position, 0.0f) &&
+                                                                                               allArea.GetShowMarkerOn()))
                     allArea.ShowAreaMarker();
-            }
-        }
-
-        [HarmonyPatch(typeof(WardMonoscript), nameof(WardMonoscript.IsInside))]
-        private static class IsInside_Patch
-        {
-            private static void Prefix(WardMonoscript __instance, ref float ___m_radius)
-            {
-                foreach (WardMonoscript? pa in WardMonoscript.m_allAreas)
-                {
-                    pa.m_areaMarker.m_radius = pa.GetWardRadius();
-                    pa.m_radiusNMA = pa.GetWardRadius();
-                    pa.m_radiusBurning = pa.GetWardRadius();
-                    pa.m_playerBase.GetComponent<SphereCollider>().radius = pa.GetWardRadius();
-                    if ((bool)(Object)__instance.m_areaMarker)
-                        __instance.m_areaMarker.m_radius = __instance.GetWardRadius();
-                    __instance.m_enabledNMAEffect.GetComponent<SphereCollider>().radius =
-                        __instance.GetWardRadius();
-                    __instance.m_enabledBurningEffect.GetComponent<SphereCollider>().radius =
-                        __instance.GetWardRadius();
-                    WardRangeEffect(__instance, EffectArea.Type.PlayerBase, __instance.GetWardRadius());
-                    ___m_radius = pa.GetWardRadius();
-                }
             }
         }
 

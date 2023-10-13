@@ -766,23 +766,37 @@ namespace WardIsLove.Util
 
         public void RPC_ToggleEnabled(long uid, long playerID)
         {
-            WardIsLovePlugin.WILLogger.LogDebug(
-                $"Toggle enabled, creator is {m_nview.GetZDO().GetString("creatorName")} {m_piece.GetCreator()}");
-            if (!m_nview.IsOwner() && m_piece.GetCreator() != playerID && !IsPermitted(playerID)) return;
-            /*            if (!m_nview.IsOwner() || m_piece.GetCreator() != playerID || !this.IsPermitted(playerID))
-                            return;*/
-            SetEnabled(!IsEnabled());
-            if (this.GetBubbleOn())
+            if (this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Default)
             {
-                if (!m_bubble.activeSelf)
-                    m_bubble.SetActive(true);
-                //var newScale = this.m_bubble.transform.root.localScale * this.GetWardRadius() * 0.08f;
-                Vector3 newScale = m_bubble.transform.root.localScale * this.GetWardRadius() * 2f;
-                m_bubble.transform.localScale = newScale;
+                WardIsLovePlugin.WILLogger.LogDebug($"Toggle enabled, creator is {m_nview.GetZDO().GetString("creatorName")} {m_piece.GetCreator()}");
+                if (!m_nview.IsOwner() && m_piece.GetCreator() != playerID && !IsPermitted(playerID)) return;
+                /*            if (!m_nview.IsOwner() || m_piece.GetCreator() != playerID || !this.IsPermitted(playerID))
+                                return;*/
+                SetEnabled(!IsEnabled());
+                if (this.GetBubbleOn())
+                {
+                    if (!m_bubble.activeSelf)
+                        m_bubble.SetActive(true);
+                    //var newScale = this.m_bubble.transform.root.localScale * this.GetWardRadius() * 0.08f;
+                    Vector3 newScale = m_bubble.transform.root.localScale * this.GetWardRadius() * 2f;
+                    m_bubble.transform.localScale = newScale;
+                }
+                else
+                {
+                    m_bubble.SetActive(false);
+                }
             }
             else
             {
-                m_bubble.SetActive(false);
+#if DEBUG
+                WardIsLovePlugin.WILLogger.LogDebug($"Toggle enabled from {playerID}  creator is {m_piece.GetCreator()}");
+#endif
+                if (m_nview.IsOwner() &&
+                    (IsPermitted(playerID) &&
+                     this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Default ||
+                     this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Everyone ||
+                     m_piece.IsCreator()))
+                    SetEnabled(!IsEnabled());
             }
         }
 
@@ -1006,7 +1020,32 @@ namespace WardIsLove.Util
 
         public bool IsInside(Vector3 point, float radius)
         {
+            foreach (WardMonoscript? pa in m_allAreas)
+            {
+                pa.m_areaMarker.m_radius = pa.GetWardRadius();
+                pa.m_radiusNMA = pa.GetWardRadius();
+                pa.m_radiusBurning = pa.GetWardRadius();
+                pa.m_playerBase.GetComponent<SphereCollider>().radius = pa.GetWardRadius();
+                if (m_areaMarker)
+                    m_areaMarker.m_radius = this.GetWardRadius();
+                m_enabledNMAEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
+                m_enabledBurningEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
+                WardRangeEffect(this, EffectArea.Type.PlayerBase, this.GetWardRadius());
+                radius = pa.GetWardRadius();
+            }
+
             return Utils.DistanceXZ(transform.position, point) < m_radius + (double)radius;
+        }
+
+        private static void WardRangeEffect(Component parent, EffectArea.Type includedTypes, float newRadius)
+        {
+            if (parent == null) return;
+            EffectArea effectArea = parent.GetComponentInChildren<EffectArea>();
+            if (effectArea == null) return;
+            if ((effectArea.m_type & includedTypes) == 0) return;
+            SphereCollider collision = effectArea.GetComponent<SphereCollider>();
+            //WardIsLovePlugin.WILLogger.LogError(collision.transform.name);
+            if (collision != null) collision.radius = newRadius;
         }
 
         public static bool InsideFactionArea(Vector3 point, Character.Faction faction)

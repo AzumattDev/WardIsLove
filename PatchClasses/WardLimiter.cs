@@ -258,8 +258,7 @@ namespace WardIsLove
             {
                 if (piece.gameObject.name == "Thorward" && !CanPlaceWard)
                 {
-                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                        "<color=#FF0000>Ward Limit</color>");
+                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#FF0000>Ward Limit</color>");
                     return false;
                 }
 
