@@ -69,7 +69,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.2.3";
+        public const string version = "3.3.0";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -478,6 +478,17 @@ namespace WardIsLove
             private static void Postfix(ref bool __result)
             {
                 if (WardGUI.IsPanelVisible()) __result = true;
+            }
+        }
+        
+        [HarmonyPatch(typeof(ConsoleLogListener),nameof(ConsoleLogListener.LogEvent))]
+        static class ConsoleLogListenerLogEventPatch
+        {
+            [HarmonyPriority(Priority.First)]
+            static bool Prefix(ConsoleLogListener __instance, object sender, LogEventArgs eventArgs)
+            {
+                string str = eventArgs.Data.ToString();
+                return !str.Contains("The referenced script"); // surpress until I can fix.
             }
         }
 

@@ -6,7 +6,7 @@ using WardIsLove.Util;
 namespace WardIsLove.PatchClasses
 {
     [HarmonyPatch(typeof(Player), nameof(Player.UpdateFood))]
-    static class Player_NoFoodDrain_Patch
+    static class PlayerNoFoodDrainPatch
     {
         [UsedImplicitly]
         static void Prefix(Player __instance, float dt, bool forceUpdate)

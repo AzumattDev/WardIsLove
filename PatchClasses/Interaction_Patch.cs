@@ -5,45 +5,10 @@ using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
-    [HarmonyPatch]
-    public static class Interaction_Patch
+    [HarmonyPatch(typeof(Sign), nameof(Sign.Interact))]
+    static class SignInteractPatch
     {
-        /*[HarmonyPatch(typeof(Hud), nameof(Hud.UpdateCrosshair))]
-        static class HudUpdateCrosshairPatch
-        {
-            static void Prefix(Hud __instance)
-            {
-                if (Player.m_localPlayer == null) return;
-                var player = Player.m_localPlayer;
-                GameObject hoverObject = player.GetHoverObject();
-                Hoverable hoverable = hoverObject
-                    ? hoverObject.GetComponentInParent<Hoverable>()
-                    : null;
-                if (hoverable != null && !TextViewer.instance.IsVisible())
-                {
-                    // Check the layer of the hoverable object
-                    if (hoverObject.layer == LayerMask.NameToLayer("piece"))
-                    {
-                        if (!WardEnabled.Value)
-                            return;
-                        if (!WardMonoscript.CheckInWardMonoscript(hoverObject.transform.position) ||
-                            CustomCheck.CheckAccess(
-                                player.GetPlayerID(), hoverObject.transform.position,
-                                flash: false)) return;
-                        WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(hoverObject.transform.position);
-                        if (pa.GetChestInteractOn()) return;
-                        
-                        player.Message(MessageHud.MessageType.Center, "$msg_privatezone");
-                        return;
-                    }
-                }
-            }
-        }*/
-
-
-        [HarmonyPatch(typeof(Sign), nameof(Sign.Interact))]
-        [HarmonyPrefix]
-        private static bool SignInteraction(Sign __instance, Humanoid character)
+        static bool Prefix(Sign __instance, Humanoid character)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -60,10 +25,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(ItemStand), nameof(ItemStand.Interact))]
-        [HarmonyPrefix]
-        private static bool ItemStandInteraction(ItemStand __instance, Humanoid user)
+    [HarmonyPatch(typeof(ItemStand), nameof(ItemStand.Interact))]
+    static class ItemStandInteractPatch
+    {
+        static bool Prefix(ItemStand __instance, Humanoid user)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -82,10 +49,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]
-        [HarmonyPrefix]
-        private static bool Portal(TeleportWorld __instance, Humanoid human, bool hold)
+    [HarmonyPatch(typeof(TeleportWorld), nameof(TeleportWorld.Interact))]
+    static class TeleportWorldInteractPatch
+    {
+        static bool Prefix(TeleportWorld __instance, Humanoid human, bool hold)
         {
             if (hold)
                 return false;
@@ -95,10 +64,12 @@ namespace WardIsLove.PatchClasses
             human.Message(MessageHud.MessageType.Center, "$piece_noaccess");
             return false;
         }
+    }
 
-        [HarmonyPatch(typeof(Door), nameof(Door.Interact))]
-        [HarmonyPrefix]
-        private static bool DoorInteraction(Door __instance, Humanoid character, bool hold)
+    [HarmonyPatch(typeof(Door), nameof(Door.Interact))]
+    static class DoorInteractPatch
+    {
+        static bool Prefix(Door __instance, Humanoid character, bool hold)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -117,10 +88,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(Container), nameof(Container.Interact))]
-        [HarmonyPrefix]
-        private static bool ContainerInteraction(Container __instance, Humanoid character, bool hold)
+    [HarmonyPatch(typeof(Container), nameof(Container.Interact))]
+    static class ContainerInteractPatch
+    {
+        static bool Prefix(Container __instance, Humanoid character, bool hold)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -140,11 +113,12 @@ namespace WardIsLove.PatchClasses
             character.Message(MessageHud.MessageType.Center, "$msg_privatezone");
             return false;
         }
+    }
 
-
-        [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
-        [HarmonyPrefix]
-        private static bool RPC_Pick(Pickable __instance, ref bool repeat)
+    [HarmonyPatch(typeof(Pickable), nameof(Pickable.Interact))]
+    static class PickableInteractPatch
+    {
+        static bool Prefix(Pickable __instance, ref bool repeat)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -160,27 +134,29 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        /* Meant for pickable protection by request */
-        [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
-        public class PickableProtection_WardIsLove
+    /* Meant for pickable protection by request */
+    [HarmonyPatch(typeof(Destructible), nameof(Destructible.Damage))]
+    static class DestructibleDamagePatch
+    {
+        static void Prefix(Destructible __instance, HitData hit)
         {
-            public static void Prefix(Destructible __instance, HitData hit)
-            {
-                if (!WardEnabled.Value)
-                    return;
-                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
-                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (pa.GetPickableInteractOn()) return;
-                if (!__instance.gameObject.GetComponent<Pickable>()) return;
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
-                hit.ApplyModifier(0);
-            }
+            if (!WardEnabled.Value)
+                return;
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
+            WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+            if (pa.GetPickableInteractOn()) return;
+            if (!__instance.gameObject.GetComponent<Pickable>()) return;
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
+            hit.ApplyModifier(0);
         }
+    }
 
-        [HarmonyPatch(typeof(ItemDrop), nameof(ItemDrop.Interact))]
-        [HarmonyPrefix]
-        private static bool Pickup(ItemDrop __instance)
+    [HarmonyPatch(typeof(ItemDrop), nameof(ItemDrop.Interact))]
+    static class ItemDropInteractPatch
+    {
+        static bool Prefix(ItemDrop __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -196,10 +172,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(ShipControlls), nameof(ShipControlls.Interact))]
-        [HarmonyPrefix]
-        private static bool Ship(ShipControlls __instance)
+    [HarmonyPatch(typeof(ShipControlls), nameof(ShipControlls.Interact))]
+    static class ShipControllsInteractPatch
+    {
+        static bool Prefix(ShipControlls __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -218,33 +196,35 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(ArmorStand), nameof(ArmorStand.UseItem))]
-        static class ArmorStand_UseItem_Patch
+    [HarmonyPatch(typeof(ArmorStand), nameof(ArmorStand.UseItem))]
+    static class ArmorStandUseItemPatch
+    {
+        static bool Prefix(ArmorStand __instance, Switch caller, Humanoid user, ItemDrop.ItemData item)
         {
-            static bool Prefix(ArmorStand __instance, Switch caller, Humanoid user, ItemDrop.ItemData item)
-            {
-                if (!WardEnabled.Value)
-                    return true;
-                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
-                        Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
-                        flash: false)) return true;
-                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-
-
-                if (!pa.GetItemStandInteractOn())
-                {
-                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
-                    return false;
-                }
-
+            if (!WardEnabled.Value)
                 return true;
-            }
-        }
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
+                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
+                    flash: false)) return true;
+            WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
 
-        [HarmonyPatch(typeof(CraftingStation), nameof(CraftingStation.Interact))]
-        [HarmonyPrefix]
-        private static bool CraftingStation_InteractionCheck(CraftingStation __instance)
+
+            if (!pa.GetItemStandInteractOn())
+            {
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(CraftingStation), nameof(CraftingStation.Interact))]
+    static class CraftingStationInteractPatch
+    {
+        static bool Prefix(CraftingStation __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -262,10 +242,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(Smelter), nameof(Smelter.OnAddOre))]
-        [HarmonyPrefix]
-        private static bool SmeltingStation_InteractionCheck(Smelter __instance)
+    [HarmonyPatch(typeof(Smelter), nameof(Smelter.OnAddOre))]
+    static class SmelterOnAddOrePatch
+    {
+        static bool Prefix(Smelter __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -282,10 +264,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(Smelter), nameof(Smelter.OnAddFuel))]
-        [HarmonyPrefix]
-        private static bool SmeltingStation_InteractionCheck2(Smelter __instance)
+    [HarmonyPatch(typeof(Smelter), nameof(Smelter.OnAddFuel))]
+    static class SmelterOnAddFuelPatch
+    {
+        static bool Prefix(Smelter __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -301,10 +285,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(Beehive), nameof(Beehive.Interact))]
-        [HarmonyPrefix]
-        private static bool Beehive_InteractionCheck(Beehive __instance)
+    [HarmonyPatch(typeof(Beehive), nameof(Beehive.Interact))]
+    static class BeehiveInteractPatch
+    {
+        static bool Prefix(Beehive __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -320,10 +306,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(MapTable), nameof(MapTable.OnWrite))]
-        [HarmonyPrefix]
-        private static bool MapTable_InteractionCheck(MapTable __instance)
+    [HarmonyPatch(typeof(MapTable), nameof(MapTable.OnWrite))]
+    static class MapTableOnWritePatch
+    {
+        static bool Prefix(MapTable __instance)
         {
             if (!WardEnabled.Value)
                 return true;
@@ -339,10 +327,12 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(MapTable), nameof(MapTable.OnRead))]
-        [HarmonyPrefix]
-        private static bool MapTable_InteractionCheckOnRead(MapTable __instance)
+    [HarmonyPatch(typeof(MapTable), nameof(MapTable.OnRead))]
+    static class MapTableOnReadPatch
+    {
+        static bool Prefix(MapTable __instance)
         {
             if (!WardEnabled.Value)
                 return true;

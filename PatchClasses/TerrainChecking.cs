@@ -27,20 +27,20 @@ namespace WardIsLove.PatchClasses
 
             return true;
         }
+    }
 
-        [HarmonyPatch(typeof(TerrainOp), nameof(TerrainOp.Awake))]
-        static class TerrainOp_Awake_Patch
+    [HarmonyPatch(typeof(TerrainOp), nameof(TerrainOp.Awake))]
+    static class TerrainOp_Awake_Patch
+    {
+        static bool Prefix(TerrainOp __instance)
         {
-            static bool Prefix(TerrainOp __instance)
-            {
-                if (!Player.m_localPlayer) return true;
-                if (!WardMonoscript.CheckInWardMonoscript(Player.m_localPlayer.transform.position) ||
-                    CustomCheck.CheckAccess(
-                        Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
-                        flash: false)) return true;
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft, "$msg_privatezone");
-                return false;
-            }
+            if (!Player.m_localPlayer) return true;
+            if (!WardMonoscript.CheckInWardMonoscript(Player.m_localPlayer.transform.position) ||
+                CustomCheck.CheckAccess(
+                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
+                    flash: false)) return true;
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.TopLeft, "$msg_privatezone");
+            return false;
         }
     }
 }

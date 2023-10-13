@@ -164,8 +164,11 @@
         <Reference Include="fastJSON">
             <HintPath>Libs\fastJSON.dll</HintPath>
         </Reference>
-        <Reference Include="Groups, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-            <HintPath>Libs\Groups.dll</HintPath>
+        <Reference Include="Groups">
+          <HintPath>Libs\GroupsAPI.dll</HintPath>
+        </Reference>
+        <Reference Include="Guilds">
+          <HintPath>Libs\GuildsAPI.dll</HintPath>
         </Reference>
         <Reference Include="mscorlib"/>
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

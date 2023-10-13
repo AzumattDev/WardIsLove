@@ -6,11 +6,9 @@ using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
-    [HarmonyPatch]
-    public static class FireplaceUnlimited
+    [HarmonyPatch(typeof(Fireplace), nameof(Fireplace.UpdateFireplace))]
+    static class FireplaceUpdateFireplacePatch
     {
-        [HarmonyPatch(typeof(Fireplace), nameof(Fireplace.UpdateFireplace))]
-        [HarmonyPostfix]
         private static void Postfix(Fireplace __instance, ZNetView ___m_nview)
         {
             if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position))
@@ -24,9 +22,11 @@ namespace WardIsLove.PatchClasses
                         ___m_nview.GetZDO().Set("fuel", __instance.m_maxFuel);
             }
         }
+    }
 
-        [HarmonyPatch(typeof(Smelter), nameof(Smelter.UpdateSmelter))]
-        [HarmonyPostfix]
+    [HarmonyPatch(typeof(Smelter), nameof(Smelter.UpdateSmelter))]
+    static class SmelterUpdateSmelterPatch
+    {
         private static void Postfix(Smelter __instance, ZNetView ___m_nview)
         {
             if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position))
@@ -39,9 +39,11 @@ namespace WardIsLove.PatchClasses
                     __instance.SetFuel(__instance.m_maxFuel);
             }
         }
+    }
 
-        [HarmonyPatch(typeof(CookingStation), nameof(CookingStation.UpdateCooking))]
-        [HarmonyPostfix]
+    [HarmonyPatch(typeof(CookingStation), nameof(CookingStation.UpdateCooking))]
+    static class CookingStationUpdateCookingPatch
+    {
         private static void Postfix(CookingStation __instance, ZNetView ___m_nview)
         {
             if (WardMonoscript.CheckInWardMonoscript(__instance.transform.position))
