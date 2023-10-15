@@ -244,9 +244,7 @@ namespace WardIsLove
                 go.GetComponent<WardMonoscript>().SetEnabled(true);
                 try
                 {
-                    ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid,
-                        "WILLimitWard GetClientInfo",
-                        Player.m_localPlayer.GetPlayerID());
+                    ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard GetClientInfo", Player.m_localPlayer.GetPlayerID());
                 }
                 catch (Exception e)
                 {

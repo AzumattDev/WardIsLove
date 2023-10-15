@@ -13,6 +13,7 @@ namespace WardIsLove.PatchClasses
             _ = LocalizeWord("betterwards_accessMode", "Access • ");
             _ = LocalizeWord("betterwards_accessMode_OwnerOnly", "Owner Only");
             _ = LocalizeWord("betterwards_accessMode_Guild", "Guild Members");
+            _ = LocalizeWord("betterwards_accessMode_Group", "Group Members");
             _ = LocalizeWord("betterwards_accessMode_Everyone", "Everyone");
             _ = LocalizeWord("betterwards_accessMode_Default", "Default");
 

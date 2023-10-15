@@ -120,8 +120,7 @@ namespace WardIsLove.Extensions
         public static float GetHealthBoost(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("healthRegen", WardIsLovePlugin.WardPassiveHealthRegen.Value);
+                return WardMonoscript.m_nview.GetZDO().GetFloat("healthRegen", WardIsLovePlugin.WardPassiveHealthRegen.Value);
             return WardIsLovePlugin.WardPassiveHealthRegen.Value;
         }
 
@@ -133,8 +132,7 @@ namespace WardIsLove.Extensions
         public static float GetStaminaBoost(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetFloat("staminaBoost", WardIsLovePlugin.WardPassiveStaminaRegen.Value);
+                return WardMonoscript.m_nview.GetZDO().GetFloat("staminaBoost", WardIsLovePlugin.WardPassiveStaminaRegen.Value);
             return WardIsLovePlugin.WardPassiveStaminaRegen.Value;
         }
 
@@ -146,8 +144,7 @@ namespace WardIsLove.Extensions
         public static bool GetBubbleOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("bubbleOn", WardIsLovePlugin.EnableBubble.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("bubbleOn", WardIsLovePlugin.EnableBubble.Value);
             return WardIsLovePlugin.EnableBubble.Value;
         }
 
@@ -159,8 +156,7 @@ namespace WardIsLove.Extensions
         public static bool GetWeatherDmgOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("weatherDmgOn", WardIsLovePlugin.NoWeatherDmg.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("weatherDmgOn", WardIsLovePlugin.NoWeatherDmg.Value);
             return WardIsLovePlugin.NoWeatherDmg.Value;
         }
 
@@ -172,8 +168,7 @@ namespace WardIsLove.Extensions
         public static bool GetAutoPickupOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("autoPickupOn", WardIsLovePlugin.DisablePickup.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("autoPickupOn", WardIsLovePlugin.DisablePickup.Value);
             return WardIsLovePlugin.DisablePickup.Value;
         }
 
@@ -185,8 +180,7 @@ namespace WardIsLove.Extensions
         public static bool GetAutoCloseDoorsOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("autoCloseDoorsOn", WardIsLovePlugin.AutoClose.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("autoCloseDoorsOn", WardIsLovePlugin.AutoClose.Value);
             return WardIsLovePlugin.AutoClose.Value;
         }
 
@@ -198,8 +192,7 @@ namespace WardIsLove.Extensions
         public static bool GetFireplaceUnlimOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("fireplaceUnlimOn", WardIsLovePlugin.FireplaceUnlimited.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("fireplaceUnlimOn", WardIsLovePlugin.FireplaceUnlimited.Value);
             return WardIsLovePlugin.FireplaceUnlimited.Value;
         }
 
@@ -211,8 +204,7 @@ namespace WardIsLove.Extensions
         public static bool GetBathingUnlimOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("bathingUnlimOn", WardIsLovePlugin.BathingUnlimited.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("bathingUnlimOn", WardIsLovePlugin.BathingUnlimited.Value);
             return WardIsLovePlugin.BathingUnlimited.Value;
         }
 
@@ -224,8 +216,7 @@ namespace WardIsLove.Extensions
         public static bool GetCookingUnlimOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("cookingUnlimOn", WardIsLovePlugin.CookingUnlimited.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("cookingUnlimOn", WardIsLovePlugin.CookingUnlimited.Value);
             return WardIsLovePlugin.CookingUnlimited.Value;
         }
 
@@ -237,8 +228,7 @@ namespace WardIsLove.Extensions
         public static string GetFireplaceList(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetString("wardFireplaceList", WardIsLovePlugin.FireSources.Value);
+                return WardMonoscript.m_nview.GetZDO().GetString("wardFireplaceList", WardIsLovePlugin.FireSources.Value);
             return WardIsLovePlugin.FireSources.Value;
         }
 
@@ -250,8 +240,7 @@ namespace WardIsLove.Extensions
         public static bool GetNoDeathPenOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("noDeathPenOn", WardIsLovePlugin.WardNoDeathPen.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("noDeathPenOn", WardIsLovePlugin.WardNoDeathPen.Value);
             return WardIsLovePlugin.WardNoDeathPen.Value;
         }
 
@@ -263,8 +252,7 @@ namespace WardIsLove.Extensions
         public static bool GetNoFoodDrainOn(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
-                return WardMonoscript.m_nview.GetZDO()
-                    .GetBool("noFoodDrainOn", WardIsLovePlugin.NoFoodDrain.Value);
+                return WardMonoscript.m_nview.GetZDO().GetBool("noFoodDrainOn", WardIsLovePlugin.NoFoodDrain.Value);
             return WardIsLovePlugin.NoFoodDrain.Value;
         }
 

@@ -43,7 +43,8 @@ namespace WardIsLove
             Default = 0,
             OwnerOnly = 1,
             Everyone = 2,
-            Group = 3
+            Group = 3,
+            Guild = 4,
         }
 
         public enum WardModelTypes
@@ -147,10 +148,8 @@ namespace WardIsLove
                 }
             };
             /* Charge */
-            ChargeItem = config("Charge", "Charge Item", "Thunderstone",
-                "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
-            ChargeItemAmount = config("Charge", "Charge Item Amount", 5,
-                "Amount of the Item needed to charge the ward. If you set this to 0, the item is not needed and can charge without cost.");
+            ChargeItem = config("Charge", "Charge Item", "Thunderstone:5",
+                "Item and amount needed to charge the ward. Format needs to be 'ItemName:Amount' and is comma delimited to add more. Goes by prefab name (Item column on the site). List here: https://valheim-modding.github.io/Jotunn/data/objects/item-list.html");
             /* Control GUI */
             WardControl = config("Control GUI", "Ward Control", false,
                 "Should ward owners have control of their ward via their own (limited) GUI interface?");
