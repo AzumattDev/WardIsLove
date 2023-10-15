@@ -3,12 +3,10 @@ using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
-    /// Add WardIsLove intro to chat window.
     [HarmonyPatch(typeof(Chat), nameof(Chat.Awake))]
-    public static class ChatPatchAwake
+    static class ChatAwakePatch
     {
-        [HarmonyPostfix]
-        private static void Postfix_ChatAwake(ref Chat __instance)
+        static void Postfix(ref Chat __instance)
         {
             __instance.AddString("[WardIsLove]",
                 !IsUpToDate

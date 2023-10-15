@@ -49,11 +49,18 @@ public class ForceFieldController : MonoBehaviour
 
     private Vector4[] spherePositions;
     private float[] sphereSizes;
+    private float psmainLossyScaleX;
 
     // Use this for initialization
     private void Start()
     {
+        InitializeFields();
+    }
+
+    private void InitializeFields()
+    {
         psmain = controlParticleSystem.main;
+        psmainLossyScaleX = controlParticleSystem.transform.lossyScale.x;
 
         GetRenderers();
         GetNumberOfSpheres();
@@ -63,42 +70,51 @@ public class ForceFieldController : MonoBehaviour
         if (procedrualGradientEnabled) UpdateRampTexture();
     }
 
-    // Update is called once per frame
     private void Update()
     {
+        // Get the number of spheres only if it's necessary
         GetNumberOfSpheres();
-
         if (numberOfSpheres != numberOfSpheresOld)
         {
             GetRenderers();
             ApplyMaterials();
+            numberOfSpheresOld = numberOfSpheres;
+            GetSphereArrays(); // Only update sphere arrays if the number of spheres changes
         }
 
-        numberOfSpheresOld = numberOfSpheres;
+        // Check for procedural gradient updates
+        if (procedrualGradientEnabled && procedrualGradientUpdate)
+        {
+            UpdateRampTexture();
+        }
 
-        GetSphereArrays();
-        if (procedrualGradientEnabled)
-            if (procedrualGradientUpdate)
-                UpdateRampTexture();
+        // Update the particles if the affector count changes
+        if (psmain.maxParticles != affectorCount)
+        {
+            psmain.maxParticles = affectorCount;
+            controlParticles = new ParticleSystem.Particle[affectorCount];
+            controlParticlesPositions = new Vector4[affectorCount];
+            controlParticlesSizes = new float[affectorCount];
+        }
 
-        controlParticles = new ParticleSystem.Particle[affectorCount];
-        controlParticlesPositions = new Vector4[affectorCount];
-        controlParticlesSizes = new float[affectorCount];
-        psmain.maxParticles = affectorCount;
-        ParticleSystem.MainModule mainModule = controlParticleSystem.main;
-        mainModule.maxParticles = affectorCount;
+        // Populate and update the controlParticles array only if needed
         controlParticleSystem.GetParticles(controlParticles);
         for (int i = 0; i < affectorCount; i++)
         {
             controlParticlesPositions[i] = controlParticles[i].position;
-            controlParticlesSizes[i] = controlParticles[i].GetCurrentSize(controlParticleSystem) *
-                                       controlParticleSystem.transform.lossyScale.x;
+            controlParticlesSizes[i] = controlParticles[i].GetCurrentSize(controlParticleSystem) * psmainLossyScaleX;
         }
 
+        // Update waves
         UpdateHitWaves();
 
-        if (openAutoAnimation) OpenCloseProgress();
+        // Auto-animate the opening/closing if needed
+        if (openAutoAnimation)
+        {
+            OpenCloseProgress();
+        }
     }
+
 
     // For Better Effects Change in DemoScene
     private void OnEnable()

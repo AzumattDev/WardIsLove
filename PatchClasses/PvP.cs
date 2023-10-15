@@ -6,13 +6,10 @@ using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
-    /// make sure PvP is on
-    [HarmonyPatch]
-    public static class PvP
+    [HarmonyPatch(typeof(Player), nameof(Player.Update))]
+    static class PlayerUpdatePatch
     {
-        [HarmonyPatch(typeof(Player), nameof(Player.Update))]
-        [HarmonyPostfix]
-        private static void Postfix(Player __instance)
+        static void Postfix(Player __instance)
         {
             if (!ZNetScene.instance) return;
             if (Game.instance && !Player.m_localPlayer) return;
@@ -21,31 +18,35 @@ namespace WardIsLove.PatchClasses
             try
             {
                 if (!InventoryGui.instance) return;
-                PvPChecker(InventoryGui.instance);
+                PvP.PvPChecker(InventoryGui.instance);
             }
             catch (Exception exception)
             {
                 //WardIsLovePlugin.WILLogger.LogError($"There was an error in setting the PvP {exception}");
             }
         }
+    }
 
-
-        [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.UpdateCharacterStats))]
-        [HarmonyPostfix]
-        private static void Postfix(InventoryGui __instance)
+    [HarmonyPatch(typeof(InventoryGui), nameof(InventoryGui.UpdateCharacterStats))]
+    static class InventoryGuiUpdateCharacterStatsPatch
+    {
+        static void Postfix(InventoryGui __instance)
         {
             try
             {
                 if (!__instance) return;
-                PvPChecker(__instance);
+                PvP.PvPChecker(__instance);
             }
             catch (Exception exception)
             {
                 //WardIsLovePlugin.WILLogger.LogError($"There was an error in setting the PvP {exception}");
             }
         }
+    }
 
-        private static void PvPChecker(InventoryGui invGUI)
+    public static class PvP
+    {
+        internal static void PvPChecker(InventoryGui invGUI)
         {
             if (!Player.m_localPlayer) return;
             foreach (WardMonoscript? pa in WardMonoscriptExt.WardMonoscriptsINSIDE)

@@ -3,40 +3,37 @@ using HarmonyLib;
 
 namespace WardIsLove.PatchClasses
 {
-    public static class ZdoDataBuffer
+    [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]
+    internal class StartBufferingOnNewConnection
     {
-        private static readonly List<ZPackage> PackageBuffer = new();
+        internal static readonly List<ZPackage> PackageBuffer = new();
 
-        [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]
-        private class StartBufferingOnNewConnection
+        private static void Postfix(ZNet __instance, ZNetPeer peer)
         {
-            private static void Postfix(ZNet __instance, ZNetPeer peer)
+            if (!__instance.IsServer())
             {
-                if (!__instance.IsServer())
-                {
-                    peer.m_rpc.Register<ZPackage>("ZDOData", (_, package) => PackageBuffer.Add(package));
-                }
+                peer.m_rpc.Register<ZPackage>("ZDOData", (_, package) => PackageBuffer.Add(package));
             }
         }
+    }
 
-        [HarmonyPatch(typeof(ZNet), nameof(ZNet.Shutdown))]
-        private class ClearPackageBufferOnShutdown
-        {
-            private static void Postfix() => PackageBuffer.Clear();
-        }
+    [HarmonyPatch(typeof(ZNet), nameof(ZNet.Shutdown))]
+    internal class ClearPackageBufferOnShutdown
+    {
+        private static void Postfix() => StartBufferingOnNewConnection.PackageBuffer.Clear();
+    }
 
-        [HarmonyPatch(typeof(ZDOMan), nameof(ZDOMan.AddPeer))]
-        private class EvaluateBufferedPackages
+    [HarmonyPatch(typeof(ZDOMan), nameof(ZDOMan.AddPeer))]
+    internal class EvaluateBufferedPackages
+    {
+        private static void Postfix(ZDOMan __instance, ZNetPeer netPeer)
         {
-            private static void Postfix(ZDOMan __instance, ZNetPeer netPeer)
+            foreach (ZPackage package in StartBufferingOnNewConnection.PackageBuffer)
             {
-                foreach (ZPackage package in PackageBuffer)
-                {
-                    __instance.RPC_ZDOData(netPeer.m_rpc, package);
-                }
-
-                PackageBuffer.Clear();
+                __instance.RPC_ZDOData(netPeer.m_rpc, package);
             }
+
+            StartBufferingOnNewConnection.PackageBuffer.Clear();
         }
     }
 }

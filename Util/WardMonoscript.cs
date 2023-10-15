@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Groups;
 using HarmonyLib;
 using Steamworks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WardIsLove.Extensions;
@@ -147,7 +148,6 @@ namespace WardIsLove.Util
                 m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
                     gradient.colorKeys[1].color;
             }
-            
         }
 
         private void SwapWardModel(long sender, int index)
@@ -427,35 +427,47 @@ namespace WardIsLove.Util
                 if ((m_piece.IsCreator() || IsPermitted(Player.m_localPlayer.GetPlayerID())) &&
                     (EnvMan.instance.GetCurrentDay() != m_nview.m_zdo.GetInt("WILLimitedWardTime")))
                 {
-                    ItemDrop? item = ObjectDB.instance.GetItemPrefab(WardIsLovePlugin.ChargeItem.Value)
-                        .GetComponent<ItemDrop>();
-                    WardIsLovePlugin.WILLogger.LogDebug(
-                        $":You have {Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name)} of {item.m_itemData.m_shared.m_name}");
-                    if (Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name) >=
-                        WardIsLovePlugin.ChargeItemAmount.Value)
+                    // Parsing the ChargeItem string
+                    string[] chargeItemEntries = WardIsLovePlugin.ChargeItem.Value.Split(',');
+                    Dictionary<string, int> requiredItems = new Dictionary<string, int>();
+
+                    foreach (var entry in chargeItemEntries)
                     {
-                        if (WardIsLovePlugin.ChargeItemAmount.Value == 0)
+                        string[] parts = entry.Split(':');
+                        if (parts.Length == 2 && int.TryParse(parts[1].Trim(), out int amount))
                         {
-                            Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
-                                Quaternion.identity);
-                            m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
-                            return true;
+                            requiredItems[parts[0].Trim()] = amount;
+                        }
+                        else
+                        {
+                            // Handle parsing error. Log it or show a message.
+                            WardIsLovePlugin.WILLogger.LogDebug($"Invalid ChargeItem entry: {entry}");
+                            return true; // Stop processing
+                        }
+                    }
+
+                    // Checking player's inventory for all required items
+                    bool hasAllItems = !(from kvp in requiredItems 
+                        let item = ObjectDB.instance.GetItemPrefab(kvp.Key).GetComponent<ItemDrop>() 
+                        where Player.m_localPlayer.GetInventory().CountItems(item.m_itemData.m_shared.m_name) < kvp.Value select kvp).Any();
+
+                    if (hasAllItems)
+                    {
+                        foreach (var kvp in requiredItems)
+                        {
+                            ItemDrop? item = ObjectDB.instance.GetItemPrefab(kvp.Key).GetComponent<ItemDrop>();
+                            Player.m_localPlayer.GetInventory().RemoveItem(item.m_itemData.m_shared.m_name, kvp.Value);
+                            Player.m_localPlayer.ShowRemovedMessage(item.m_itemData, kvp.Value);
                         }
 
-                        Player.m_localPlayer.GetInventory().RemoveItem(item.m_itemData.m_shared.m_name,
-                            WardIsLovePlugin.ChargeItemAmount.Value);
-                        Player.m_localPlayer.ShowRemovedMessage(item.m_itemData,
-                            WardIsLovePlugin.ChargeItemAmount.Value);
-                        Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
-                            Quaternion.identity);
+                        Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position, Quaternion.identity);
                         m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
                     }
                     else
                     {
                         if (WardIsLovePlugin.Admin)
                         {
-                            Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position,
-                                Quaternion.identity);
+                            Instantiate(ZNetScene.instance.GetPrefab("vfx_HealthUpgrade"), transform.position, Quaternion.identity);
                             m_nview.InvokeRPC("WILWardLimit Reactivate", WardIsLovePlugin.Admin);
                         }
                         else
@@ -467,6 +479,7 @@ namespace WardIsLove.Util
 
                 return true;
             }
+
 
             if (m_piece.IsCreator())
             {
@@ -686,7 +699,7 @@ namespace WardIsLove.Util
                         if (API.IsLoaded())
                         {
                             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-                            if (API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null)
+                            if (API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null || m_piece.GetCreator() == playerID)
                             {
                                 return true;
                             }
@@ -706,6 +719,33 @@ namespace WardIsLove.Util
 
                         break;
                     }
+                    case WardIsLovePlugin.WardInteractBehaviorEnums.Guild:
+                        if (Guilds.API.IsLoaded())
+                        {
+                            List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
+                            if (Guilds.API.GetOwnGuild() != null)
+                            {
+                                if (Guilds.API.GetGuildLeader(Guilds.API.GetOwnGuild()).name == GetCreatorName() || m_piece.GetCreator() == playerID)
+                                {
+                                    return true;
+                                }
+
+                                try
+                                {
+                                    if (permittedPlayers.Any(permittedPlayer
+                                            => Guilds.API.GetOwnGuild().Members.Keys.Any(x => x.name == permittedPlayer.Value)))
+                                    {
+                                        return true;
+                                    }
+                                }
+                                catch
+                                {
+                                }
+                            }
+                            else if (m_piece.GetCreator() == playerID) return true;
+                        }
+
+                        break;
                     default:
                         return false;
                 }
@@ -730,7 +770,7 @@ namespace WardIsLove.Util
         public void SetPermittedPlayers(List<KeyValuePair<long, string>> users)
         {
             m_nview.ClaimOwnership();
-            m_nview.GetZDO().Set("permitted", users.Count);
+            m_nview.GetZDO().Set(ZDOVars.s_permitted, users.Count, false);
             for (int index = 0; index < users.Count; ++index)
             {
                 KeyValuePair<long, string> user = users[index];
@@ -742,7 +782,7 @@ namespace WardIsLove.Util
         public List<KeyValuePair<long, string>> GetPermittedPlayers()
         {
             List<KeyValuePair<long, string>> keyValuePairList = new();
-            int num = m_nview.GetZDO().GetInt("permitted");
+            int num = m_nview.GetZDO().GetInt(ZDOVars.s_permitted);
             for (int index = 0; index < num; ++index)
             {
                 long key = m_nview.GetZDO().GetLong("pu_id" + index);
@@ -766,29 +806,43 @@ namespace WardIsLove.Util
 
         public void RPC_ToggleEnabled(long uid, long playerID)
         {
-            WardIsLovePlugin.WILLogger.LogDebug(
-                $"Toggle enabled, creator is {m_nview.GetZDO().GetString("creatorName")} {m_piece.GetCreator()}");
-            if (!m_nview.IsOwner() && m_piece.GetCreator() != playerID && !IsPermitted(playerID)) return;
-            /*            if (!m_nview.IsOwner() || m_piece.GetCreator() != playerID || !this.IsPermitted(playerID))
-                            return;*/
-            SetEnabled(!IsEnabled());
-            if (this.GetBubbleOn())
+            if (this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Default)
             {
-                if (!m_bubble.activeSelf)
-                    m_bubble.SetActive(true);
-                //var newScale = this.m_bubble.transform.root.localScale * this.GetWardRadius() * 0.08f;
-                Vector3 newScale = m_bubble.transform.root.localScale * this.GetWardRadius() * 2f;
-                m_bubble.transform.localScale = newScale;
+                WardIsLovePlugin.WILLogger.LogDebug($"Toggle enabled, creator is {m_nview.GetZDO().GetString("creatorName")} {m_piece.GetCreator()}");
+                if (!m_nview.IsOwner() && m_piece.GetCreator() != playerID && !IsPermitted(playerID)) return;
+                /*            if (!m_nview.IsOwner() || m_piece.GetCreator() != playerID || !this.IsPermitted(playerID))
+                                return;*/
+                SetEnabled(!IsEnabled());
+                if (this.GetBubbleOn())
+                {
+                    if (!m_bubble.activeSelf)
+                        m_bubble.SetActive(true);
+                    //var newScale = this.m_bubble.transform.root.localScale * this.GetWardRadius() * 0.08f;
+                    Vector3 newScale = m_bubble.transform.root.localScale * this.GetWardRadius() * 2f;
+                    m_bubble.transform.localScale = newScale;
+                }
+                else
+                {
+                    m_bubble.SetActive(false);
+                }
             }
             else
             {
-                m_bubble.SetActive(false);
+#if DEBUG
+                WardIsLovePlugin.WILLogger.LogDebug($"Toggle enabled from {playerID}  creator is {m_piece.GetCreator()}");
+#endif
+                if (m_nview.IsOwner() &&
+                    (IsPermitted(playerID) &&
+                     this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Default ||
+                     this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Everyone ||
+                     m_piece.IsCreator()))
+                    SetEnabled(!IsEnabled());
             }
         }
 
         public bool IsEnabled()
         {
-            return m_nview.IsValid() && m_nview.GetZDO().GetBool("enabled") && this.WILWardLimitCheck();
+            return m_nview.IsValid() && m_nview.GetZDO().GetBool(ZDOVars.s_enabled) && this.WILWardLimitCheck();
         }
 
         public void SetEnabled(bool enabled)
@@ -803,9 +857,9 @@ namespace WardIsLove.Util
 
         public void Setup(string name)
         {
-            m_nview.GetZDO().Set("creatorName", name);
-            m_nview.GetZDO().Set("steamName", SteamFriends.GetPersonaName());
-            m_nview.GetZDO().Set("steamID", SteamUser.GetSteamID().ToString());
+            m_nview.GetZDO().Set(ZDOVars.s_creatorName, name);
+            m_nview.GetZDO().Set("steamName", PrivilegeManager.GetCurrentPlatform() == PrivilegeManager.Platform.Steam ? SteamFriends.GetPersonaName() : UserInfo.GetLocalPlayerGamertag());
+            m_nview.GetZDO().Set("steamID", PrivilegeManager.GetNetworkUserId().ToString());
             m_nview.GetZDO().Set("wardFresh", true);
         }
 
@@ -875,7 +929,7 @@ namespace WardIsLove.Util
 
         public string GetCreatorName()
         {
-            return m_nview.GetZDO().GetString("creatorName");
+            return m_nview.GetZDO().GetString(ZDOVars.s_creatorName);
         }
 
         public static bool CheckInWardMonoscript(Vector3 point, bool flash = false)
@@ -1006,7 +1060,37 @@ namespace WardIsLove.Util
 
         public bool IsInside(Vector3 point, float radius)
         {
+            foreach (WardMonoscript? pa in m_allAreas)
+            {
+                pa.m_areaMarker.m_radius = pa.GetWardRadius();
+                pa.m_radiusNMA = pa.GetWardRadius();
+                pa.m_radiusBurning = pa.GetWardRadius();
+                pa.m_playerBase.GetComponent<SphereCollider>().radius = pa.GetWardRadius();
+                if (m_areaMarker)
+                    m_areaMarker.m_radius = this.GetWardRadius();
+                m_enabledNMAEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
+                m_enabledBurningEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
+                WardRangeEffect(this, EffectArea.Type.PlayerBase, this.GetWardRadius());
+                radius = pa.GetWardRadius();
+            }
+
             return Utils.DistanceXZ(transform.position, point) < m_radius + (double)radius;
+        }
+
+        private static void WardRangeEffect(Component parent, EffectArea.Type includedTypes, float newRadius)
+        {
+            if (parent == null) return;
+            EffectArea effectArea = parent.GetComponentInChildren<EffectArea>();
+            if (effectArea == null) return;
+            if ((effectArea.m_type & includedTypes) == 0) return;
+            SphereCollider collision = effectArea.GetComponent<SphereCollider>();
+            //WardIsLovePlugin.WILLogger.LogError(collision.transform.name);
+            if (collision != null) collision.radius = newRadius;
+        }
+
+        public static bool InsideFactionArea(Vector3 point, Character.Faction faction)
+        {
+            return PrivateArea.m_allAreas.Any(allArea => allArea.m_ownerFaction == faction && allArea.IsInside(point, 0.0f));
         }
 
         public void ShowAreaMarker()
@@ -1079,7 +1163,7 @@ namespace WardIsLove.Util
                     m_worldPos = pos,
                     m_gui = Instantiate(DamageText.instance.m_worldTextBase, DamageText.instance.transform)
                 };
-                worldTextInstance.m_textField = worldTextInstance.m_gui.GetComponent<Text>();
+                worldTextInstance.m_textField = worldTextInstance.m_gui.GetComponent<TMP_Text>();
                 DamageText.instance.m_worldTexts.Add(worldTextInstance);
                 worldTextInstance.m_textField.color = Color.cyan;
                 worldTextInstance.m_textField.fontSize = 24;

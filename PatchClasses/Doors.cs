@@ -8,12 +8,11 @@ using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
 {
-    [HarmonyPatch]
-    public static class AutomaticDoorClose
+    [HarmonyPatch(typeof(Door), nameof(Door.Interact))]
+    static class AutomaticDoorClose
     {
         private static readonly Dictionary<int, Coroutine> coroutineClose = new();
 
-        [HarmonyPatch(typeof(Door), nameof(Door.Interact))]
         private static void Postfix(ref Door __instance, ZNetView ___m_nview)
         {
             if (!WardEnabled.Value) return;
@@ -37,6 +36,7 @@ namespace WardIsLove.PatchClasses
                 }
             }
         }
+
 
         private static IEnumerator AutoClose(Door __instance, ZNetView ___m_nview)
         {

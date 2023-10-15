@@ -121,12 +121,10 @@ namespace WardIsLove.Util.RPCShit
         }
     }
 
-    [HarmonyPatch]
-    public class ServerRPC_Registrations
+    [HarmonyPatch(typeof(Game), nameof(Game.Start))]
+    static class GameStartPatch
     {
-        [HarmonyPatch(typeof(Game), nameof(Game.Start))]
-        [HarmonyPrefix]
-        public static void Prefix()
+        static void Prefix(Game __instance)
         {
             if (!ZNet.m_isServer) return;
             ZRoutedRpc.instance.Register("RequestSync",

@@ -244,9 +244,7 @@ namespace WardIsLove
                 go.GetComponent<WardMonoscript>().SetEnabled(true);
                 try
                 {
-                    ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid,
-                        "WILLimitWard GetClientInfo",
-                        Player.m_localPlayer.GetPlayerID());
+                    ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard GetClientInfo", Player.m_localPlayer.GetPlayerID());
                 }
                 catch (Exception e)
                 {
@@ -258,8 +256,7 @@ namespace WardIsLove
             {
                 if (piece.gameObject.name == "Thorward" && !CanPlaceWard)
                 {
-                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center,
-                        "<color=#FF0000>Ward Limit</color>");
+                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#FF0000>Ward Limit</color>");
                     return false;
                 }
 

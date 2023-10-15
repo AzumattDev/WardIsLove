@@ -21,7 +21,7 @@ namespace WardIsLove
 {
     [BepInPlugin(HGUID, ModName, version)]
     [BepInIncompatibility("Azumatt.BetterWards")]
-    //[BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     public partial class WardIsLovePlugin : BaseUnityPlugin
     {
@@ -43,7 +43,8 @@ namespace WardIsLove
             Default = 0,
             OwnerOnly = 1,
             Everyone = 2,
-            Group = 3
+            Group = 3,
+            Guild = 4,
         }
 
         public enum WardModelTypes
@@ -69,7 +70,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.2.1";
+        public const string version = "3.3.1";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -147,10 +148,8 @@ namespace WardIsLove
                 }
             };
             /* Charge */
-            ChargeItem = config("Charge", "Charge Item", "Thunderstone",
-                "Item needed to charge the ward. Limit is 1 item: Goes by prefab name. List here: https://github.com/Valheim-Modding/Wiki/wiki/ObjectDB-Table");
-            ChargeItemAmount = config("Charge", "Charge Item Amount", 5,
-                "Amount of the Item needed to charge the ward. If you set this to 0, the item is not needed and can charge without cost.");
+            ChargeItem = config("Charge", "Charge Item", "Thunderstone:5",
+                "Item and amount needed to charge the ward. Format needs to be 'ItemName:Amount' and is comma delimited to add more. Goes by prefab name (Item column on the site). List here: https://valheim-modding.github.io/Jotunn/data/objects/item-list.html");
             /* Control GUI */
             WardControl = config("Control GUI", "Ward Control", false,
                 "Should ward owners have control of their ward via their own (limited) GUI interface?");
@@ -478,6 +477,17 @@ namespace WardIsLove
             private static void Postfix(ref bool __result)
             {
                 if (WardGUI.IsPanelVisible()) __result = true;
+            }
+        }
+        
+        [HarmonyPatch(typeof(ConsoleLogListener),nameof(ConsoleLogListener.LogEvent))]
+        static class ConsoleLogListenerLogEventPatch
+        {
+            [HarmonyPriority(Priority.First)]
+            static bool Prefix(ConsoleLogListener __instance, object sender, LogEventArgs eventArgs)
+            {
+                string str = eventArgs.Data.ToString();
+                return !str.Contains("The referenced script"); // surpress until I can fix.
             }
         }
 

@@ -1,4 +1,18 @@
 > # Update Information (Latest listed first)
+> ### v3.3.1
+> - Hotfix for Guilds, I was dumb and forgot to uncomment stuff.
+> ### v3.3.0
+> - Fix issue where ward damage amount being cleared would throw an error.
+> - Add Guilds integration. If you set the permissions on your ward to Guild, only guild members will be permitted
+> - Fix a missing localization key
+> - Internal "steamName" that is stored on the ward is now able to store the playfab/xbox IDs into it. The key is still "steamName" to provide backwards compatibility.
+> - Extend the Charge Item config to allow for multiple items to be used to charge the ward. Comma delimited list of item names and amounts. New Format is "ItemName:Amount,ItemName:Amount,ItemName:Amount"
+>   - Please note: This means that the Charge Item Amount config is no longer used. It has been removed, you might need to regenerate your config file.
+>     - Regenerate your configuration file by deleting the old one and restarting the game with the mod installed. I recommend you keep a backup of your old config file for reference if needed.
+> ### v3.2.3
+> - Update for latest Valheim changes
+> ### v3.2.2
+> - Update for Hildir's Request. 0.217.14
 > ### v3.2.1
 > - Minor fix
 > ### v3.2.0

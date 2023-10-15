@@ -36,8 +36,7 @@ namespace WardIsLove.Util.UI
             WardIsLovePlugin.Thorward.RequiredItems.Add("Thunderstone", 1, true);
             WardIsLovePlugin.Thorward.Category.Add(BuildPieceCategory.Misc);
             WardIsLovePlugin.Thorward.Crafting.Set(CraftingTable.Forge);
-            GameObject go2 =
-                wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUINoAdmin.prefab");
+            GameObject go2 = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUINoAdmin.prefab");
             GameObject go = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUI.prefab");
             WardIsLovePlugin.LightningVFX = PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningAOE");
             PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningActivation");

@@ -447,7 +447,7 @@ public class BuildPiece
                         Piece.Requirement[] requirements =
                             SerializedRequirements.toPieceReqs(new SerializedRequirements(cfg.craft.Value));
                         piecePrefab.m_resources = requirements;
-                        foreach (Piece instantiatedPiece in UnityEngine.Object.FindObjectsOfType<Piece>())
+                        foreach (Piece instantiatedPiece in Object.FindObjectsOfType<Piece>())
                         {
                             if (instantiatedPiece.m_name == pieceName)
                             {
@@ -1104,7 +1104,7 @@ public class AdminSyncing
                 string pieceName = piecePrefab.m_name;
                 string localizedName = Localization.instance.Localize(pieceName).Trim();
                 if (!ObjectDB.instance || ObjectDB.instance.GetItemPrefab("Wood") == null) continue;
-                foreach (Piece instantiatedPiece in UnityEngine.Object.FindObjectsOfType<Piece>())
+                foreach (Piece instantiatedPiece in Object.FindObjectsOfType<Piece>())
                 {
                     if (admin)
                     {

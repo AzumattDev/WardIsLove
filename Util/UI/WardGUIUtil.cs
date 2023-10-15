@@ -353,7 +353,7 @@ namespace WardIsLove.Util.UI
             {
                 return StrIn.Replace("\"", "\\\"");
             }
-            
+
             new DiscordMessage()
                 .SetUsername($"WardIsLove v{WardIsLovePlugin.version}")
                 .SetAvatar("https://staticdelivery.nexusmods.com/mods/3667/images/402/402-1620654411-147438437.png")
@@ -452,7 +452,16 @@ namespace WardIsLove.Util.UI
         public void SetWardDamageAmount()
         {
             WardMonoscript pa = WardGUI.PassInWardMonoscriptToGui();
-            pa.SetWardDamageAmount(float.Parse(m_damageAmount.text));
+            // Default value for ward damage amount
+            float defaultDamageAmount = 0.0f;
+
+            if (m_damageAmount == null || string.IsNullOrEmpty(m_damageAmount.text))
+            {
+                pa.SetWardDamageAmount(defaultDamageAmount);
+                return;
+            }
+
+            pa.SetWardDamageAmount(float.TryParse(m_damageAmount.text, out float parsedDamageAmount) ? parsedDamageAmount : defaultDamageAmount);
         }
 
         public void SetIndestructibleOn()
