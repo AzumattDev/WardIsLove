@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.3.1
+> - Hotfix for Guilds, I was dumb and forgot to uncomment stuff.
 > ### v3.3.0
 > - Fix issue where ward damage amount being cleared would throw an error.
 > - Add Guilds integration. If you set the permissions on your ward to Guild, only guild members will be permitted

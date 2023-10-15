@@ -21,7 +21,7 @@ namespace WardIsLove
 {
     [BepInPlugin(HGUID, ModName, version)]
     [BepInIncompatibility("Azumatt.BetterWards")]
-    //[BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("org.bepinex.plugins.guilds", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("org.bepinex.plugins.groups", BepInDependency.DependencyFlags.SoftDependency)]
     public partial class WardIsLovePlugin : BaseUnityPlugin
     {
@@ -70,7 +70,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.3.0";
+        public const string version = "3.3.1";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
