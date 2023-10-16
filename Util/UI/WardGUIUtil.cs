@@ -661,7 +661,7 @@ namespace WardIsLove.Util.UI
                 "Choose the Gradient", BubbleSetGradient, BubbleGradientFinished);
             /*ColorPicker.Create(paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint,
                 "Choose the bubble Color", BubbleSetColor, BubbleColorFinished, true);*/
-            paArea.m_nview.m_zdo.Set("wardFresh", false);
+            paArea.m_nview.m_zdo.Set(ZdoInternalExtensions.wardFresh, false);
             m_GradientPicker.SetActive(true);
             m_ColorPicker.SetActive(true);
         }
@@ -684,7 +684,7 @@ namespace WardIsLove.Util.UI
         {
             WardIsLovePlugin.WILLogger.LogDebug("You chose the color " + ColorUtility.ToHtmlStringRGBA(finishedColor));
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
-            paArea.m_nview.GetZDO().Set("wardColorCount",
+            paArea.m_nview.GetZDO().Set(ZdoInternalExtensions.wardColorCount,
                 paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
 
             int i = 0;
@@ -705,7 +705,7 @@ namespace WardIsLove.Util.UI
                 ++i;
             }
 
-            paArea.m_nview.GetZDO().Set("wardAlphaCount",
+            paArea.m_nview.GetZDO().Set(ZdoInternalExtensions.wardAlphaCount,
                 paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.alphaKeys.Length);
             m_GradientPicker.SetActive(false);
             m_ColorPicker.SetActive(false);
@@ -728,7 +728,7 @@ namespace WardIsLove.Util.UI
             WardIsLovePlugin.WILLogger.LogDebug("You chose a Gradient with " + finishedGradient.colorKeys.Length +
                                                 " Color keys");
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
-            paArea.m_nview.GetZDO().Set("wardColorCount", finishedGradient.colorKeys.Length);
+            paArea.m_nview.GetZDO().Set(ZdoInternalExtensions.wardColorCount, finishedGradient.colorKeys.Length);
 
             int i = 0;
             foreach (GradientColorKey colorKey in finishedGradient.colorKeys)
@@ -746,7 +746,7 @@ namespace WardIsLove.Util.UI
                 ++i;
             }
 
-            paArea.m_nview.GetZDO().Set("wardAlphaCount", finishedGradient.alphaKeys.Length);
+            paArea.m_nview.GetZDO().Set(ZdoInternalExtensions.wardAlphaCount, finishedGradient.alphaKeys.Length);
             m_GradientPicker.SetActive(false);
             m_ColorPicker.SetActive(false);
         }

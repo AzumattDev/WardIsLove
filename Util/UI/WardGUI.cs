@@ -27,12 +27,11 @@ namespace WardIsLove.Util.UI
         {
             AssetBundle wardMenuBundle = WardIsLovePlugin.GetAssetBundle("wardislove");
             
-            WardIsLovePlugin.Thorward =
-                new BuildPiece(wardMenuBundle,"Thorward"); // Silver,SurtlingCore,TrophyAbomination,Thunderstone        //15,30,1,1
+            WardIsLovePlugin.Thorward = new BuildPiece(wardMenuBundle,"Thorward");
             WardIsLovePlugin.Thorward.Name.English("Thorward");
             WardIsLovePlugin.Thorward.Description.English("The power of Thor stored in order to protect you.");
-            WardIsLovePlugin.Thorward.RequiredItems.Add("Silver", 15, true);
-            WardIsLovePlugin.Thorward.RequiredItems.Add("SurtlingCore", 30, true);
+            WardIsLovePlugin.Thorward.RequiredItems.Add("FineWood", 10, true);
+            WardIsLovePlugin.Thorward.RequiredItems.Add("SurtlingCore", 10, true);
             WardIsLovePlugin.Thorward.RequiredItems.Add("Thunderstone", 1, true);
             WardIsLovePlugin.Thorward.Category.Add(BuildPieceCategory.Misc);
             WardIsLovePlugin.Thorward.Crafting.Set(CraftingTable.Forge);
@@ -42,10 +41,8 @@ namespace WardIsLove.Util.UI
             PiecePrefabManager.RegisterPrefab(wardMenuBundle, "wardlightningActivation");
             try
             {
-                WardIsLovePlugin.Thorward.Prefab.GetComponent<WardMonoscript>().m_bubble
-                    .AddComponent<CollisionBubble>();
-
-
+                WardIsLovePlugin.Thorward.Prefab.GetComponent<WardMonoscript>().m_bubble.AddComponent<CollisionBubble>();
+                
                 wardGUI = Object.Instantiate(go);
                 Object.DontDestroyOnLoad(wardGUI);
                 wardGUINoAdmin = Object.Instantiate(go2);

@@ -31,7 +31,7 @@ namespace WardIsLove.Util.RPCShit
                 return;
             Chat.m_instance.AddString("Server", "<color=\"red\">" + str + "</color>", Talker.Type.Normal);
         }
-        
+
         public static void RPC_RequestDropdownPlayers(long sender, ZPackage pkg)
         {
         }
@@ -58,7 +58,7 @@ namespace WardIsLove.Util.RPCShit
         public static void RPC_EventRequestGuild(long sender, ZPackage pkg)
         {
         }
-        
+
         public static void RPC_EventDropdownPlayers(long sender, ZPackage pkg)
         {
             /* Populate External list, then populate dropdown in DropdownPopulate.cs "PopulatePlayerList()" */
@@ -77,13 +77,13 @@ namespace WardIsLove.Util.RPCShit
                 playerInfo.m_publicPosition = pkg.ReadBool();
                 if (playerInfo.m_publicPosition)
                     playerInfo.m_position = pkg.ReadVector3();
-                
+
                 if (playerInfo.m_name != "Human")
                 {
                     DropdownPopulate.External_list.Add(index,
                         new DropdownData
                         {
-                            //id = ZDOMan.instance.GetZDO(playerInfo.m_characterID).GetLong("playerID"),
+                            //id = ZDOMan.instance.GetZDO(playerInfo.m_characterID)..GetLong(ZDOVars.s_playerID),
                             id = playerID,
                             name = playerInfo.m_name
                         });
@@ -94,12 +94,12 @@ namespace WardIsLove.Util.RPCShit
                     DropdownPopulate.External_list.Add(index,
                         new DropdownData
                         {
-                            //id = ZDOMan.instance.GetZDO(playerInfo.m_characterID).GetLong("playerID"),
+                            //id = ZDOMan.instance.GetZDO(playerInfo.m_characterID)..GetLong(ZDOVars.s_playerID),
                             id = playerID,
                             name = Player.m_localPlayer.GetPlayerName()
                         });
                 }
-                
+
                 WardIsLovePlugin.WILLogger.LogDebug($"Dropdown data from server:\nName:{playerInfo.m_name}\nCharacterID:{playerInfo.m_characterID}\nHost:{playerInfo.m_host}\nPosition:{playerInfo.m_position}\nPlayerID:{playerID}");
             }
         }
@@ -118,8 +118,7 @@ namespace WardIsLove.Util.RPCShit
 
                 if (ZRoutedRpc.instance == null || !ZNetScene.instance)
                     return;
-                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestSync",
-                    new ZPackage());
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.instance.GetServerPeerID(), "RequestSync", new ZPackage());
             }
         }
     }
@@ -159,22 +158,71 @@ namespace WardIsLove.Util.RPCShit
         static void Prefix(Game __instance)
         {
             if (ZNet.m_isServer) return;
-            ZRoutedRpc.instance.Register("WILRequestTestConnection",
-                new Action<long, ZPackage>(ClientSystem.RPC_RequestTestConnection));
-            ZRoutedRpc.instance.Register("WILEventTestConnection",
-                new Action<long, ZPackage>(ClientSystem.RPC_EventTestConnection));
-            ZRoutedRpc.instance.Register("WILRequestAdminSync",
-                new Action<long, ZPackage>(ClientSystem.RPC_RequestAdminSync));
-            ZRoutedRpc.instance.Register("WILEventAdminSync",
-                new Action<long, ZPackage>(ClientSystem.RPC_EventAdminSync));
-            ZRoutedRpc.instance.Register("WILBadRequestMsg",
-                new Action<long, ZPackage>(ClientSystem.RPC_BadRequestMsg));
-            
+            ZRoutedRpc.instance.Register("WILRequestTestConnection", new Action<long, ZPackage>(ClientSystem.RPC_RequestTestConnection));
+            ZRoutedRpc.instance.Register("WILEventTestConnection", new Action<long, ZPackage>(ClientSystem.RPC_EventTestConnection));
+            ZRoutedRpc.instance.Register("WILRequestAdminSync", new Action<long, ZPackage>(ClientSystem.RPC_RequestAdminSync));
+            ZRoutedRpc.instance.Register("WILEventAdminSync", new Action<long, ZPackage>(ClientSystem.RPC_EventAdminSync));
+            ZRoutedRpc.instance.Register("WILBadRequestMsg", new Action<long, ZPackage>(ClientSystem.RPC_BadRequestMsg));
+
             /* Dropdown list fix */
-            ZRoutedRpc.instance.Register("WILDropdownListRequest",
-                new Action<long, ZPackage>(ClientSystem.RPC_RequestDropdownPlayers));
-            ZRoutedRpc.instance.Register("WILDropdownListEvent",
-                new Action<long, ZPackage>(ClientSystem.RPC_EventDropdownPlayers));
+            ZRoutedRpc.instance.Register("WILDropdownListRequest", new Action<long, ZPackage>(ClientSystem.RPC_RequestDropdownPlayers));
+            ZRoutedRpc.instance.Register("WILDropdownListEvent", new Action<long, ZPackage>(ClientSystem.RPC_EventDropdownPlayers));
+        }
+    }
+
+    [HarmonyPatch(typeof(ZNet), nameof(ZNet.OnNewConnection))]
+    public static class ServerTimeRPCs
+    {
+        internal static DateTime LastFetchedTime;
+        internal static TimeSpan CacheThreshold = TimeSpan.FromMinutes(30);
+
+        public static void Postfix(ZNet __instance, ZNetPeer peer)
+        {
+            if (__instance.IsServer())
+            {
+                peer.m_rpc.Register($"{WardIsLovePlugin.ModName} GetServerTime", OnServerTimeRequest);
+            }
+            else
+            {
+                peer.m_rpc.Register<long>($"{WardIsLovePlugin.ModName} GetServerTime", OnServerTimeReceived);
+            }
+        }
+
+        private static void OnServerTimeReceived(ZRpc? rpc, long time)
+        {
+            LastFetchedTime = new DateTime(time);
+            WardIsLovePlugin.serverTime = LastFetchedTime;
+            WardIsLovePlugin.serverDateTimeOffset = new DateTimeOffset(WardIsLovePlugin.serverTime, TimeSpan.Zero);
+        }
+
+        private static void OnServerTimeRequest(ZRpc rpc)
+        {
+            rpc.Invoke($"{WardIsLovePlugin.ModName} GetServerTime", DateTime.UtcNow.Ticks);
+        }
+
+        public static void RequestServerTimeIfNeeded()
+        {
+            if (ShouldUpdateTimeCache())
+            {
+                RequestServerTime();
+            }
+        }
+
+        private static bool ShouldUpdateTimeCache()
+        {
+            return DateTime.UtcNow - LastFetchedTime > CacheThreshold;
+        }
+
+        private static void RequestServerTime()
+        {
+            if (ZNet.instance.IsServer())
+            {
+                OnServerTimeReceived(null, DateTime.UtcNow.Ticks);
+            }
+            else
+            {
+                ZNet.instance.GetServerPeer().m_rpc.Invoke($"{WardIsLovePlugin.ModName} GetServerTime");
+            }
         }
     }
 }

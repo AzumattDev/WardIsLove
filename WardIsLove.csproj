@@ -60,11 +60,11 @@
         <Compile Include="Extensions\ColorPicker.cs"/>
         <Compile Include="Extensions\DragControl.cs"/>
         <Compile Include="Extensions\GradientPicker.cs"/>
-        <Compile Include="Extensions\PieceChecker.cs"/>
         <Compile Include="Extensions\SliderValueToText.cs"/>
         <Compile Include="Extensions\SliderWithText.cs"/>
         <Compile Include="Extensions\TabSwitcher.cs"/>
         <Compile Include="Extensions\WardExt.cs"/>
+        <Compile Include="Extensions\ZDOInternalExtensions.cs" />
         <Compile Include="PatchClasses\AutoPickup.cs"/>
         <Compile Include="PatchClasses\ChatWindow.cs"/>
         <Compile Include="PatchClasses\ConsoleWindow.cs"/>
@@ -72,6 +72,7 @@
         <Compile Include="PatchClasses\Doors.cs"/>
         <Compile Include="PatchClasses\EffectFix.cs"/>
         <Compile Include="PatchClasses\FireplaceUnlimited.cs"/>
+        <Compile Include="PatchClasses\HudHoverName.cs" />
         <Compile Include="PatchClasses\Passive.cs"/>
         <Compile Include="PatchClasses\HoverTextPatches.cs"/>
         <Compile Include="PatchClasses\Interaction_Patch.cs"/>
@@ -128,8 +129,12 @@
         <Content Include="Libs\GroupsAPI.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Libs\GuildsAPI.dll"/>
-        <Content Include="Libs\ServerSync.dll"/>
+        <Content Include="Libs\GuildsAPI.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Libs\ServerSync.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="README.md"/>
         <Content Include="Thunderstore\CHANGELOG.md"/>
         <Content Include="Thunderstore\icon.png"/>
@@ -230,7 +235,7 @@
             <HintPath>$(GamePath)\valheim_Data\Managed\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=13.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-            <HintPath>packages\YamlDotNet.13.1.0\lib\net45\YamlDotNet.dll</HintPath>
+          <HintPath>packages\YamlDotNet.13.7.1\lib\net45\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>

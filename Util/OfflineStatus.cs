@@ -6,96 +6,59 @@ namespace WardIsLove.Util
 {
     public class OfflineStatus
     {
+        private const string NotEnoughPlayersMessage = "Not enough players on this ward are online; ONLINE: {0}, NEEDED: {1}";
+        private const string IndestructibleMessage = "All structures inside the ward are indestructible";
+        private const string RaidableMessage = "Raidable";
+
         internal static bool CheckOfflineStatus(WardMonoscript ward, bool isPlayer = false)
         {
-            bool flag = false;
-            string message = "";
-            if (ward.IsPermitted(Player.m_localPlayer.GetPlayerID()))
-            {
-                flag = true;
-                return flag;
-            }
-
             List<KeyValuePair<long, string>> permittedList = ward.GetPermittedPlayers();
-            List<string> stringList = ZNet.instance.GetPlayerList().Select(player => player.m_name).ToList();
+            List<string> playerList = ZNet.instance.GetPlayerList().Select(player => player.m_name).ToList();
             int raidProtectionPlayerNeeded = ward.GetRaidProtectionPlayerNeeded();
-            bool protectionOn = ward.GetRaidProtectionOn();
-            int permittedOnline =
-                permittedList.Count(permittedPlayer => stringList.Contains(permittedPlayer.Value));
+            int permittedOnline = permittedList.Count(permittedPlayer => playerList.Contains(permittedPlayer.Value));
+            string creatorName = ward.GetCreatorName();
+            bool isCreatorOnline = playerList.Contains(creatorName);
 
-            switch (permittedList.Count)
+            if (IsWardRaidable(permittedList.Count, isCreatorOnline, permittedOnline, raidProtectionPlayerNeeded))
             {
-                /* If the permitted list is empty, but the owner is found in the PlayerList, compare raidable player count to determine raidable status*/
-                case 0 when stringList.Contains(ward.GetCreatorName()):
-                {
-                    flag = raidProtectionPlayerNeeded <= 1;
-                    return flag;
-                }
-
-                /* If owner is online and people from the permitted list are online, compare raidable count */
-                case > 0 when stringList.Contains(ward.GetCreatorName()):
-                {
-                    if (raidProtectionPlayerNeeded >= 1 && (permittedOnline + 1 >= raidProtectionPlayerNeeded))
-                    {
-                        flag = true;
-                        return flag;
-                    }
-
-                    break;
-                }
-                /* If owner is not online and people from the permitted list are online, compare raidable count */
-                case > 0 when !stringList.Contains(ward.GetCreatorName()):
-                {
-                    if (raidProtectionPlayerNeeded >= 1 && (permittedOnline >= raidProtectionPlayerNeeded))
-                    {
-                        flag = true;
-                        return flag;
-                    }
-
-                    break;
-                }
+                DisplayMessage(isPlayer, true, permittedOnline, raidProtectionPlayerNeeded, isCreatorOnline);
+                return true;
             }
 
-            /* Display the appropriate message to the player */
-            switch (flag)
-            {
-                case false:
-                    bool showmessage = WardIsLovePlugin.ShowraidableMessage.Value;
-                    if (showmessage)
-                    {
-                        if (isPlayer)
-                        {
-                            if (stringList.Contains(ward.GetCreatorName()))
-                            {
-                                Chat.m_instance.AddString("[WardIsLove]",
-                                    $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline + 1}, NEEDED: {raidProtectionPlayerNeeded}</color>",
-                                    Talker.Type.Normal);
-                                Chat.m_instance.AddString("[WardIsLove]",
-                                    "<color=\"red\">All structures inside the ward are indestructible</color>",
-                                    Talker.Type.Normal);
-                            }
-                            else
-                            {
-                                Chat.m_instance.AddString("[WardIsLove]",
-                                    $"<color=\"red\">Not enough players on this ward are online; ONLINE: {permittedOnline}, NEEDED: {raidProtectionPlayerNeeded}</color>",
-                                    Talker.Type.Normal);
-                                Chat.m_instance.AddString("[WardIsLove]",
-                                    "<color=\"red\">All structures inside the ward are indestructible</color>",
-                                    Talker.Type.Normal);
-                            }
-                        }
-                    }
-
-                    break;
-                case true:
-                    Chat.m_instance.AddString("[WardIsLove]", "<color=\"green\">Raidable</color>",
-                        Talker.Type.Normal);
-                    break;
-            }
-
-            WardIsLovePlugin.WILLogger.LogDebug(
-                "None of the offline criteria matched. Assume that the base shouldn't be raidable.");
+            DisplayMessage(isPlayer, false, permittedOnline, raidProtectionPlayerNeeded, isCreatorOnline);
             return false;
+        }
+
+        private static bool IsWardRaidable(int permittedListCount, bool isCreatorOnline, int permittedOnline, int raidProtectionPlayerNeeded)
+        {
+            if (permittedListCount == 0 && isCreatorOnline)
+            {
+                return raidProtectionPlayerNeeded <= 1;
+            }
+
+            int effectivePlayerCount = isCreatorOnline ? permittedOnline + 1 : permittedOnline;
+
+            return raidProtectionPlayerNeeded >= 1 && effectivePlayerCount >= raidProtectionPlayerNeeded;
+        }
+
+        private static void DisplayMessage(bool isPlayer, bool isRaidable, int permittedOnline, int raidProtectionPlayerNeeded, bool isCreatorOnline)
+        {
+            if (!isPlayer || !WardIsLovePlugin.ShowraidableMessage.Value)
+            {
+                return;
+            }
+
+            int effectivePlayerCount = isCreatorOnline ? permittedOnline + 1 : permittedOnline;
+
+            if (isRaidable)
+            {
+                Chat.m_instance.AddString("[WardIsLove]", $"<color=\"green\">{RaidableMessage}</color>", Talker.Type.Normal);
+            }
+            else
+            {
+                Chat.m_instance.AddString("[WardIsLove]", string.Format(NotEnoughPlayersMessage, effectivePlayerCount, raidProtectionPlayerNeeded), Talker.Type.Normal);
+                Chat.m_instance.AddString("[WardIsLove]", $"<color=\"red\">{IndestructibleMessage}</color>", Talker.Type.Normal);
+            }
         }
     }
 }
