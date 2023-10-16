@@ -45,7 +45,7 @@ namespace WardIsLove
                 _manager = new WardManager(Path.Combine(Paths.ConfigPath, "Azumatt.WardIsLoveData.yml"));
                 _maxWardCountConfig = Instance.Config.Bind("General", "Max Wards Per Player", 3);
                 _maxWardCountVipConfig = Instance.Config.Bind("General", "Max Wards Per Player (VIP)", 5);
-                MaxDaysDifferenceConfig = Instance.Config.Bind("General", "Days For Deactivate", 300);
+                MaxDaysDifferenceConfig = Instance.Config.Bind("General", "Days For Deactivate", 30);
                 ViPplayersListConfig = Instance.Config.Bind("General", "VIP players list", "steam ids");
             }
         }

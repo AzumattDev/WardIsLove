@@ -1,10 +1,15 @@
 > # Update Information (Latest listed first)
-> ### v3.3.2
+> ### v3.4.0
+> - `WARNING: SIZEABLE CHANGE`
+>   - The internal time for each ward has been moved to real time (based on the server's time). It's highly recommended that you destroy and rebuild your wards or charge each ward over again to get the new server times, otherwise they will auto expire or not function correctly after updating to this version.
+>   - The default ward time is now 30 days. This is configurable on the server. Admin ward time never expires
+> - Fix the hover text to be a bit more pretty (like it used to be)
 > - Change default ward requirements to allow wards faster. (Requested)
 >   - It's now 10 FineWood, 10 SurtlingCore and 1 Thunderstone
 >   - Was 15 Silver, 30 SurtingCore, 1 Thunderstone
 > - Check ZDO values using hashes directly instead of strings like vanilla now does for most things.
 > - Change Offline Raid Checking code to be easier to read and understand.
+> - Fix for the terminal commands 
 > ### v3.3.1
 > - Hotfix for Guilds, I was dumb and forgot to uncomment stuff.
 > ### v3.3.0

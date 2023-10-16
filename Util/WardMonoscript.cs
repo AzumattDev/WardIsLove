@@ -106,7 +106,8 @@ namespace WardIsLove.Util
                 {
                     if (!isAdmin)
                     {
-                        m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, (int)DateTimeOffset.Now.ToUnixTimeSeconds());
+                        ServerTimeRPCs.RequestServerTimeIfNeeded();
+                        m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, (int)WardIsLovePlugin.serverDateTimeOffset.ToUnixTimeSeconds());
                     }
                     else
                     {
@@ -359,7 +360,7 @@ namespace WardIsLove.Util
 
             if (isAdminWard)
             {
-                isWardCharged = "Never Expires";
+                isWardCharged = "Yes, Never Expires\n";
             }
             else
             {
@@ -372,7 +373,7 @@ namespace WardIsLove.Util
 
                 isWardCharged = daysDifference >= WardIsLovePlugin.MaxDaysDifference ? "<color=#FF0000>No</color>\n" : "<color=#00FF00>Yes</color>\n";
 
-                string daysTillExpire = $"\nDays Till Expiration • <color=#00FF00>{daysUntilExpiration}</color>\n";
+                string daysTillExpire = $"Days Till Expiration • <color=#00FF00>{daysUntilExpiration}</color>\n";
                 isWardCharged += daysTillExpire;
             }
 
@@ -632,10 +633,7 @@ namespace WardIsLove.Util
         {
             if (WardIsLovePlugin.Admin && !WardIsLovePlugin.StreamerMode.Value)
             {
-                _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName() +
-                                " <color=#FFA500><b>[Steam Info: " +
-                                m_nview.GetZDO().GetString(ZdoInternalExtensions.steamName) + " " +
-                                m_nview.GetZDO().GetString(ZdoInternalExtensions.steamID) + "]</b></color>");
+                _ = text.Append($"\n$piece_guardstone_owner • {GetCreatorName()} <color=#FFA500>\n\t<b>[Steam Info: {m_nview.GetZDO().GetString(ZdoInternalExtensions.steamName)} {m_nview.GetZDO().GetString(ZdoInternalExtensions.steamID)}]</b></color>");
             }
             else
             {

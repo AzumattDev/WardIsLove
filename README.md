@@ -7,6 +7,16 @@ individually configurable. Managed with a simple GUI interface for admins.
 
 `This mod uses a FileWatcher. If the file on the server is changed, upon saving the file, the configurations are sent to all clients.`
 
+> ## Ward Information
+
+## Prefab Name
+
+- Thorward
+
+## Resources Needed by default
+
+- 10 FineWood, 10 SurtlingCore, 1 Thunderstone and a nearby Forge (recipe is fully configurable)
+
 > ## Features
 
 ### Everything listed below is a feature in the mod. The config values dictate the `GLOBAL` defaults for these values. Admins can change the individual options via the GUI per ward.
@@ -22,13 +32,11 @@ individually configurable. Managed with a simple GUI interface for admins.
 * Ward Limiting with VIP option for those *special* players that you want to allow more wards for (configured on the
   server and found in General section, thanks KG!)
     - wardIsLoveData is where the ward limit information is stored. Found in BepInEx/config folder. Keyed to SteamIDs
-    - Ward "Charging" to deactivate ward after {x} in game days (configured on server)
+    - Ward "Charging" to deactivate ward after {x} days (configured on server)
         - The default cost of the charge is 5 Thunderstones. All wards that expire and are not charged will turn off
           until charged once more. Leaving it vulnerable to attack or takeover.
-        - For reference. It's approximately 24 minutes for a full day cycle. Though this wiki says
-          otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
-            - This means that you either have ~5 days until initial expiration or 6.25 if the wiki is correct.
-            - The default expiration is 300 in-game days.
+        - Charging uses the server's time and is converted into UTC time to maintain consistency during calculations.
+            - The default expiration is 30 days.
 * Configurable entry and exit messages.
 * Different levels of access to the ward.
 * The hotkey can be adjusted by the configuration file.
@@ -72,6 +80,10 @@ individually configurable. Managed with a simple GUI interface for admins.
 * Auto permit on enabled wards nearby (client configurable, having this option off means you play as a normal player)
 * Admin only chat/console(F5) commands (permit, enable, flash, disable)
 
+> ## Commands for Players
+
+* unpermit - allows you to unpermit yourself from nearby wards
+
 > ## Installation Instructions
 ***You must have BepInEx installed correctly! I can not stress this enough.***
 
@@ -110,8 +122,8 @@ individually configurable. Managed with a simple GUI interface for admins.
 >
 > ### How long are the days in Valheim for the ward?
 >
-> Approximately 20 minutes for a full day cycle. Though this wiki says
-> otherwise. https://valheim.fandom.com/wiki/Day_and_Night_Cycle
+> It uses the server's time and converts it to UTC time to maintain consistency during calculations. Meaning - It's real
+> time
 >
 > ### Where is the configuration file?
 >
@@ -121,11 +133,12 @@ individually configurable. Managed with a simple GUI interface for admins.
 <details> <summary></summary>
 
 * Anything that toggles PvE/PvP and forces the value will conflict if you have this mod toggle the values. Current known
-  mods that do this are:
+  mods that do this and aren't known to be compatible:
 
 World of Valheim - Zones
 
-PvP-Always-On
+Marketplace's Territories
+
 </details>
 
 # Author Information

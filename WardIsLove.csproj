@@ -72,6 +72,7 @@
         <Compile Include="PatchClasses\Doors.cs"/>
         <Compile Include="PatchClasses\EffectFix.cs"/>
         <Compile Include="PatchClasses\FireplaceUnlimited.cs"/>
+        <Compile Include="PatchClasses\HudHoverName.cs" />
         <Compile Include="PatchClasses\Passive.cs"/>
         <Compile Include="PatchClasses\HoverTextPatches.cs"/>
         <Compile Include="PatchClasses\Interaction_Patch.cs"/>
@@ -128,8 +129,12 @@
         <Content Include="Libs\GroupsAPI.dll">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Libs\GuildsAPI.dll"/>
-        <Content Include="Libs\ServerSync.dll"/>
+        <Content Include="Libs\GuildsAPI.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Libs\ServerSync.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="README.md"/>
         <Content Include="Thunderstore\CHANGELOG.md"/>
         <Content Include="Thunderstore\icon.png"/>
