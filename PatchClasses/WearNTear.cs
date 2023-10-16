@@ -115,9 +115,6 @@ namespace WardIsLove.PatchClasses
         {
             private static void Postfix(WearNTear __instance, ref bool __result)
             {
-                /*if (!_wardEnabled.Value || !_noWeatherDmg.Value)
-                    return;
-                __result = false;*/
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (!WardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null ||

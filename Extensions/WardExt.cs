@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using WardIsLove.Util;
+using WardIsLove.Util.RPCShit;
 
 namespace WardIsLove.Extensions
 {
@@ -701,9 +702,30 @@ namespace WardIsLove.Extensions
 
         public static bool WILWardLimitCheck(this WardMonoscript area)
         {
-            return area.m_nview.IsValid() && area.m_nview.m_zdo.GetBool(ZdoInternalExtensions.WILLimitedWard) &&
-                   EnvMan.instance.GetCurrentDay() - area.m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime) < WardIsLovePlugin.MaxDaysDifference;
+            if (area.m_nview.IsValid() && area.m_nview.m_zdo.GetBool(ZdoInternalExtensions.WILLimitedWard))
+            {
+                ServerTimeRPCs.RequestServerTimeIfNeeded();
+                int currentUnixTimeDefault = (int)WardIsLovePlugin.serverDateTimeOffset.ToUnixTimeSeconds();
+                int storedUnixTime = area.m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime, currentUnixTimeDefault);
+
+                // Check for admin ward that should never expire
+                if (storedUnixTime == -1)
+                {
+                    return true;
+                }
+
+                DateTime storedDateTime = DateTimeOffset.FromUnixTimeSeconds(storedUnixTime).DateTime;
+
+                // Calculate the difference in days
+                TimeSpan timeDifference = WardIsLovePlugin.serverTime - storedDateTime;
+                int daysDifference = (int)Math.Floor(timeDifference.TotalDays);
+
+                return daysDifference < WardIsLovePlugin.MaxDaysDifference;
+            }
+
+            return false;
         }
+
 
         internal static void EmissionSetter(this WardMonoscript area)
         {

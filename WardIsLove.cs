@@ -82,13 +82,9 @@ namespace WardIsLove
         public static bool IsUpToDate;
         public static bool ValidServer = false;
         public static bool Admin = false;
-        public static bool Raidable = false;
-        public static bool fInit = false;
         public static int EffectTick = 0;
         public static BuildPiece Thorward;
         public static GameObject LightningVFX;
-        internal static string CachedID = "";
-        internal static string CachedPersona = "";
 
         private static Sprite icon;
         public static readonly ManualLogSource WILLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
@@ -98,6 +94,8 @@ namespace WardIsLove
         public static Dictionary<string, ConfigEntry<string>> localizedStrings = new();
         private static long _timeSave;
         public static Material ForceField = null;
+        internal static DateTime serverTime = DateTime.UtcNow;
+        internal static DateTimeOffset serverDateTimeOffset = new(serverTime, TimeSpan.Zero);
 
         // Project Repository Info
         internal static string Repository = "https://github.com/WardIsLove/WardIsLove";

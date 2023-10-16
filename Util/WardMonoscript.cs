@@ -11,6 +11,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WardIsLove.Extensions;
+using WardIsLove.Util.RPCShit;
 using WardIsLove.Util.UI;
 using Object = UnityEngine.Object;
 
@@ -105,11 +106,11 @@ namespace WardIsLove.Util
                 {
                     if (!isAdmin)
                     {
-                        m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, EnvMan.instance.GetCurrentDay());
+                        m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, (int)DateTimeOffset.Now.ToUnixTimeSeconds());
                     }
                     else
                     {
-                        m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, EnvMan.instance.GetCurrentDay() + 50000);
+                        m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, -1);
                     }
                 });
             SwapWardModel(0, m_nview.GetZDO().GetInt(ZdoInternalExtensions.wardModelKey));
@@ -123,15 +124,13 @@ namespace WardIsLove.Util
                 int colorAlphaNumbers = m_nview.GetZDO().GetInt(ZdoInternalExtensions.wardAlphaCount,
                     m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
 
-                WardIsLovePlugin.WILLogger.LogDebug(
-                    $"Color Number values has a value of {colorNumbers}");
+                WardIsLovePlugin.WILLogger.LogDebug($"Color Number values has a value of {colorNumbers}");
                 Gradient gradient = new();
                 GradientColorKey[] gradientKeys = new GradientColorKey[colorNumbers];
                 GradientAlphaKey[] gradientAlphaKeys = new GradientAlphaKey[colorAlphaNumbers];
                 for (int i = 0; i < colorNumbers; i++)
                 {
-                    if (ColorUtility.TryParseHtmlString(
-                            m_nview.GetZDO().GetString($"wardColor{i}"), out Color color))
+                    if (ColorUtility.TryParseHtmlString(m_nview.GetZDO().GetString($"wardColor{i}"), out Color color))
                     {
                         gradientKeys[i].color = color;
                         gradientKeys[i].time = m_nview.GetZDO().GetFloat($"wardColorTime{i}");
@@ -350,35 +349,45 @@ namespace WardIsLove.Util
             }
 
             AddUserList(text);
-            int timeto = m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime) + WardIsLovePlugin.MaxDaysDifference;
-            int difference = timeto - EnvMan.instance.GetCurrentDay();
-            string tf = EnvMan.instance.GetCurrentDay() >= timeto
-                ? "<color=#FF0000>No</color>\n"
-                : "<color=#00FF00>Yes</color>";
-            string isEnabled = $"Is ward charged • {tf}";
-            if (difference < 0)
+
+            // Retrieve stored time and determine if this is an admin ward
+            int storedUnixTime = m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime);
+            bool isAdminWard = (storedUnixTime == -1);
+
+            // Initialize the ward status string
+            string isWardCharged;
+
+            if (isAdminWard)
             {
-                difference = 0;
+                isWardCharged = "Never Expires";
+            }
+            else
+            {
+                ServerTimeRPCs.RequestServerTimeIfNeeded();
+                DateTime storedDateTime = DateTimeOffset.FromUnixTimeSeconds(storedUnixTime).DateTime;
+                TimeSpan timeDifference = WardIsLovePlugin.serverTime - storedDateTime;
+                int daysDifference = (int)Math.Floor(timeDifference.TotalDays);
+
+                int daysUntilExpiration = WardIsLovePlugin.MaxDaysDifference - daysDifference;
+
+                isWardCharged = daysDifference >= WardIsLovePlugin.MaxDaysDifference ? "<color=#FF0000>No</color>\n" : "<color=#00FF00>Yes</color>\n";
+
+                string daysTillExpire = $"\nDays Till Expiration • <color=#00FF00>{daysUntilExpiration}</color>\n";
+                isWardCharged += daysTillExpire;
             }
 
-            string daysTillExpire = $"\nDays Till Expiration • <color=#00FF00>{difference}</color>\n";
-            if (EnvMan.instance.GetCurrentDay() >= timeto)
-            {
-                daysTillExpire = "";
-            }
-
+            // Creator text logic
             string creatorText = "";
-            if ((EnvMan.instance.GetCurrentDay() != m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime)))
+            if (!isAdminWard && WardIsLovePlugin.serverTime.DayOfYear != DateTimeOffset.FromUnixTimeSeconds(storedUnixTime).DateTime.DayOfYear)
             {
-                creatorText = m_piece.IsCreator() ||
-                              IsPermitted(Player.m_localPlayer.GetPlayerID())
-                    ? Localization.instance.Localize(
-                        "[<color=#FFFF00><b>LAlt + $KEY_Use</b></color>] <color=#00FF00>Recharge Ward</color>\n\n")
+                creatorText = m_piece.IsCreator() || IsPermitted(Player.m_localPlayer.GetPlayerID())
+                    ? Localization.instance.Localize("[<color=#FFFF00><b>LAlt + $KEY_Use</b></color>] <color=#00FF00>Recharge Ward</color>\n\n")
                     : "";
             }
 
-            string result = "<color=#00FFFF>" + isEnabled + daysTillExpire + "</color>" +
-                            creatorText;
+            // Combine everything
+            string result = $"<color=#00FFFF>Is ward charged • {isWardCharged}</color>{creatorText}";
+
             return result + Localization.instance.Localize(text.ToString());
         }
 
@@ -425,8 +434,13 @@ namespace WardIsLove.Util
 
             if (Input.GetKey(KeyCode.LeftAlt))
             {
-                if ((m_piece.IsCreator() || IsPermitted(Player.m_localPlayer.GetPlayerID())) &&
-                    (EnvMan.instance.GetCurrentDay() != m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime)))
+                int storedUnixTime = m_nview.m_zdo.GetInt(ZdoInternalExtensions.WILLimitedWardTime);
+                bool isAdminWard = (storedUnixTime == -1);
+
+                DateTime storedDateTime = DateTimeOffset.FromUnixTimeSeconds(storedUnixTime).DateTime.ToUniversalTime();
+                DateTime currentDateTime = DateTime.UtcNow;
+
+                if ((m_piece.IsCreator() || IsPermitted(Player.m_localPlayer.GetPlayerID())) && (!isAdminWard && storedDateTime.Date != currentDateTime.Date))
                 {
                     // Parsing the ChargeItem string
                     string[] chargeItemEntries = WardIsLovePlugin.ChargeItem.Value.Split(',');
