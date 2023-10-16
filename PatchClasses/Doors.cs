@@ -42,7 +42,7 @@ namespace WardIsLove.PatchClasses
         {
             _ = coroutineClose.Remove(___m_nview.GetHashCode());
             yield return new WaitForSeconds(5);
-            ___m_nview.GetZDO().Set("state", 0);
+            ___m_nview.GetZDO().Set(ZDOVars.s_state, 0);
             _ = coroutineClose.Remove(___m_nview.GetHashCode());
         }
     }

@@ -1,4 +1,10 @@
 > # Update Information (Latest listed first)
+> ### v3.3.2
+> - Change default ward requirements to allow wards faster. (Requested)
+>   - It's now 10 FineWood, 10 SurtlingCore and 1 Thunderstone
+>   - Was 15 Silver, 30 SurtingCore, 1 Thunderstone
+> - Check ZDO values using hashes directly instead of strings like vanilla now does for most things.
+> - Change Offline Raid Checking code to be easier to read and understand.
 > ### v3.3.1
 > - Hotfix for Guilds, I was dumb and forgot to uncomment stuff.
 > ### v3.3.0

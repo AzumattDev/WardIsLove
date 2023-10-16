@@ -7,6 +7,7 @@ using fastJSON;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Rendering;
+using WardIsLove.Extensions;
 using WardIsLove.Util;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -50,7 +51,7 @@ namespace WardIsLove
 
         static PlayerStatus GetPlayerStatus(string steam)
         {
-            if(ZNet.instance.ListContainsId(ZNet.instance.m_adminList, steam)) return PlayerStatus.Admin;
+            if (ZNet.instance.ListContainsId(ZNet.instance.m_adminList, steam)) return PlayerStatus.Admin;
             if (ViPplayersListConfig.Value.Contains(steam)) return PlayerStatus.VIP;
             return PlayerStatus.User;
         }
@@ -109,7 +110,7 @@ namespace WardIsLove
                 string jsonData = File.ReadAllText(jsonFilePath);
 
                 if (string.IsNullOrEmpty(jsonData)) return;
-                
+
                 // Deserialize the JSON data into a dictionary
                 var deserializer = new DeserializerBuilder()
                     .WithNamingConvention(CamelCaseNamingConvention.Instance)
@@ -191,29 +192,25 @@ namespace WardIsLove
         [HarmonyPatch(typeof(ZDOMan), nameof(ZDOMan.HandleDestroyedZDO))]
         static class ZDOMan_Patch
         {
-            private static readonly int CreatorHash = "steamID".GetStableHashCode();
-            private static readonly int PlayerIDHash = "playerID".GetStableHashCode();
 
             static void Prefix(ZDOMan __instance, ZDOID uid)
             {
                 if (!IsServer) return;
                 ZDO zdo = __instance.GetZDO(uid);
                 if (zdo == null) return;
-                if (zdo.GetBool("WILLimitedWard"))
+                if (zdo.GetBool(ZdoInternalExtensions.WILLimitedWard))
                 {
-                    string steam = zdo.GetString(CreatorHash);
+                    string steam = zdo.GetString(ZdoInternalExtensions.steamID);
                     if (_manager.PlayersWardData.ContainsKey(steam))
                     {
                         _manager.PlayersWardData[steam]--;
                         if (_manager.PlayersWardData[steam] < 0) _manager.PlayersWardData[steam] = 0;
-                        WILLogger.LogDebug(
-                            $"Player's Ward {steam} destroyed. Player wards count: {_manager.PlayersWardData[steam]}");
+                        WILLogger.LogDebug($"Player's Ward {steam} destroyed. Player wards count: {_manager.PlayersWardData[steam]}");
                         foreach (ZNetPeer? player in ZNet.instance.m_peers)
                         {
                             if (player.m_socket.GetHostName() == steam)
                             {
-                                ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo",
-                                    _manager.PlayersWardData[steam]);
+                                ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.PlayersWardData[steam]);
                             }
                         }
                     }
@@ -231,14 +228,14 @@ namespace WardIsLove
                 if (!go.name.Contains("Thorward")) return;
                 Piece piece = go.GetComponent<Piece>();
                 WardCount = 999;
-                piece.m_nview.m_zdo.Set("WILLimitedWard", true);
+                piece.m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, true);
                 if (Admin)
                 {
-                    piece.m_nview.m_zdo.Set("WILLimitedWardTime", EnvMan.instance.GetCurrentDay() + 50000);
+                    piece.m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, EnvMan.instance.GetCurrentDay() + 50000);
                 }
                 else
                 {
-                    piece.m_nview.m_zdo.Set("WILLimitedWardTime", EnvMan.instance.GetCurrentDay());
+                    piece.m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, EnvMan.instance.GetCurrentDay());
                 }
 
                 go.GetComponent<WardMonoscript>().SetEnabled(true);
@@ -301,7 +298,7 @@ namespace WardIsLove
                     if (zdo != null)
                     {
                         print($"ZDO is fine");
-                        long data = zdo.GetLong("playerID");
+                        long data = zdo..GetLong(ZDOVars.s_playerID);
                         if (_manager.PlayersWardData.ContainsKey(data))
                         {
                             print(
@@ -340,8 +337,7 @@ namespace WardIsLove
                 {
                     WILLogger.LogDebug(
                         $"Sending info to player about his wards (exist in database) Wards count: {_manager.PlayersWardData[steam]}");
-                    ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo",
-                        _manager.PlayersWardData[steam]);
+                    ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo", _manager.PlayersWardData[steam]);
                 }
                 else
                 {

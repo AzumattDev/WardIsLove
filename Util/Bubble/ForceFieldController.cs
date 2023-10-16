@@ -191,7 +191,7 @@ public class ForceFieldController : MonoBehaviour
     public static void SetOpenCloseValueBubbleOff(WardMonoscript ward)
     {
         openCloseValue -= Time.deltaTime * 0.2f;
-        if (openCloseValue <= 0f) ward.m_nview.GetZDO().Set("bubbleOn", false);
+        if (openCloseValue <= 0f) ward.m_nview.GetZDO().Set(ZdoInternalExtensions.bubbleOn, false);
     }
 
     // Generating a texture from gradient variable

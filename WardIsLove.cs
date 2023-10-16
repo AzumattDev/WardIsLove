@@ -8,6 +8,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using JetBrains.Annotations;
 using PieceManager;
 using ServerSync;
 using UnityEngine;
@@ -70,7 +71,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.3.1";
+        public const string version = "3.3.2";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -100,9 +101,7 @@ namespace WardIsLove
 
         // Project Repository Info
         internal static string Repository = "https://github.com/WardIsLove/WardIsLove";
-
-        internal static string ApiRepositoryLatestRelease =
-            "https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest";
+        internal static string ApiRepositoryLatestRelease = "https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest";
 
         //harmony
         private static Harmony harmony;
@@ -111,8 +110,7 @@ namespace WardIsLove
 
         private static PieceTable? _hammer;
 
-        private readonly ConfigSync configSync = new(ModName)
-            { DisplayName = ModName, CurrentVersion = version, MinimumRequiredVersion = version };
+        private readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = version, MinimumRequiredVersion = version };
 
         public static WardIsLovePlugin Instance { get; private set; }
 
@@ -144,7 +142,7 @@ namespace WardIsLove
 
                 if (WardGUI.wardGUI != null)
                 {
-                    Utils.FindChild(WardGUI.wardGUI.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode = CanvasScaleMode.Value;   
+                    Utils.FindChild(WardGUI.wardGUI.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode = CanvasScaleMode.Value;
                 }
             };
             /* Charge */
@@ -281,9 +279,7 @@ namespace WardIsLove
                 "Display Raid message if not raidable", false);
 
 
-            localizationFile =
-                new ConfigFile(
-                    Path.Combine(Paths.ConfigPath, HGUID + ".Localization.cfg"), false);
+            localizationFile = new ConfigFile(Path.Combine(Paths.ConfigPath, HGUID + ".Localization.cfg"), false);
 
             // send log
             WILLogger.LogDebug("Loading WardIsLove configuration file");
@@ -399,14 +395,14 @@ namespace WardIsLove
                                 if (instanceField == null ||
                                     !WardMonoscript.CheckInWardMonoscript(instance.transform.position))
                                     continue;
-                                float num1 = instanceField.GetZDO().GetFloat("health");
+                                float num1 = instanceField.GetZDO().GetFloat(ZDOVars.s_health);
                                 if (!(num1 > 0.0) || !(num1 < (double)instance.m_health)) continue;
                                 float num2 = num1 +
                                              (float)(instance.m_health * (double)ward.GetAutoRepairAmount() /
                                                      100.0);
                                 if (num2 > (double)instance.m_health)
                                     num2 = instance.m_health;
-                                instanceField.GetZDO().Set("health", num2);
+                                instanceField.GetZDO().Set(ZDOVars.s_health, num2);
                                 instanceField.InvokeRPC(ZNetView.Everybody, "WNTHealthChanged", num2);
                             }
                     }
@@ -479,8 +475,8 @@ namespace WardIsLove
                 if (WardGUI.IsPanelVisible()) __result = true;
             }
         }
-        
-        [HarmonyPatch(typeof(ConsoleLogListener),nameof(ConsoleLogListener.LogEvent))]
+
+        [HarmonyPatch(typeof(ConsoleLogListener), nameof(ConsoleLogListener.LogEvent))]
         static class ConsoleLogListenerLogEventPatch
         {
             [HarmonyPriority(Priority.First)]
@@ -499,7 +495,6 @@ namespace WardIsLove
         public static ConfigEntry<bool> StreamerMode = null!;
         public static ConfigEntry<bool> WardControl = null!;
         public static ConfigEntry<string> ChargeItem = null!;
-        public static ConfigEntry<int> ChargeItemAmount = null!;
         public static ConfigEntry<string> Announcement = null!;
         public static ConfigEntry<KeyboardShortcut> WardHotKey = null!;
         public static ConfigEntry<float> WardRange = null!;
@@ -587,7 +582,10 @@ namespace WardIsLove
 
         private class ConfigurationManagerAttributes
         {
-            public bool? Browsable = false;
+            [UsedImplicitly] public int? Order = null!;
+            [UsedImplicitly] public bool? Browsable = null!;
+            [UsedImplicitly] public string? Category = null!;
+            [UsedImplicitly] public Action<ConfigEntryBase>? CustomDrawer = null!;
         }
 
         class AcceptableShortcuts : AcceptableValueBase
@@ -600,7 +598,7 @@ namespace WardIsLove
             public override bool IsValid(object value) => true;
 
             public override string ToDescriptionString() =>
-                "# Acceptable values: " + string.Join(", ", KeyboardShortcut.AllKeyCodes);
+                "# Acceptable values: " + string.Join(", ", UnityInput.Current.SupportedKeyCodes);
         }
 
         #endregion

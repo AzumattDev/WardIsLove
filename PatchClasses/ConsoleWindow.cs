@@ -27,22 +27,29 @@ namespace WardIsLove.PatchClasses
             Terminal.ConsoleCommand permitCommand = new("permit", "Permit on wards around you",
                 args =>
                 {
-                    Player localPlayer = Player.m_localPlayer;
-                    Vector3 pos = localPlayer.transform.position;
-                    PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
-                    List<GameObject> gameObjectList = new();
-                    foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                 WardRange.Value * 1.5f))
+                    if (WardIsLovePlugin.Admin)
                     {
-                        WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
-                        if (!componentInParent || !(Vector3.Distance(localPlayer.transform.position,
-                                                        componentInParent.transform.position) <=
-                                                    (double)WardRange.Value)) continue;
-                        componentInParent.AddPermitted(playerProfile.m_playerID, playerProfile.m_playerName);
-                        if (gameObjectList.Contains(componentInParent.gameObject)) continue;
-                        gameObjectList.Add(componentInParent.gameObject);
-                        args.Context?.AddString(
-                            $"<color=#00FF00>Ward in position: {componentInParent.transform.position} now permitted for {playerProfile.m_playerName}</color>");
+                        Player localPlayer = Player.m_localPlayer;
+                        Vector3 pos = localPlayer.transform.position;
+                        PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
+                        List<GameObject> gameObjectList = new();
+                        foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
+                                     WardRange.Value * 1.5f))
+                        {
+                            WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
+                            if (!componentInParent || !(Vector3.Distance(localPlayer.transform.position,
+                                                            componentInParent.transform.position) <=
+                                                        (double)WardRange.Value)) continue;
+                            componentInParent.AddPermitted(playerProfile.m_playerID, playerProfile.m_playerName);
+                            if (gameObjectList.Contains(componentInParent.gameObject)) continue;
+                            gameObjectList.Add(componentInParent.gameObject);
+                            args.Context?.AddString(
+                                $"<color=#00FF00>Ward in position: {componentInParent.transform.position} now permitted for {playerProfile.m_playerName}</color>");
+                        }
+                    }
+                    else
+                    {
+                        args.Context?.AddString($"<color=#FF0000>You are not an admin</color>");
                     }
                 }, true);
 
@@ -83,29 +90,36 @@ namespace WardIsLove.PatchClasses
                 new("disable", "Disable wards around you",
                     args =>
                     {
-                        Player localPlayer = Player.m_localPlayer;
-                        Vector3 pos = localPlayer.transform.position;
-                        PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
-                        List<GameObject> gameObjectList = new();
-                        foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                     WardRange.Value * 1.5f))
+                        if (Admin)
                         {
-                            WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
-                            bool flag = true;
-                            if (!WardEnabled.Value && componentInParent)
-                                flag = componentInParent.m_piece.GetCreator() ==
-                                       Game.instance.GetPlayerProfile().GetPlayerID() ||
-                                       componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
-                                           .GetPlayerID());
-                            if (((!(bool)componentInParent ? 0 :
-                                    Vector3.Distance(localPlayer.transform.position,
-                                        componentInParent.transform.position) <=
-                                    (double)WardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
-                            componentInParent.SetEnabled(false);
-                            if (gameObjectList.Contains(componentInParent.gameObject)) continue;
-                            gameObjectList.Add(componentInParent.gameObject);
-                            args.Context?.AddString(
-                                $"<color=#FFA500>Ward in position: {componentInParent.transform.position} now disabled</color>");
+                            Player localPlayer = Player.m_localPlayer;
+                            Vector3 pos = localPlayer.transform.position;
+                            PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
+                            List<GameObject> gameObjectList = new();
+                            foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
+                                         WardRange.Value * 1.5f))
+                            {
+                                WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
+                                bool flag = true;
+                                if (!WardEnabled.Value && componentInParent)
+                                    flag = componentInParent.m_piece.GetCreator() ==
+                                           Game.instance.GetPlayerProfile().GetPlayerID() ||
+                                           componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
+                                               .GetPlayerID());
+                                if (((!(bool)componentInParent ? 0 :
+                                        Vector3.Distance(localPlayer.transform.position,
+                                            componentInParent.transform.position) <=
+                                        (double)WardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
+                                componentInParent.SetEnabled(false);
+                                if (gameObjectList.Contains(componentInParent.gameObject)) continue;
+                                gameObjectList.Add(componentInParent.gameObject);
+                                args.Context?.AddString(
+                                    $"<color=#FFA500>Ward in position: {componentInParent.transform.position} now disabled</color>");
+                            }
+                        }
+                        else
+                        {
+                            args.Context?.AddString($"<color=#FF0000>You are not an admin</color>");
                         }
                     }, isCheat: true);
             /* Enable */
@@ -113,29 +127,36 @@ namespace WardIsLove.PatchClasses
                 new("enable", "Enable wards around you",
                     args =>
                     {
-                        Player localPlayer = Player.m_localPlayer;
-                        Vector3 pos = localPlayer.transform.position;
-                        PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
-                        List<GameObject> gameObjectList = new();
-                        foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                     WardRange.Value * 1.5f))
+                        if (Admin)
                         {
-                            WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
-                            bool flag = true;
-                            if (!WardEnabled.Value && componentInParent)
-                                flag = componentInParent.m_piece.GetCreator() ==
-                                       Game.instance.GetPlayerProfile().GetPlayerID() ||
-                                       componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
-                                           .GetPlayerID());
-                            if (((!(bool)componentInParent ? 0 :
-                                    Vector3.Distance(localPlayer.transform.position,
-                                        componentInParent.transform.position) <=
-                                    (double)WardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
-                            componentInParent.SetEnabled(true);
-                            if (gameObjectList.Contains(componentInParent.gameObject)) continue;
-                            gameObjectList.Add(componentInParent.gameObject);
-                            args.Context?.AddString(
-                                $"<color=lightgreen>Ward in position: {componentInParent.transform.position} now enabled</color>");
+                            Player localPlayer = Player.m_localPlayer;
+                            Vector3 pos = localPlayer.transform.position;
+                            PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
+                            List<GameObject> gameObjectList = new();
+                            foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
+                                         WardRange.Value * 1.5f))
+                            {
+                                WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
+                                bool flag = true;
+                                if (!WardEnabled.Value && componentInParent)
+                                    flag = componentInParent.m_piece.GetCreator() ==
+                                           Game.instance.GetPlayerProfile().GetPlayerID() ||
+                                           componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
+                                               .GetPlayerID());
+                                if (((!(bool)componentInParent ? 0 :
+                                        Vector3.Distance(localPlayer.transform.position,
+                                            componentInParent.transform.position) <=
+                                        (double)WardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
+                                componentInParent.SetEnabled(true);
+                                if (gameObjectList.Contains(componentInParent.gameObject)) continue;
+                                gameObjectList.Add(componentInParent.gameObject);
+                                args.Context?.AddString(
+                                    $"<color=lightgreen>Ward in position: {componentInParent.transform.position} now enabled</color>");
+                            }
+                        }
+                        else
+                        {
+                            args.Context?.AddString($"<color=#FF0000>You are not an admin</color>");
                         }
                     }, isCheat: true);
             /* Flash Wards */
@@ -143,29 +164,36 @@ namespace WardIsLove.PatchClasses
                 new("flash", "Flash wards around you (Everyone can see this)",
                     args =>
                     {
-                        Player localPlayer = Player.m_localPlayer;
-                        Vector3 pos = localPlayer.transform.position;
-                        PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
-                        List<GameObject> gameObjectList = new();
-                        foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
-                                     WardRange.Value * 1.5f))
+                        if (Admin)
                         {
-                            WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
-                            bool flag = true;
-                            if (!WardEnabled.Value && componentInParent)
-                                flag = componentInParent.m_piece.GetCreator() ==
-                                       Game.instance.GetPlayerProfile().GetPlayerID() ||
-                                       componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
-                                           .GetPlayerID());
-                            if (((!(bool)componentInParent ? 0 :
-                                    Vector3.Distance(localPlayer.transform.position,
-                                        componentInParent.transform.position) <=
-                                    (double)WardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
-                            componentInParent.FlashShield(true);
-                            if (gameObjectList.Contains(componentInParent.gameObject)) continue;
-                            gameObjectList.Add(componentInParent.gameObject);
-                            args.Context?.AddString(
-                                $"<color=#FFFF00>Flashing Shield for ward in position: {componentInParent.transform.position}</color>");
+                            Player localPlayer = Player.m_localPlayer;
+                            Vector3 pos = localPlayer.transform.position;
+                            PlayerProfile playerProfile = Game.instance.GetPlayerProfile();
+                            List<GameObject> gameObjectList = new();
+                            foreach (Collider component in Physics.OverlapSphere(localPlayer.transform.position,
+                                         WardRange.Value * 1.5f))
+                            {
+                                WardMonoscript componentInParent = component.GetComponentInParent<WardMonoscript>();
+                                bool flag = true;
+                                if (!WardEnabled.Value && componentInParent)
+                                    flag = componentInParent.m_piece.GetCreator() ==
+                                           Game.instance.GetPlayerProfile().GetPlayerID() ||
+                                           componentInParent.IsPermitted(Game.instance.GetPlayerProfile()
+                                               .GetPlayerID());
+                                if (((!(bool)componentInParent ? 0 :
+                                        Vector3.Distance(localPlayer.transform.position,
+                                            componentInParent.transform.position) <=
+                                        (double)WardRange.Value ? 1 : 0) & (flag ? 1 : 0)) == 0) continue;
+                                componentInParent.FlashShield(true);
+                                if (gameObjectList.Contains(componentInParent.gameObject)) continue;
+                                gameObjectList.Add(componentInParent.gameObject);
+                                args.Context?.AddString(
+                                    $"<color=#FFFF00>Flashing Shield for ward in position: {componentInParent.transform.position}</color>");
+                            }
+                        }
+                        else
+                        {
+                            args.Context?.AddString($"<color=#FF0000>You are not an admin</color>");
                         }
                     }, isCheat: true);
         }

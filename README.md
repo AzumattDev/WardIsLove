@@ -70,7 +70,7 @@ individually configurable. Managed with a simple GUI interface for admins.
 
 * Hotkeys are UpArrow for enabling a ward, DownArrow for disabling a ward (must be looking at it)
 * Auto permit on enabled wards nearby (client configurable, having this option off means you play as a normal player)
-* Admin only chat/console(F5) commands (permit, unpermit, enable, flash, disable)
+* Admin only chat/console(F5) commands (permit, enable, flash, disable)
 
 > ## Installation Instructions
 ***You must have BepInEx installed correctly! I can not stress this enough.***
