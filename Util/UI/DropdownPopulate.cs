@@ -23,18 +23,18 @@ namespace WardIsLove.Util.UI
             }
         };
 
-        internal static string SelectedPlayerName;
-        internal static string SelectedEffectArea;
-        internal static string SelectedPermission;
-        internal static string SelectedWardModel;
-        public Dropdown EffectAreaDropdown;
-        public Dropdown PermissionsDropdown;
-        public Dropdown PlayerDropdown;
-        public Dropdown DamageTypeDropdown;
-        public Dropdown ModelTypeDropdown;
-        public Text WardOwnerText;
-        public Text WardPermittedText;
-        public Text WardPermittedListText;
+        internal static string SelectedPlayerName = null!;
+        internal static string SelectedEffectArea = null!;
+        internal static string SelectedPermission = null!;
+        internal static string SelectedWardModel = null!;
+        public Dropdown EffectAreaDropdown = null!;
+        public Dropdown PermissionsDropdown = null!;
+        public Dropdown PlayerDropdown = null!;
+        public Dropdown DamageTypeDropdown = null!;
+        public Dropdown ModelTypeDropdown = null!;
+        public Text WardOwnerText = null!;
+        public Text WardPermittedText = null!;
+        public Text WardPermittedListText = null!;
 
         private void Start()
         {
@@ -139,6 +139,6 @@ namespace WardIsLove.Util.UI
     public class DropdownData
     {
         public long id;
-        public string name;
+        public string name = null!;
     }
 }

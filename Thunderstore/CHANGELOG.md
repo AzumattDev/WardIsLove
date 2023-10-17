@@ -1,4 +1,8 @@
 > # Update Information (Latest listed first)
+> ### v3.4.1
+> - Fix the radius issue with the ward that started in 3.3.0 (I think)
+> - Fix issue with the Pickable Protection being backwards when enabled/disabled
+> - Make internal changes to my code project to build cleaner
 > ### v3.4.0
 > - `WARNING: SIZEABLE CHANGE`
 >   - The internal time for each ward has been moved to real time (based on the server's time). It's highly recommended that you destroy and rebuild your wards or charge each ward over again to get the new server times, otherwise they will auto expire or not function correctly after updating to this version.

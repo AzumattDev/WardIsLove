@@ -10,7 +10,7 @@ public class ColorPicker : MonoBehaviour
     /// <param name="c">received Color</param>
     public delegate void ColorEvent(Color c);
 
-    private static ColorPicker instance;
+    private static ColorPicker instance = null!;
 
     /// <returns>
     /// True when the ColorPicker is closed
@@ -18,17 +18,17 @@ public class ColorPicker : MonoBehaviour
     public static bool done = true;
 
     //onColorChanged event
-    private static ColorEvent onCC;
+    private static ColorEvent onCC = null!;
 
     //onColorSelected event
-    private static ColorEvent onCS;
+    private static ColorEvent onCS = null!;
 
     //Color before editing
     private static Color32 originalColor;
 
     //current Color
     private static Color32 modifiedColor;
-    private static HSV modifiedHsv;
+    private static HSV modifiedHsv = null!;
 
     //useAlpha bool
     private static bool useA;
@@ -36,14 +36,14 @@ public class ColorPicker : MonoBehaviour
     private bool interact;
 
     // these can only work with the prefab and its children
-    public RectTransform positionIndicator;
-    public Slider mainComponent;
-    public Slider rComponent;
-    public Slider gComponent;
-    public Slider bComponent;
-    public Slider aComponent;
-    public InputField hexaComponent;
-    public RawImage colorComponent;
+    public RectTransform positionIndicator  = null!;
+    public Slider mainComponent  = null!;
+    public Slider rComponent  = null!;
+    public Slider gComponent  = null!;
+    public Slider bComponent  = null!;
+    public Slider aComponent  = null!;
+    public InputField hexaComponent  = null!;
+    public RawImage colorComponent  = null!;
 
     private void Awake()
     {
@@ -146,9 +146,10 @@ public class ColorPicker : MonoBehaviour
     //used by EventTrigger to calculate the chosen value in color box
     public void SetChooser()
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(positionIndicator.parent as RectTransform,
+        var parent = positionIndicator.parent;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent as RectTransform,
             Input.mousePosition, GetComponentInParent<Canvas>().worldCamera, out Vector2 localpoint);
-        localpoint = Rect.PointToNormalized((positionIndicator.parent as RectTransform).rect, localpoint);
+        localpoint = Rect.PointToNormalized(((parent as RectTransform)!).rect, localpoint);
         if (positionIndicator.anchorMin != localpoint)
         {
             positionIndicator.anchorMin = localpoint;

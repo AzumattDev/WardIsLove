@@ -20,7 +20,7 @@ namespace WardIsLove.PatchClasses
                 if (!InventoryGui.instance) return;
                 PvP.PvPChecker(InventoryGui.instance);
             }
-            catch (Exception exception)
+            catch
             {
                 //WardIsLovePlugin.WILLogger.LogError($"There was an error in setting the PvP {exception}");
             }
@@ -37,7 +37,7 @@ namespace WardIsLove.PatchClasses
                 if (!__instance) return;
                 PvP.PvPChecker(__instance);
             }
-            catch (Exception exception)
+            catch
             {
                 //WardIsLovePlugin.WILLogger.LogError($"There was an error in setting the PvP {exception}");
             }

@@ -48,9 +48,9 @@ namespace WardIsLove.Util.UI
         }
 
 #pragma warning disable 0649
-        [SerializeField] private Image m_Target;
+        [SerializeField] private Image m_Target = null!;
         [SerializeField] private Transition m_Transition = Transition.SpriteSwap;
-        [SerializeField] private Sprite m_ActiveSprite;
+        [SerializeField] private Sprite m_ActiveSprite = null!;
         [SerializeField] private Vector2 m_InactivePosition = Vector2.zero;
         [SerializeField] private Vector2 m_ActivePosition = Vector2.zero;
 #pragma warning restore 0649

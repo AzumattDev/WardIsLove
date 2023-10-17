@@ -5,8 +5,8 @@ namespace WardIsLove.Extensions
 {
     public class SliderValueToText : MonoBehaviour
     {
-        public Slider sliderUI;
-        private Text textSliderValue;
+        public Slider sliderUI = null!;
+        private Text textSliderValue = null!;
 
         private void Start()
         {

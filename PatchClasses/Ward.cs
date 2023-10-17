@@ -49,10 +49,10 @@ namespace WardIsLove.PatchClasses
                 Piece piece = hitInfo.collider.GetComponentInParent<Piece>();
                 if (piece == null && hitInfo.collider.GetComponent<Heightmap>())
                     piece = TerrainModifier.FindClosestModifierPieceInRange(hitInfo.point, 2.5f);
-                if (!piece || !piece.m_canBeRemoved) return false;
+                if (piece != null && (!piece || !piece.m_canBeRemoved)) return false;
 
                 /* For the piece */
-                if (!WardMonoscript.CheckAccess(piece.transform.position, flash: false, wardCheck: true))
+                if (piece != null && !WardMonoscript.CheckAccess(piece.transform.position, flash: false, wardCheck: true))
                 {
                     __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
                     return flag;
@@ -102,8 +102,7 @@ namespace WardIsLove.PatchClasses
                         WardMonoscript component5 = component1.GetComponent<WardMonoscript>();
                         float radius = component5 ? component5.GetWardRadius() : 0.0f;
                         bool wardCheck = component5 != null;
-                        if (!WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, radius,
-                                flashGuardStone, wardCheck))
+                        if (!WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, radius, flashGuardStone, wardCheck))
                         {
                             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
 

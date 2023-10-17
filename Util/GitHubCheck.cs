@@ -49,7 +49,8 @@ namespace WardIsLove.Util
                 UnityWebRequest.Get(ApiRepositoryLatestRelease);
             yield return unityWebRequest.SendWebRequest();
 
-            if (unityWebRequest.isNetworkError || unityWebRequest.isHttpError)
+            if (unityWebRequest.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError
+                or UnityWebRequest.Result.DataProcessingError)
             {
                 Debug.Log("Error While Sending: " + unityWebRequest.error);
             }

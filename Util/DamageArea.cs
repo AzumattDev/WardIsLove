@@ -8,12 +8,12 @@ namespace WardIsLove.Util
     [HarmonyPatch]
     public class DamageArea : MonoBehaviour
     {
-        [SerializeField] internal WardMonoscript _area;
-        private Collider _collider;
-        private HitData hitdata;
-        private Humanoid hum;
-        private GameObject LightningStrikeVFX;
-        private Transform strikelocation;
+        [SerializeField] internal WardMonoscript _area = null!;
+        private Collider _collider = null!;
+        private HitData hitdata = null!;
+        private Humanoid hum = null!;
+        private GameObject LightningStrikeVFX = null!;
+        private Transform strikelocation = null!;
 
         private void Awake()
         {
@@ -27,7 +27,7 @@ namespace WardIsLove.Util
                 if (_area == null) _area = GetComponentInParent<WardMonoscript>();
                 //InvokeRepeating(nameof(Castlightning), 0f, 1);
             }
-            catch (Exception e)
+            catch
             {
                 // ignored
             }

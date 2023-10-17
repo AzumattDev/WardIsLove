@@ -71,7 +71,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.4.0";
+        public const string version = "3.4.1";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -83,17 +83,15 @@ namespace WardIsLove
         public static bool ValidServer = false;
         public static bool Admin = false;
         public static int EffectTick = 0;
-        public static BuildPiece Thorward;
-        public static GameObject LightningVFX;
-
-        private static Sprite icon;
+        public static BuildPiece Thorward = null!;
+        public static GameObject LightningVFX = null!;
+        
         public static readonly ManualLogSource WILLogger = BepInEx.Logging.Logger.CreateLogSource(ModName);
-        private static WardIsLovePlugin? plugin;
 
-        public static ConfigFile localizationFile;
+        public static ConfigFile localizationFile = null!;
         public static Dictionary<string, ConfigEntry<string>> localizedStrings = new();
         private static long _timeSave;
-        public static Material ForceField = null;
+        public static Material? ForceField = null;
         internal static DateTime serverTime = DateTime.UtcNow;
         internal static DateTimeOffset serverDateTimeOffset = new(serverTime, TimeSpan.Zero);
 
@@ -102,15 +100,13 @@ namespace WardIsLove
         internal static string ApiRepositoryLatestRelease = "https://api.github.com/repos/AzumattDev/WardIsLove/releases/latest";
 
         //harmony
-        private static Harmony harmony;
-
-        private static bool isInitialized = false;
+        private static Harmony harmony = null!;
 
         private static PieceTable? _hammer;
 
         private readonly ConfigSync configSync = new(ModName) { DisplayName = ModName, CurrentVersion = version, MinimumRequiredVersion = version };
 
-        public static WardIsLovePlugin Instance { get; private set; }
+        public static WardIsLovePlugin Instance { get; private set; } = null!;
 
 
         public void Awake()
@@ -435,7 +431,7 @@ namespace WardIsLove
             return AssetBundle.LoadFromStream(stream);
         }
 
-        private static object GetInstanceField<T>(T instance, string fieldName)
+        private static object? GetInstanceField<T>(T instance, string fieldName)
         {
             FieldInfo field = typeof(T).GetField(fieldName,
                 BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)!;
