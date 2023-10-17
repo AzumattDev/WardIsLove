@@ -9,8 +9,8 @@ namespace WardIsLove.Util.DiscordMessenger;
 public class Provider
 {
     [YamlMember(Alias = "name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [YamlMember(Alias = "url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 }

@@ -126,13 +126,10 @@ namespace WardIsLove.PatchClasses
                     Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
                     flash: false)) return true;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-            if (!pa.GetPickableInteractOn())
-            {
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
-                return false;
-            }
+            if (!pa.GetPickableInteractOn()) return true;
+            MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
+            return false;
 
-            return true;
         }
     }
 
@@ -146,7 +143,7 @@ namespace WardIsLove.PatchClasses
                 return;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-            if (pa.GetPickableInteractOn()) return;
+            if (!pa.GetPickableInteractOn()) return;
             if (!__instance.gameObject.GetComponent<Pickable>()) return;
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
             hit.ApplyModifier(0);

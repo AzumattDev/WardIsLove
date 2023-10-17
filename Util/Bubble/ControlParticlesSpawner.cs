@@ -6,7 +6,7 @@ namespace WardIsLove.Util.Bubble
     [HarmonyPatch]
     public class ControlParticlesSpawner : MonoBehaviour
     {
-        public static ParticleSystem cps;
+        public static ParticleSystem cps = null!;
         public string bubbleTag = "WardIsLoveFF";
 
         /*private void OnCollisionEnter(Collision collision)

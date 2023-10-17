@@ -24,35 +24,35 @@ namespace WardIsLove.Util
         public static List<WardMonoscript> m_allAreas = new();
         public EffectList m_activateEffect = new();
         public EffectList m_addPermittedEffect = new();
-        public CirclesProjector m_areaMarker;
-        public GameObject m_bardWardAudio;
-        public GameObject m_bubble;
+        public CirclesProjector m_areaMarker = null!;
+        public GameObject m_bardWardAudio = null!;
+        public GameObject m_bubble = null!;
         public List<WardMonoscript> m_connectedAreas = new();
-        public Light m_wardLightColor;
-        public ParticleSystem m_wardParticleLightColor;
-        public GameObject m_connectEffect;
+        public Light m_wardLightColor = null!;
+        public ParticleSystem m_wardParticleLightColor = null!;
+        public GameObject m_connectEffect = null!;
         public List<GameObject> m_connectionInstances = new();
         public float m_connectionUpdateTime = -1000f;
         public EffectList m_deactivateEffect = new();
-        public GameObject m_enabledBurningEffect;
-        public GameObject m_enabledEffect;
-        public GameObject m_enabledNMAEffect;
+        public GameObject m_enabledBurningEffect = null!;
+        public GameObject m_enabledEffect = null!;
+        public GameObject m_enabledNMAEffect = null!;
         public bool m_flashAvailable = true;
         public EffectList m_flashEffect = new();
-        public GameObject m_inRangeEffect;
-        public MeshRenderer m_model;
-        public MeshRenderer m_modelLoki;
-        public MeshRenderer m_modelDefault;
-        public MeshRenderer m_modelHel;
-        public MeshRenderer m_modelBetterWard;
-        public MeshRenderer m_modelBetterWard_Type2;
-        public MeshRenderer m_modelBetterWard_Type3;
-        public MeshRenderer m_modelBetterWard_Type4;
+        public GameObject m_inRangeEffect = null!;
+        public MeshRenderer m_model = null!;
+        public MeshRenderer m_modelLoki = null!;
+        public MeshRenderer m_modelDefault = null!;
+        public MeshRenderer m_modelHel = null!;
+        public MeshRenderer m_modelBetterWard = null!;
+        public MeshRenderer m_modelBetterWard_Type2 = null!;
+        public MeshRenderer m_modelBetterWard_Type3 = null!;
+        public MeshRenderer m_modelBetterWard_Type4 = null!;
         public string m_name = "Ward";
-        public ZNetView m_nview;
-        public ZNetView m_rootObjectOverride;
-        public Piece m_piece;
-        public GameObject m_playerBase;
+        public ZNetView m_nview = null!;
+        public ZNetView m_rootObjectOverride = null!;
+        public Piece m_piece = null!;
+        public GameObject m_playerBase = null!;
         public float m_radius;
         public float m_radiusBurning;
         public float m_radiusNMA;
@@ -406,7 +406,7 @@ namespace WardIsLove.Util
                 return false;
             }
 
-            Player player = human as Player;
+            Player? player = human as Player;
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.Tilde))
                 try
                 {
@@ -500,11 +500,11 @@ namespace WardIsLove.Util
 
             if (m_piece.IsCreator())
             {
-                m_nview.InvokeRPC("ToggleEnabled", player.GetPlayerID());
+                if (player != null) m_nview.InvokeRPC("ToggleEnabled", player.GetPlayerID());
                 return true;
             }
 
-            if (IsPermitted(player.GetPlayerID()) && WardIsLovePlugin.WardHotKey.Value.IsDown())
+            if (player != null && IsPermitted(player.GetPlayerID()) && WardIsLovePlugin.WardHotKey.Value.IsDown())
             {
                 m_nview.InvokeRPC("ToggleEnabled", player.GetPlayerID());
                 return true;
@@ -513,7 +513,7 @@ namespace WardIsLove.Util
             if (IsEnabled())
                 return false;
             m_nview.ClaimOwnership();
-            m_nview.InvokeRPC("TogglePermitted", player.GetPlayerID(), player.GetPlayerName());
+            if (player != null) m_nview.InvokeRPC("TogglePermitted", player.GetPlayerID(), player.GetPlayerName());
             return true;
         }
 
@@ -604,7 +604,8 @@ namespace WardIsLove.Util
                 //float time = 0;
                 try
                 {
-                    time = ward.GetAutoRepairTextTime() + 30;
+                    if (ward != null) time = ward.GetAutoRepairTextTime() + 30;
+                    else time = 30;
                 }
                 catch
                 {
@@ -740,7 +741,7 @@ namespace WardIsLove.Util
                             List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
                             if (Guilds.API.GetOwnGuild() != null)
                             {
-                                if (Guilds.API.GetGuildLeader(Guilds.API.GetOwnGuild()).name == GetCreatorName() || m_piece.GetCreator() == playerID)
+                                if (Guilds.API.GetGuildLeader(Guilds.API.GetOwnGuild()!).name == GetCreatorName() || m_piece.GetCreator() == playerID)
                                 {
                                     return true;
                                 }
@@ -748,7 +749,7 @@ namespace WardIsLove.Util
                                 try
                                 {
                                     if (permittedPlayers.Any(permittedPlayer
-                                            => Guilds.API.GetOwnGuild().Members.Keys.Any(x => x.name == permittedPlayer.Value)))
+                                            => Guilds.API.GetOwnGuild()!.Members.Keys.Any(x => x.name == permittedPlayer.Value)))
                                     {
                                         return true;
                                     }
@@ -970,7 +971,7 @@ namespace WardIsLove.Util
                 return true;
             }
 
-            wardout = null;
+            wardout = null!;
             return false;
         }
 
@@ -1085,7 +1086,7 @@ namespace WardIsLove.Util
                 m_enabledNMAEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
                 m_enabledBurningEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
                 WardRangeEffect(this, EffectArea.Type.PlayerBase, this.GetWardRadius());
-                radius = pa.GetWardRadius();
+                m_radius = pa.GetWardRadius();
             }
 
             return Utils.DistanceXZ(transform.position, point) < m_radius + (double)radius;

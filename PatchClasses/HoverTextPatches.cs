@@ -117,7 +117,7 @@ namespace WardIsLove.PatchClasses
             if (!WardMonoscript.CheckAccess(__instance.transform.position, flash: false))
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (pa.GetPickableInteractOn()) return __result;
+                if (!pa.GetPickableInteractOn()) return __result;
                 hoverText = Localization.instance.Localize(__instance.GetHoverName() +
                                                            "\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;

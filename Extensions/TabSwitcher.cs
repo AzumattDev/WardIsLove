@@ -73,16 +73,16 @@ namespace WardIsLove.Extensions
         [Serializable]
         public class Tab
         {
-            public Button m_button;
+            public Button m_button = null!;
 
 
-            public RectTransform m_page;
+            public RectTransform m_page = null!;
 
 
             public bool m_default;
 
 
-            public UnityEvent m_onClick;
+            public UnityEvent m_onClick = null!;
         }
     }
 }

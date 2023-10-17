@@ -10,8 +10,8 @@ namespace WardIsLove.Extensions
 {
     public static class WardMonoscriptExt
     {
-        public static IEnumerable<WardMonoscript> WardMonoscriptsINSIDE;
-        public static IEnumerable<WardMonoscript> WardCharacterINSIDE;
+        public static IEnumerable<WardMonoscript> WardMonoscriptsINSIDE = null!;
+        public static IEnumerable<WardMonoscript> WardCharacterINSIDE = null!;
 
         public static IEnumerator UpdateAreas()
         {
@@ -52,7 +52,7 @@ namespace WardIsLove.Extensions
                 if (allArea.IsEnabled() && allArea.IsInside(transformPos, 0.0f))
                     return allArea;
 
-            return null;
+            return null!;
         }
 
         public static WardIsLovePlugin.WardInteractBehaviorEnums GetAccessMode(

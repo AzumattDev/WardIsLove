@@ -14,7 +14,7 @@ namespace WardIsLove.Util.Bubble
     [HarmonyPatch]
     public class WardEntryDetector : MonoBehaviour
     {
-        public WardMonoscript m_wardEntered;
+        public WardMonoscript m_wardEntered = null!;
         private Coroutine? Heal;
         private Coroutine? Stamina;
         private Coroutine? DamageUpdate;
@@ -28,6 +28,11 @@ namespace WardIsLove.Util.Bubble
         [SerializeField] private List<Humanoid> m_character = new List<Humanoid>();
         [SerializeField] internal WardIsLovePlugin.WardDamageTypes _type;
         [SerializeField] internal Vector3 staggerDirection = new Vector3(0f, 0f, 0f);
+
+        public WardEntryDetector(WardIsLovePlugin.WardDamageTypes type)
+        {
+            _type = type;
+        }
 
         private void OnTriggerEnter(Collider collider)
         {
@@ -314,8 +319,8 @@ namespace WardIsLove.Util.Bubble
     [HarmonyPatch]
     public class CollisionBubble : MonoBehaviour
     {
-        private Collider COL;
-        private WardMonoscript ward;
+        private Collider COL = null!;
+        private WardMonoscript ward = null!;
 
         private void Awake()
         {

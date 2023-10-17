@@ -6,7 +6,7 @@ namespace WardIsLove.Extensions
     {
         //delta drag
         private Vector2 delta;
-        private RectTransform window;
+        private RectTransform window = null!;
 
         private void Awake()
         {

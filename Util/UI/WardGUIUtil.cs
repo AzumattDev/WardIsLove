@@ -15,76 +15,75 @@ namespace WardIsLove.Util.UI
     public class WardGUIUtil : MonoBehaviour
     {
         /* General */
-        public Slider m_wardradius;
-        public Toggle m_nofooddrain;
-        public Toggle m_autoclosedoors;
-        public Toggle m_wardnotifyToggle;
-        public InputField m_enternotifyMessage;
-        public InputField m_exitnotifyMessage;
-        public Toggle m_weatherDmgToggle;
-        public Toggle m_nodeathpen;
-        public Toggle m_showFlashToggle;
-        public Toggle m_showMarkerToggle;
-        public Slider m_healthboost;
-        public Slider m_staminaboost;
-        public Toggle m_bathingunlimited;
-        public Toggle m_cookingunlimited;
-        public Toggle m_fireplaceunlimited;
-        public InputField m_firesourceList;
+        public Slider m_wardradius = null!;
+        public Toggle m_nofooddrain = null!;
+        public Toggle m_autoclosedoors = null!;
+        public Toggle m_wardnotifyToggle = null!;
+        public InputField m_enternotifyMessage = null!;
+        public InputField m_exitnotifyMessage = null!;
+        public Toggle m_weatherDmgToggle = null!;
+        public Toggle m_nodeathpen = null!;
+        public Toggle m_showFlashToggle = null!;
+        public Toggle m_showMarkerToggle = null!;
+        public Slider m_healthboost = null!;
+        public Slider m_staminaboost = null!;
+        public Toggle m_bathingunlimited = null!;
+        public Toggle m_cookingunlimited = null!;
+        public Toggle m_fireplaceunlimited = null!;
+        public InputField m_firesourceList = null!;
 
-        public Toggle m_pveEnforceToggle;
-        public Toggle m_pvpEnforceToggle;
-        public Toggle m_onlyPerm;
-        public Toggle m_notPerm;
-        public InputField m_ctaMessage;
+        public Toggle m_pveEnforceToggle = null!;
+        public Toggle m_pvpEnforceToggle = null!;
+        public Toggle m_onlyPerm = null!;
+        public Toggle m_notPerm = null!;
+        public InputField m_ctaMessage = null!;
 
         /* Access */
-        public Toggle m_bubbleToggle;
-        public Toggle m_autopickup;
-        public Toggle m_itemstandInteractToggle;
-        public Toggle m_portalInteractToggle;
-        public Toggle m_itemInteractToggle;
-        public Toggle m_doorInteractToggle;
-        public Toggle m_chestInteractToggle;
-        public Toggle m_shipInteractToggle;
-        public Toggle m_signInteractToggle;
-        public Toggle m_craftingStationInteractToggle;
-        public Toggle m_smelterInteractToggle;
-        public Toggle m_beehiveInteractToggle;
-        public Toggle m_maptableInteractToggle;
-        public Toggle m_noteleportToggle;
-        public Toggle m_pickableInteractToggle;
-        public Toggle m_pushoutPlayers;
-        public Toggle m_pushoutCreatures;
-        public Dropdown m_effectarea;
-        public Dropdown m_permissions;
-        public Dropdown m_PlayerDropdown;
-        public GameObject m_GradientPicker;
-        public GameObject m_ColorPicker;
+        public Toggle m_bubbleToggle = null!;
+        public Toggle m_autopickup = null!;
+        public Toggle m_itemstandInteractToggle = null!;
+        public Toggle m_portalInteractToggle = null!;
+        public Toggle m_itemInteractToggle = null!;
+        public Toggle m_doorInteractToggle = null!;
+        public Toggle m_chestInteractToggle = null!;
+        public Toggle m_shipInteractToggle = null!;
+        public Toggle m_signInteractToggle = null!;
+        public Toggle m_craftingStationInteractToggle = null!;
+        public Toggle m_smelterInteractToggle = null!;
+        public Toggle m_beehiveInteractToggle = null!;
+        public Toggle m_maptableInteractToggle = null!;
+        public Toggle m_noteleportToggle = null!;
+        public Toggle m_pickableInteractToggle = null!;
+        public Toggle m_pushoutPlayers = null!;
+        public Toggle m_pushoutCreatures = null!;
+        public Dropdown m_effectarea = null!;
+        public Dropdown m_permissions = null!;
+        public Dropdown m_PlayerDropdown = null!;
+        public GameObject m_GradientPicker = null!;
+        public GameObject m_ColorPicker = null!;
 
 
         /* Additional */
 
-        public Dropdown m_damageType;
-        public Dropdown m_modelType;
-        public InputField m_damageAmount;
-        public Toggle m_indestructibleToggle;
-        public InputField m_indestructibleList;
-        public Slider m_creatureDamageIncrease;
-        public Slider m_structDamageReduction;
-        public Toggle m_autoRepairToggle;
-        public Slider m_autoRepairAmount;
-        public InputField m_autoRepairTime;
-        public Toggle m_raidProtectionToggle;
-        public InputField m_raidPlayersNeeded;
-
-        public Toggle m_wardIsLove;
+        public Dropdown m_damageType = null!;
+        public Dropdown m_modelType = null!;
+        public InputField m_damageAmount = null!;
+        public Toggle m_indestructibleToggle = null!;
+        public InputField m_indestructibleList = null!;
+        public Slider m_creatureDamageIncrease = null!;
+        public Slider m_structDamageReduction = null!;
+        public Toggle m_autoRepairToggle = null!;
+        public Slider m_autoRepairAmount = null!;
+        public InputField m_autoRepairTime = null!;
+        public Toggle m_raidProtectionToggle = null!;
+        public InputField m_raidPlayersNeeded = null!;
+        public Toggle m_wardIsLove = null!;
 
         /* Feedback */
-        public Text m_subject;
-        public Text m_text;
-        public Button m_sendButton;
-        public Dropdown m_feebackType;
+        public Text m_subject = null!;
+        public Text m_text = null!;
+        public Button m_sendButton = null!;
+        public Dropdown m_feebackType = null!;
 
         private void Start()
         {

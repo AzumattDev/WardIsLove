@@ -17,13 +17,13 @@ namespace WardIsLove
 {
     public partial class WardIsLovePlugin
     {
-        private static int MaxWardCount = 99999;
+        private static int _maxWardCount = 99999;
 
-        private static int WardCount;
+        private static int _wardCount;
         public static int MaxDaysDifference = 99999;
-        private static WardManager _manager;
+        private static WardManager _manager = null!;
 
-        private static bool CanPlaceWard => WardCount < MaxWardCount;
+        private static bool CanPlaceWard => _wardCount < _maxWardCount;
         internal static bool IsServer;
         internal static bool IsSinglePlayer;
 
@@ -80,9 +80,7 @@ namespace WardIsLove
                     string data = File.ReadAllText(_path);
                     if (!string.IsNullOrEmpty(data))
                     {
-                        var deserializer = new DeserializerBuilder()
-                            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                            .Build();
+                        var deserializer = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
                         PlayersWardData = deserializer.Deserialize<Dictionary<string, int>>(data);
                     }
                 }
@@ -94,9 +92,27 @@ namespace WardIsLove
                 }
             }
 
+            public void IncrementWardCount(string steamId)
+            {
+                if (PlayersWardData.ContainsKey(steamId))
+                {
+                    PlayersWardData[steamId]++;
+                }
+                else
+                {
+                    PlayersWardData[steamId] = 1;
+                }
+
+                Save();
+            }
+
+            public int GetWardCount(string steamId)
+            {
+                return PlayersWardData.TryGetValue(steamId, out int value) ? value : 0;
+            }
+
             public void Save()
             {
-                /*File.WriteAllText(_path, JSON.ToJSON(PlayersWardData));*/
                 var serializer = new SerializerBuilder().Build();
 
                 var yaml = serializer.Serialize(PlayersWardData);
@@ -137,32 +153,23 @@ namespace WardIsLove
 
         private static void GetServerInitialData(long sender, int maxwards, int days)
         {
-            MaxWardCount = maxwards;
-            WardCount = 9999;
+            _maxWardCount = maxwards;
+            _wardCount = 9999;
             MaxDaysDifference = days;
         }
 
         private static void GetServerInfo(long server, int currentWards)
         {
-            WardCount = currentWards;
+            _wardCount = currentWards;
         }
 
         private static void GetClientInfo(long sender)
         {
             ZNetPeer peer = ZNet.instance.GetPeer(sender);
             string steam = peer.m_socket.GetHostName();
-            if (_manager.PlayersWardData.ContainsKey(steam))
-            {
-                _manager.PlayersWardData[steam]++;
-            }
-            else
-            {
-                _manager.PlayersWardData[steam] = 1;
-            }
-
-            WILLogger.LogInfo($"Player (Ward Creator) {peer.m_playerName} : {steam} placed ward. Ward amount: {_manager.PlayersWardData[steam]}");
-            _manager.Save();
-            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILLimitWard GetServerInfo", _manager.PlayersWardData[steam]);
+            _manager.IncrementWardCount(steam);
+            WILLogger.LogInfo($"Player (Ward Creator) {peer.m_playerName} : {steam} placed ward. Ward amount: {_manager.GetWardCount(steam)}");
+            ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
         }
 
         [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -196,13 +203,13 @@ namespace WardIsLove
                     if (_manager.PlayersWardData.ContainsKey(steam))
                     {
                         _manager.PlayersWardData[steam]--;
-                        if (_manager.PlayersWardData[steam] < 0) _manager.PlayersWardData[steam] = 0;
-                        WILLogger.LogDebug($"Player's Ward {steam} destroyed. Player wards count: {_manager.PlayersWardData[steam]}");
+                        if (_manager.GetWardCount(steam) < 0) _manager.PlayersWardData[steam] = 0;
+                        WILLogger.LogInfo($"Player's Ward {zdo.GetString(ZDOVars.s_creatorName)}({steam}) destroyed. Player wards count: {_manager.GetWardCount(steam)}");
                         foreach (ZNetPeer? player in ZNet.instance.m_peers)
                         {
                             if (player.m_socket.GetHostName() == steam)
                             {
-                                ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.PlayersWardData[steam]);
+                                ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
                             }
                         }
                     }
@@ -219,7 +226,7 @@ namespace WardIsLove
             {
                 if (!go.name.Contains("Thorward")) return;
                 Piece piece = go.GetComponent<Piece>();
-                WardCount = 999;
+                _wardCount = 999;
                 piece.m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWard, true);
                 if (Admin)
                 {
@@ -236,7 +243,7 @@ namespace WardIsLove
                 {
                     ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard GetClientInfo", Player.m_localPlayer.GetPlayerID());
                 }
-                catch (Exception e)
+                catch
                 {
                     //IGNORE FOR SINGLE PLAYER: WardIsLovePlugin.WILLogger.LogError($"The issue was found in the GetServerPeer method:  {e}");
                 }
@@ -275,40 +282,6 @@ namespace WardIsLove
             }
         }
 
-        /*[HarmonyPatch(typeof(ZNet), "RPC_CharacterID")]
-        private static class ZnetSync2
-        {
-            private static void Postfix(ZRpc rpc, ZDOID characterID)
-            {
-                if (!(ZNet.instance.IsServer() && ZNet.instance.IsDedicated())) return;
-                print($"Player {rpc.m_socket.GetHostName()} Connected");
-                ZNetPeer peer = ZNet.instance.GetPeer(rpc);
-                Task.Run(async () =>
-                {
-                    await Task.Delay(6000);
-                    if (peer == null || !peer.IsReady()) return;
-                    ZDO zdo = ZDOMan.instance.GetZDO(peer.m_characterID);
-                    if (zdo != null)
-                    {
-                        print($"ZDO is fine");
-                        long data = zdo..GetLong(ZDOVars.s_playerID);
-                        if (_manager.PlayersWardData.ContainsKey(data))
-                        {
-                            print(
-                                $"Sending info to player about his wards (exist in database) Wards count: {_manager.PlayersWardData[data]}");
-                            ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo",
-                                _manager.PlayersWardData[data]);
-                        }
-                        else
-                        {
-                            print("Sending info to player about his wards (not existing in database)");
-                            ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo", 0);
-                        }
-                    }
-                });
-            }
-        }*/
-
         [HarmonyPatch(typeof(ZNet), nameof(ZNet.RPC_PeerInfo))]
         private static class ZnetSync1
         {
@@ -324,12 +297,11 @@ namespace WardIsLove
                     PlayerStatus.User => _maxWardCountConfig.Value,
                     _ => _maxWardCountConfig.Value
                 };
-                ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInitialData", wardCount,
-                    MaxDaysDifferenceConfig.Value);
+                ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInitialData", wardCount, MaxDaysDifferenceConfig.Value);
                 if (_manager.PlayersWardData.ContainsKey(steam))
                 {
-                    WILLogger.LogDebug($"Sending info to player about his wards (exist in database) Wards count: {_manager.PlayersWardData[steam]}");
-                    ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo", _manager.PlayersWardData[steam]);
+                    WILLogger.LogInfo($"Sending info to {peer.m_playerName}({steam}) about his wards Wards count: {_manager.GetWardCount(steam)}");
+                    ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
                 }
                 else
                 {

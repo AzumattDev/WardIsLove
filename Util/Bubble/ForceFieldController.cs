@@ -22,33 +22,33 @@ public class ForceFieldController : MonoBehaviour
     [Range(-2, 2)] public float openCloseProgress = 2;
     public bool openAutoAnimation = true;
     public float openSpeed = 0.6f;
-    public AnimationCurve openCurve;
+    public AnimationCurve openCurve = null!;
 
-    public Material[] materialLayers;
+    public Material[] materialLayers = null!;
 
     public bool procedrualGradientEnabled = true;
     public bool procedrualGradientUpdate = true;
-    public Gradient procedrualGradientRamp;
+    public Gradient procedrualGradientRamp = null!;
     public Color procedrualRampColorTint = Color.white;
 
-    public ParticleSystem controlParticleSystem;
-    public GameObject getRenderersInChildren;
-    public Renderer[] getRenderersCustom;
+    public ParticleSystem controlParticleSystem = null!;
+    public GameObject getRenderersInChildren = null!;
+    public Renderer[] getRenderersCustom = null!;
 
-    private ParticleSystem.Particle[] controlParticles;
-    private Vector4[] controlParticlesPositions;
-    private float[] controlParticlesSizes;
+    private ParticleSystem.Particle[] controlParticles = null!;
+    private Vector4[] controlParticlesPositions = null!;
+    private float[] controlParticlesSizes = null!;
     private int numberOfSpheres;
     private int numberOfSpheresOld;
     private float openCloseCurve;
     private ParticleSystem.MainModule psmain;
-    private Texture2D rampTexture;
+    private Texture2D rampTexture = null!;
     private readonly List<Material> rendererMaterials = new();
 
-    private Renderer[] renderers;
+    private Renderer[] renderers = null!;
 
-    private Vector4[] spherePositions;
-    private float[] sphereSizes;
+    private Vector4[] spherePositions = null!;
+    private float[] sphereSizes = null!;
     private float psmainLossyScaleX;
 
     // Use this for initialization

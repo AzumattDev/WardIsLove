@@ -12,11 +12,11 @@ namespace WardIsLove.Util.DiscordMessenger;
 [Serializable]
 public class DiscordMessage
 {
-    [YamlMember(Alias = "username")] public string Username { get; set; }
+    [YamlMember(Alias = "username")] public string Username { get; set; } = null!;
 
-    [YamlMember(Alias = "avatar_url", ApplyNamingConventions = false)] public string AvatarUrl { get; set; }
+    [YamlMember(Alias = "avatar_url", ApplyNamingConventions = false)] public string AvatarUrl { get; set; } = null!;
 
-    [YamlMember(Alias = "content")] public string Content { get; set; }
+    [YamlMember(Alias = "content")] public string Content { get; set; } = null!;
 
     [YamlMember(Alias = "tts")] public bool TTS { get; set; }
 

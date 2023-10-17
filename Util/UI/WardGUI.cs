@@ -9,14 +9,14 @@ namespace WardIsLove.Util.UI
 {
     public class WardGUI
     {
-        public static GameObject wardGUI;
-        public static GameObject wardGUINoAdmin;
-        public static WardMonoscript interactedWard;
-        public static Dropdown EffectAreaDropdown;
-        public static Dropdown FeedbackDropdown;
-        public static Text EffectAreaDropdownText;
-        public static Text FeedbackDropdownText;
-        public static string FeedbackDropdownValue;
+        public static GameObject wardGUI = null!;
+        public static GameObject wardGUINoAdmin = null!;
+        public static WardMonoscript interactedWard = null!;
+        public static Dropdown EffectAreaDropdown = null!;
+        public static Dropdown FeedbackDropdown = null!;
+        public static Text EffectAreaDropdownText = null!;
+        public static Text FeedbackDropdownText = null!;
+        public static string FeedbackDropdownValue = null!;
 
         public static bool IsPanelVisible()
         {

@@ -12,7 +12,7 @@ public class GradientPicker : MonoBehaviour
     /// <param name="g">received Gradient</param>
     public delegate void GradientEvent(Gradient g);
 
-    private static GradientPicker instance;
+    private static GradientPicker instance = null!;
 
     /// <summary>
     /// True when the GradientPicker is closed
@@ -21,33 +21,33 @@ public class GradientPicker : MonoBehaviour
 
 
     //onGradientChanged Event
-    private static GradientEvent onGC;
+    private static GradientEvent onGC = null!;
 
     //onGradientSelected Event
-    private static GradientEvent onGS;
+    private static GradientEvent onGS = null!;
 
     //Gradient before editing
-    private static Gradient originalGradient;
+    private static Gradient originalGradient = null!;
 
     //current Gradient
-    private static Gradient modifiedGradient;
+    private static Gradient modifiedGradient = null!;
 
     //key template
-    private GameObject key;
+    private GameObject key = null!;
 
     private static bool interact;
 
 
     //all these objects only work on Prefab
-    private InputField positionComponent;
-    private Image colorComponent;
-    private Transform alphaComponent;
+    private InputField positionComponent = null!;
+    private Image colorComponent = null!;
+    private Transform alphaComponent = null!;
 
-    private List<Slider> colorKeyObjects;
-    private List<GradientColorKey> colorKeys;
+    private List<Slider> colorKeyObjects = null!;
+    private List<GradientColorKey> colorKeys = null!;
     private int selectedColorKey;
-    private List<Slider> alphaKeyObjects;
-    private List<GradientAlphaKey> alphaKeys;
+    private List<Slider> alphaKeyObjects = null!;
+    private List<GradientAlphaKey> alphaKeys = null!;
     private int selectedAlphaKey;
 
     private void Awake()
@@ -387,7 +387,7 @@ public class GradientPicker : MonoBehaviour
     public void ChooseColor()
     {
         ColorPicker.Create(colorKeys[selectedColorKey].color, "Gradient Color Key",
-            c => UpdateColor(selectedColorKey, c), null);
+            c => UpdateColor(selectedColorKey, c), null!);
     }
 
     private void UpdateColor(int index, Color c)
@@ -439,10 +439,10 @@ public class GradientPicker : MonoBehaviour
             Destroy(s.gameObject);
         }
 
-        instance.colorKeyObjects = null;
-        instance.colorKeys = null;
-        instance.alphaKeyObjects = null;
-        instance.alphaKeys = null;
+        instance.colorKeyObjects = null!;
+        instance.colorKeys = null!;
+        instance.alphaKeyObjects = null!;
+        instance.alphaKeys = null!;
         done = true;
         onGC?.Invoke(modifiedGradient);
         onGS?.Invoke(modifiedGradient);
