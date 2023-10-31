@@ -20,7 +20,6 @@ namespace WardIsLove.Util
             WardIsLovePlugin.WILLogger.LogDebug("Invoking version check");
             ZPackage zpackage = new();
             zpackage.Write(WardIsLovePlugin.version);
-            zpackage.Write(RpcHandlers.ComputeHashForMod().Replace("-", ""));
             peer.m_rpc.Invoke($"{WardIsLovePlugin.ModName}_VersionChecking", zpackage);
         }
     }
@@ -76,14 +75,11 @@ namespace WardIsLove.Util
         public static void RPC_WardIsLove_Version(ZRpc rpc, ZPackage pkg)
         {
             string? version = pkg.ReadString();
-            string? hash = pkg.ReadString();
 
-            var hashForAssembly = ComputeHashForMod().Replace("-", "");
-
-            WardIsLovePlugin.WILLogger.LogInfo($"Hash/Version check, local: {WardIsLovePlugin.version} {hashForAssembly} remote: {version} {hash}");
-            if (hash != hashForAssembly || version != WardIsLovePlugin.version)
+            WardIsLovePlugin.WILLogger.LogInfo($"Hash/Version check, local: {WardIsLovePlugin.version} remote: {version}");
+            if (version != WardIsLovePlugin.version)
             {
-                WardIsLovePlugin.ConnectionError = $"WardIsLove Installed: {WardIsLovePlugin.version} {hashForAssembly}\n Needed: {version} {hash}";
+                WardIsLovePlugin.ConnectionError = $"WardIsLove Installed: {WardIsLovePlugin.version}\n Needed: {version}";
                 if (!ZNet.instance.IsServer()) return;
                 // Different versions - force disconnect client from server
                 WardIsLovePlugin.WILLogger.LogWarning($"Peer ({rpc.m_socket.GetHostName()}) has incompatible version, disconnecting...");
@@ -103,21 +99,6 @@ namespace WardIsLove.Util
                     ValidatedPeers.Add(rpc);
                 }
             }
-        }
-
-        public static string ComputeHashForMod()
-        {
-            using SHA256 sha256Hash = SHA256.Create();
-            // ComputeHash - returns byte array  
-            byte[] bytes = sha256Hash.ComputeHash(File.ReadAllBytes(Assembly.GetExecutingAssembly().Location));
-            // Convert byte array to a string   
-            System.Text.StringBuilder builder = new();
-            foreach (byte b in bytes)
-            {
-                builder.Append(b.ToString("X2"));
-            }
-
-            return builder.ToString();
         }
     }
 }

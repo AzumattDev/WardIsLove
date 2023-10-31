@@ -179,7 +179,7 @@ public class GradientPicker : MonoBehaviour
     private void CalculateTexture()
     {
         Color[] g = new Color[325];
-        for (int i = 0; i < g.Length; i++)
+        for (int i = 0; i < g.Length; ++i)
         {
             g[i] = modifiedGradient.Evaluate(i / (float)g.Length);
         }

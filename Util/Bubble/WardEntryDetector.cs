@@ -24,10 +24,10 @@ namespace WardIsLove.Util.Bubble
         private Coroutine? PushoutCreaturesRoutine;
 
         /* Ward Damage things */
-        private HitData hitData = new HitData();
-        [SerializeField] private List<Humanoid> m_character = new List<Humanoid>();
+        private HitData hitData = new();
+        [SerializeField] private List<Humanoid> m_character = new();
         [SerializeField] internal WardIsLovePlugin.WardDamageTypes _type;
-        [SerializeField] internal Vector3 staggerDirection = new Vector3(0f, 0f, 0f);
+        [SerializeField] internal Vector3 staggerDirection = new(0f, 0f, 0f);
 
         public WardEntryDetector(WardIsLovePlugin.WardDamageTypes type)
         {

@@ -20,7 +20,7 @@ public class DiscordMessage
 
     [YamlMember(Alias = "tts")] public bool TTS { get; set; }
 
-    [YamlMember(Alias = "embeds")] public List<Embed> Embeds { get; set; } = new List<Embed>();
+    [YamlMember(Alias = "embeds")] public List<Embed> Embeds { get; set; } = new();
 
     public DiscordMessage SetUsername(string username)
     {

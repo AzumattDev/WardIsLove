@@ -18,7 +18,7 @@ namespace WardIsLove.PatchClasses
                     !___m_nview.IsOwner()) return;
                 string[] array = pa.GetFireplaceList().ToLower().Trim().Split(',').ToArray();
                 foreach (string item in array)
-                    if (__instance.gameObject.name.Contains(item))
+                    if (__instance.gameObject.name.ToLower().Contains(item))
                         ___m_nview.GetZDO().Set(ZDOVars.s_fuel, __instance.m_maxFuel);
             }
         }

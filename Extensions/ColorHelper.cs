@@ -209,7 +209,7 @@ namespace WardIsLove.Extensions
                 offsetGradient = Math.Abs(hsv2.H - hsv.H);
                 hsv.H = hue;
                 keys[0].color = HSVToColor(hsv);
-                for (int i = 1; i < keys.Length; i++)
+                for (int i = 1; i < keys.Length; ++i)
                 {
                     hsv = ColorToHSV(keys[i].color);
                     hsv.H = Mathf.Repeat(hsv.H + offsetGradient, 1.0f);

@@ -99,7 +99,7 @@ public class ForceFieldController : MonoBehaviour
 
         // Populate and update the controlParticles array only if needed
         controlParticleSystem.GetParticles(controlParticles);
-        for (int i = 0; i < affectorCount; i++)
+        for (int i = 0; i < affectorCount; ++i)
         {
             controlParticlesPositions[i] = controlParticles[i].position;
             controlParticlesSizes[i] = controlParticles[i].GetCurrentSize(controlParticleSystem) * psmainLossyScaleX;
@@ -131,7 +131,7 @@ public class ForceFieldController : MonoBehaviour
         psmain.maxParticles = affectorCount;
         //controlParticleSystem.maxParticles = affectorCount;
         controlParticleSystem.GetParticles(controlParticles);
-        for (int i = 0; i < affectorCount; i++)
+        for (int i = 0; i < affectorCount; ++i)
         {
             controlParticlesPositions[i] = controlParticles[i].position;
             controlParticlesSizes[i] = controlParticles[i].GetCurrentSize(controlParticleSystem) *
@@ -154,7 +154,7 @@ public class ForceFieldController : MonoBehaviour
         {
             spherePositions = new Vector4[numberOfSpheres];
             sphereSizes = new float[numberOfSpheres];
-            for (int i = 0; i < numberOfSpheres; i++)
+            for (int i = 0; i < numberOfSpheres; ++i)
             {
                 spherePositions[i] = renderers[i].gameObject.transform.position;
                 sphereSizes[i] = renderers[i].gameObject.transform.lossyScale.x;
@@ -215,7 +215,7 @@ public class ForceFieldController : MonoBehaviour
     // Applying material layers to objects
     public void ApplyMaterials()
     {
-        for (int i = 0; i < materialLayers.Length; i++) materialLayers[i] = new Material(materialLayers[i]);
+        for (int i = 0; i < materialLayers.Length; ++i) materialLayers[i] = new Material(materialLayers[i]);
 
         foreach (Renderer rend in renderers)
         {
