@@ -33,7 +33,7 @@ namespace WardIsLove.Util.UI
             WardIsLovePlugin.Thorward.RequiredItems.Add("FineWood", 10, true);
             WardIsLovePlugin.Thorward.RequiredItems.Add("SurtlingCore", 10, true);
             WardIsLovePlugin.Thorward.RequiredItems.Add("Thunderstone", 1, true);
-            WardIsLovePlugin.Thorward.Category.Add(BuildPieceCategory.Misc);
+            WardIsLovePlugin.Thorward.Category.Set(BuildPieceCategory.Misc);
             WardIsLovePlugin.Thorward.Crafting.Set(CraftingTable.Forge);
             GameObject go2 = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUINoAdmin.prefab");
             GameObject go = wardMenuBundle.LoadAsset<GameObject>("Assets/CustomItems/Wards/WardIsLoveGUI.prefab");

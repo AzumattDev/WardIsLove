@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.4.4
+> - Update to latest PieceManager to fix some issues
 > ### v3.4.3
 > - Forgot, needed to update ServerSync in the last update.
 > ### v3.4.2
