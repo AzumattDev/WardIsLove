@@ -77,6 +77,11 @@ namespace WardIsLove.Util.RPCShit
             }
         }
 
+        public static void RPC_RequestWardCount(long sender, ZPackage pkg)
+        {
+            
+        }
+
         public static void RPC_RequestDropdownPlayers(long sender, ZPackage pkg)
         {
             if (ZNet.instance.m_peers.Count <= 0)

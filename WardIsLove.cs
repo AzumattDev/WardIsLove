@@ -71,7 +71,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.4.1";
+        public const string version = "3.4.2";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = Author + "." + "WardIsLove";
@@ -543,8 +543,8 @@ namespace WardIsLove
         public static ConfigEntry<bool> ShipInteraction = null!;
         public static ConfigEntry<bool> NoFoodDrain = null!;
         public static ConfigEntry<bool> ShowFlash = null!;
-        private static ConfigEntry<int> _maxWardCountConfig = null!;
-        private static ConfigEntry<int> _maxWardCountVipConfig = null!;
+        internal static ConfigEntry<int> _maxWardCountConfig = null!;
+        internal static ConfigEntry<int> _maxWardCountVipConfig = null!;
         public static ConfigEntry<int> MaxDaysDifferenceConfig = null!;
         public static ConfigEntry<string> ViPplayersListConfig = null!;
         public static ConfigEntry<bool> DisableGUI = null!;

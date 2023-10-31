@@ -1,4 +1,7 @@
 > # Update Information (Latest listed first)
+> ### v3.4.2
+> - Increase performance when logging into a server. This is caused by the version hash check. Reverted back to just version check and letting the Anticheat handle the hashing instead.
+> - Generic bug fixes (no, ward limit is not fixed yet still working on that passively)
 > ### v3.4.1
 > - Fix the radius issue with the ward that started in 3.3.0 (I think)
 > - Fix issue with the Pickable Protection being backwards when enabled/disabled

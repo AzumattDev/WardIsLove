@@ -86,43 +86,43 @@
         <Compile Include="PatchClasses\PvP.cs"/>
         <Compile Include="PatchClasses\TerrainChecking.cs"/>
         <Compile Include="PatchClasses\Ward.cs"/>
-        <Compile Include="PatchClasses\WardLimiter.cs"/>
-        <Compile Include="PatchClasses\WearNTear.cs"/>
-        <Compile Include="PatchClasses\ZDODataBuffer.cs"/>
-        <Compile Include="Util\Bubble\ControlParticlesSpawner.cs"/>
-        <Compile Include="Util\Bubble\ForceFieldController.cs"/>
-        <Compile Include="Util\Bubble\WardEntryDetector.cs"/>
-        <Compile Include="Util\CustomCheck.cs"/>
-        <Compile Include="Util\DamageArea.cs"/>
-        <Compile Include="Util\DiscordMessenger\Author.cs"/>
-        <Compile Include="Util\DiscordMessenger\DiscordMessage.cs"/>
-        <Compile Include="Util\DiscordMessenger\Embed.cs"/>
-        <Compile Include="Util\DiscordMessenger\Field.cs"/>
-        <Compile Include="Util\DiscordMessenger\Footer.cs"/>
-        <Compile Include="Util\DiscordMessenger\Image.cs"/>
-        <Compile Include="Util\DiscordMessenger\Provider.cs"/>
-        <Compile Include="Util\DiscordMessenger\Thumbnail.cs"/>
-        <Compile Include="Util\DiscordMessenger\Video.cs"/>
-        <Compile Include="Util\GitHubCheck.cs"/>
-        <Compile Include="Util\Manager\MaterialReplacer.cs"/>
-        <Compile Include="Util\Manager\PieceManager.cs"/>
-        <Compile Include="Util\ObjectDB.cs"/>
-        <Compile Include="Util\OfflineStatus.cs"/>
-        <Compile Include="Util\RPCShit\ClientSystem.cs"/>
-        <Compile Include="Util\RPCShit\ServerAdminSystem.cs"/>
-        <Compile Include="Util\UI\DropdownPopulate.cs"/>
-        <Compile Include="Util\UI\TabToggle_OnOff.cs"/>
-        <Compile Include="Util\UI\WardGUI.cs"/>
-        <Compile Include="Util\UI\WardGUIUtil.cs"/>
-        <Compile Include="Util\VersionHandshake.cs"/>
-        <Compile Include="Util\WardMonoscript.cs"/>
-        <Compile Include="WardIsLove.cs"/>
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="PatchClasses\WardLimiter.cs" />
+        <Compile Include="PatchClasses\WearNTear.cs" />
+        <Compile Include="PatchClasses\ZDODataBuffer.cs" />
+        <Compile Include="Util\Bubble\ControlParticlesSpawner.cs" />
+        <Compile Include="Util\Bubble\ForceFieldController.cs" />
+        <Compile Include="Util\Bubble\WardEntryDetector.cs" />
+        <Compile Include="Util\CustomCheck.cs" />
+        <Compile Include="Util\DamageArea.cs" />
+        <Compile Include="Util\DiscordMessenger\Author.cs" />
+        <Compile Include="Util\DiscordMessenger\DiscordMessage.cs" />
+        <Compile Include="Util\DiscordMessenger\Embed.cs" />
+        <Compile Include="Util\DiscordMessenger\Field.cs" />
+        <Compile Include="Util\DiscordMessenger\Footer.cs" />
+        <Compile Include="Util\DiscordMessenger\Image.cs" />
+        <Compile Include="Util\DiscordMessenger\Provider.cs" />
+        <Compile Include="Util\DiscordMessenger\Thumbnail.cs" />
+        <Compile Include="Util\DiscordMessenger\Video.cs" />
+        <Compile Include="Util\GitHubCheck.cs" />
+        <Compile Include="Util\Manager\MaterialReplacer.cs" />
+        <Compile Include="Util\Manager\PieceManager.cs" />
+        <Compile Include="Util\ObjectDB.cs" />
+        <Compile Include="Util\OfflineStatus.cs" />
+        <Compile Include="Util\RPCShit\ClientSystem.cs" />
+        <Compile Include="Util\RPCShit\ServerAdminSystem.cs" />
+        <Compile Include="Util\UI\DropdownPopulate.cs" />
+        <Compile Include="Util\UI\TabToggle_OnOff.cs" />
+        <Compile Include="Util\UI\WardGUI.cs" />
+        <Compile Include="Util\UI\WardGUIUtil.cs" />
+        <Compile Include="Util\VersionHandshake.cs" />
+        <Compile Include="Util\WardMonoscript.cs" />
+        <Compile Include="WardIsLove.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include=".gitignore"/>
-        <Content Include="environment.props"/>
-        <Content Include="ILRepack.targets"/>
+        <Content Include=".gitignore" />
+        <Content Include="environment.props" />
+        <Content Include="ILRepack.targets" />
         <Content Include="Libs\fastJSON.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
@@ -135,17 +135,17 @@
         <Content Include="Libs\ServerSync.dll">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="README.md"/>
-        <Content Include="Thunderstore\CHANGELOG.md"/>
-        <Content Include="Thunderstore\icon.png"/>
-        <Content Include="Thunderstore\manifest.json"/>
-        <Content Include="Thunderstore\README.md"/>
-        <Content Include="UpdateManifest.ps1"/>
-        <EmbeddedResource Include="wardislove"/>
+        <Content Include="README.md" />
+        <Content Include="Thunderstore\CHANGELOG.md" />
+        <Content Include="Thunderstore\icon.png" />
+        <Content Include="Thunderstore\manifest.json" />
+        <Content Include="Thunderstore\README.md" />
+        <Content Include="UpdateManifest.ps1" />
+        <EmbeddedResource Include="wardislove" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="App.config"/>
-        <None Include="packages.config"/>
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
         <Reference Include="0Harmony, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
@@ -175,17 +175,17 @@
         <Reference Include="Guilds">
           <HintPath>Libs\GuildsAPI.dll</HintPath>
         </Reference>
-        <Reference Include="mscorlib"/>
+        <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
             <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
         <Reference Include="ServerSync">
             <HintPath>Libs\ServerSync.dll</HintPath>
         </Reference>
-        <Reference Include="System"/>
-        <Reference Include="System.Core"/>
-        <Reference Include="System.Data"/>
-        <Reference Include="System.Xml"/>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
             <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.dll</HintPath>
         </Reference>

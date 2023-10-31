@@ -62,10 +62,11 @@ namespace WardIsLove.PatchClasses
                         {
                             if (!ward.IsEnabled()) continue;
                             if (c.IsPlayer() || c.IsTamed()) continue;
-                            if (!WardMonoscript.CheckInWardMonoscript(c.transform.position)) continue;
-                            if (!ward.GetPushoutCreaturesOn() || !ward.m_bubble.activeSelf) continue;
                             Transform transform = c.transform;
+                            if(transform == null) continue;
                             Vector3 position = transform.position;
+                            if (!WardMonoscript.CheckInWardMonoscript(position)) continue;
+                            if (!ward.GetPushoutCreaturesOn() || !ward.m_bubble.activeSelf) continue;
                             Vector3 dir = (position - ward.transform.position).normalized;
                             position += dir * 3.15f;
                             transform.position = position;

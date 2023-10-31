@@ -129,7 +129,7 @@ namespace WardIsLove.Util
                 Gradient gradient = new();
                 GradientColorKey[] gradientKeys = new GradientColorKey[colorNumbers];
                 GradientAlphaKey[] gradientAlphaKeys = new GradientAlphaKey[colorAlphaNumbers];
-                for (int i = 0; i < colorNumbers; i++)
+                for (int i = 0; i < colorNumbers; ++i)
                 {
                     if (ColorUtility.TryParseHtmlString(m_nview.GetZDO().GetString($"wardColor{i}"), out Color color))
                     {
@@ -138,7 +138,7 @@ namespace WardIsLove.Util
                     }
                 }
 
-                for (int i = 0; i < colorAlphaNumbers; i++)
+                for (int i = 0; i < colorAlphaNumbers; ++i)
                 {
                     gradientAlphaKeys[i].alpha = m_nview.GetZDO().GetFloat($"wardAlpha{i}");
                     gradientAlphaKeys[i].time = m_nview.GetZDO().GetFloat($"wardAlphaTime{i}");
@@ -153,7 +153,7 @@ namespace WardIsLove.Util
 
         private void SwapWardModel(long sender, int index)
         {
-            for (int i = 0; i < transform.Find("new").childCount; i++)
+            for (int i = 0; i < transform.Find("new").childCount; ++i)
             {
                 transform.Find("new").GetChild(i).gameObject.SetActive(false);
             }
@@ -445,7 +445,7 @@ namespace WardIsLove.Util
                 {
                     // Parsing the ChargeItem string
                     string[] chargeItemEntries = WardIsLovePlugin.ChargeItem.Value.Split(',');
-                    Dictionary<string, int> requiredItems = new Dictionary<string, int>();
+                    Dictionary<string, int> requiredItems = new();
 
                     foreach (var entry in chargeItemEntries)
                     {
@@ -691,81 +691,66 @@ namespace WardIsLove.Util
 
         public bool IsPermitted(long playerID)
         {
-            bool iIsPermitted = false;
-            if (m_nview.IsValid())
+            if (!m_nview.IsValid()) return false;
+            if (WardIsLovePlugin.Admin && WardIsLovePlugin.AdminAutoPerm.Value)
+                return true;
+
+            bool isPermitted = GetPermittedPlayers().Any(permittedPlayer => permittedPlayer.Key == playerID);
+            WardIsLovePlugin.WardInteractBehaviorEnums accessMode = this.GetAccessMode();
+            List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
+
+            switch (accessMode)
             {
-                WardIsLovePlugin.WardInteractBehaviorEnums accessMode = this.GetAccessMode();
-                foreach (KeyValuePair<long, string> permittedPlayer in GetPermittedPlayers()
-                             .Where(permittedPlayer => permittedPlayer.Key == playerID))
-                    iIsPermitted = true;
-
-                if (WardIsLovePlugin.Admin && WardIsLovePlugin.AdminAutoPerm.Value)
+                case WardIsLovePlugin.WardInteractBehaviorEnums.Everyone:
+                case WardIsLovePlugin.WardInteractBehaviorEnums.Default when (isPermitted || m_piece.GetCreator() == playerID):
+                case WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.GetCreator() == playerID:
                     return true;
-
-                switch (accessMode)
+                case WardIsLovePlugin.WardInteractBehaviorEnums.Group:
                 {
-                    case WardIsLovePlugin.WardInteractBehaviorEnums.Everyone:
-                    case WardIsLovePlugin.WardInteractBehaviorEnums.Default
-                        when (iIsPermitted || m_piece.GetCreator() == playerID):
-                    case WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly when m_piece.GetCreator() == playerID:
-                        return true;
-                    case WardIsLovePlugin.WardInteractBehaviorEnums.Group:
+                    if (API.IsLoaded())
                     {
-                        if (API.IsLoaded())
+                        bool sameGroupAsCreator = API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null;
+                        bool sameGroupAsPermitted;
+                        try
                         {
-                            List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-                            if (API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null || m_piece.GetCreator() == playerID)
-                            {
-                                return true;
-                            }
+                            sameGroupAsPermitted = permittedPlayers.Any(permittedPlayer => API.GroupPlayers().Contains(PlayerReference.fromPlayerId(permittedPlayer.Key)));
+                        }
+                        catch
+                        {
+                            sameGroupAsPermitted = false;
+                        }
 
+                        return sameGroupAsCreator || sameGroupAsPermitted || isPermitted || m_piece.GetCreator() == playerID;
+                    }
+
+                    break;
+                }
+                case WardIsLovePlugin.WardInteractBehaviorEnums.Guild:
+                {
+                    if (Guilds.API.IsLoaded())
+                    {
+                        if (Guilds.API.GetOwnGuild() != null)
+                        {
+                            bool sameGuildAsCreator = Guilds.API.GetGuildLeader(Guilds.API.GetOwnGuild()!).name == GetCreatorName();
+                            bool sameGuildAsPermitted;
                             try
                             {
-                                if (permittedPlayers.Any(permittedPlayer => API.GroupPlayers()
-                                        .Contains(PlayerReference.fromPlayerId(permittedPlayer.Key))))
-                                {
-                                    return true;
-                                }
+                                sameGuildAsPermitted = permittedPlayers.Any(permittedPlayer => Guilds.API.GetOwnGuild()!.Members.Keys.Any(x => x.name == permittedPlayer.Value));
                             }
                             catch
                             {
+                                sameGuildAsPermitted = false;
                             }
+
+                            return sameGuildAsCreator || sameGuildAsPermitted || isPermitted || m_piece.GetCreator() == playerID;
                         }
-
-                        break;
+                        else if (m_piece.GetCreator() == playerID || isPermitted) return true;
                     }
-                    case WardIsLovePlugin.WardInteractBehaviorEnums.Guild:
-                    {
-                        if (Guilds.API.IsLoaded())
-                        {
-                            List<KeyValuePair<long, string>> permittedPlayers = GetPermittedPlayers();
-                            if (Guilds.API.GetOwnGuild() != null)
-                            {
-                                if (Guilds.API.GetGuildLeader(Guilds.API.GetOwnGuild()!).name == GetCreatorName() || m_piece.GetCreator() == playerID)
-                                {
-                                    return true;
-                                }
 
-                                try
-                                {
-                                    if (permittedPlayers.Any(permittedPlayer
-                                            => Guilds.API.GetOwnGuild()!.Members.Keys.Any(x => x.name == permittedPlayer.Value)))
-                                    {
-                                        return true;
-                                    }
-                                }
-                                catch
-                                {
-                                }
-                            }
-                            else if (m_piece.GetCreator() == playerID) return true;
-                        }
-
-                        break;
-                    }
-                    default:
-                        return false;
+                    break;
                 }
+                default:
+                    return false;
             }
 
             return false;

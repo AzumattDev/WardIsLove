@@ -16,19 +16,23 @@ namespace WardIsLove.PatchClasses
             foreach (WardMonoscript? ward in WardMonoscriptExt.WardMonoscriptsINSIDE)
                 try
                 {
-                    if (!ward.GetNoTeleportOn() || !WardEnabled.Value) return true;
-                    if (!CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(),
-                            Player.m_localPlayer.transform.position, flash: false))
+                    if (ward.GetNoTeleportOn() && WardEnabled.Value)
                     {
-                        canTeleportThisMofo = false;
-                        player.Message(MessageHud.MessageType.Center, "$msg_privatezone");
-                        return false;
-                    }
+                        if (!CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(), Player.m_localPlayer.transform.position, flash: false))
+                        {
+                            canTeleportThisMofo = false;
+                            player.Message(MessageHud.MessageType.Center, "$msg_privatezone");
+                            return false;
+                        }
 
-                    if (CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(),
-                            Player.m_localPlayer.transform.position, flash: false))
+                        if (CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(), Player.m_localPlayer.transform.position, flash: false))
+                        {
+                            canTeleportThisMofo = true;
+                        }
+                    }
+                    else
                     {
-                        canTeleportThisMofo = true;
+                        return true;
                     }
                 }
                 catch

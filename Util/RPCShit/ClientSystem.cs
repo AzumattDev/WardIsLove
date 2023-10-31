@@ -21,6 +21,10 @@ namespace WardIsLove.Util.RPCShit
         public static void RPC_RequestGuild(long sender, ZPackage pkg)
         {
         }
+        
+        public static void RPC_RequestWardCount(long sender, ZPackage pkg)
+        {
+        }
 
         public static void RPC_BadRequestMsg(long sender, ZPackage pkg)
         {

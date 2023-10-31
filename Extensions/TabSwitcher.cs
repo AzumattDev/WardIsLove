@@ -20,7 +20,7 @@ namespace WardIsLove.Extensions
         private void Awake()
         {
             int activeTab = 0;
-            for (int i = 0; i < m_tabs.Count; i++)
+            for (int i = 0; i < m_tabs.Count; ++i)
             {
                 Tab tab = m_tabs[i];
                 tab.m_button.onClick.AddListener(delegate { OnClick(tab.m_button); });
@@ -45,7 +45,7 @@ namespace WardIsLove.Extensions
 
         private void SetActiveTab(Button button)
         {
-            for (int i = 0; i < m_tabs.Count; i++)
+            for (int i = 0; i < m_tabs.Count; ++i)
                 if (m_tabs[i].m_button == button)
                 {
                     SetActiveTab(i);
@@ -57,7 +57,7 @@ namespace WardIsLove.Extensions
         public void SetActiveTab(int index)
         {
             m_selected = index;
-            for (int i = 0; i < m_tabs.Count; i++)
+            for (int i = 0; i < m_tabs.Count; ++i)
             {
                 Tab tab = m_tabs[i];
                 bool flag = i == index;

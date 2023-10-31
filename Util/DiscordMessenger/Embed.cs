@@ -31,7 +31,7 @@ public class Embed
 
     [YamlMember(Alias = "author")] public Author Author { get; set; } = null!;
 
-    [YamlMember(Alias = "fields")] public List<Field> Fields { get; set; } = new List<Field>();
+    [YamlMember(Alias = "fields")] public List<Field> Fields { get; set; } = new();
 
     [YamlIgnore] private DiscordMessage MessageInstance { get; set; } = null!;
 

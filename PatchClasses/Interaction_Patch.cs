@@ -101,14 +101,33 @@ namespace WardIsLove.PatchClasses
                 return false;
             bool flag = false;
             if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
-                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
-                    flash: false)) return !flag;
+                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) return !flag;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
             if (pa.GetChestInteractOn()) return true;
             if (__instance.m_piece.m_name.Contains("yuleklapp"))
             {
                 return true;
             }
+
+            character.Message(MessageHud.MessageType.Center, "$msg_privatezone");
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(Vagon), nameof(Vagon.Interact))]
+    static class VagonInteractPatch
+    {
+        static bool Prefix(Vagon __instance, Humanoid character, bool hold, bool alt)
+        {
+            if (!WardEnabled.Value)
+                return true;
+            if (hold)
+                return false;
+            bool flag = false;
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
+                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) return !flag;
+            WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+            if (pa.GetChestInteractOn()) return true;
 
             character.Message(MessageHud.MessageType.Center, "$msg_privatezone");
             return false;
@@ -129,7 +148,6 @@ namespace WardIsLove.PatchClasses
             if (!pa.GetPickableInteractOn()) return true;
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
             return false;
-
         }
     }
 
