@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.4.3
+> - Forgot, needed to update ServerSync in the last update.
 > ### v3.4.2
 > - Increase performance when logging into a server. This is caused by the version hash check. Reverted back to just version check and letting the Anticheat handle the hashing instead.
 > - Generic bug fixes (no, ward limit is not fixed yet still working on that passively)
