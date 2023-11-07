@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.4.5
+> - Compile against latest game version
 > ### v3.4.4
 > - Update to latest PieceManager to fix some issues
 > ### v3.4.3

@@ -41,6 +41,8 @@
             <PropertyGroup>
                 <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/Valheim</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/Library/Application Support/Steam/steamapps/common/Valheim/Contents/MacOS</GamePath>
+                <CorlibPath Condition="!Exists('$(CorlibPath)') AND Exists('$(GamePath)')">$(GamePath)\valheim_Data\Managed</CorlibPath>
+                <CorlibPath Condition="!Exists('$(CorlibPath)')">$(GamePath)/unstripped_corelib</CorlibPath>
             </PropertyGroup>
         </When>
         <When Condition="($(OS) == 'Windows_NT') AND $(GamePath) == ''">
@@ -48,9 +50,15 @@
                 <GamePath Condition="!Exists('$(GamePath)')">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 892970', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</GamePath>
                 <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
                 <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)\steamapps\common\Valheim</GamePath>
-                <GamePath Condition="!Exists('$(GamePath)')">$(ValheimGamePath)</GamePath>
+                <GamePath Condition="!Exists('$(GamePath)') AND Exists('$(ValheimGamePath)')">$(ValheimGamePath)</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\Valheim</GamePath>
                 <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Valheim</GamePath>
+                <GamePath Condition="!Exists('$(GamePath)')">D:\SteamLibrary\steamapps\common\Valheim</GamePath>
+                <BepInExPath Condition="!Exists('$(BepInExPath)')AND Exists('$(GamePath)')">$(GamePath)\BepInEx</BepInExPath>
+                <CorlibPath Condition="!Exists('$(CorlibPath)') AND Exists('$(GamePath)')">$(GamePath)\valheim_Data\Managed</CorlibPath>
+                <CorlibPath Condition="!Exists('$(CorlibPath)') AND Exists('$(GamePath)')">$(GamePath)\unstripped_corlib</CorlibPath>
+                <PublicizedAssembliesPath Condition="!Exists('$(PublicizedAssembliesPath)') AND Exists('$(GamePath)')">$(GamePath)\valheim_Data\Managed\publicized_assemblies</PublicizedAssembliesPath>
+                <AfterTargets Condition="'$(AfterTargets)' == ''">ILRepacker</AfterTargets>
             </PropertyGroup>
         </When>
     </Choose>
@@ -187,52 +195,52 @@
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AssetBundleModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AssetBundleModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AudioModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.AudioModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.AudioModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.CoreModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.IMGUIModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.IMGUIModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.IMGUIModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputLegacyModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.InputLegacyModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.InputLegacyModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.InputModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.InputModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.InputModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.ParticleSystemModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.ParticleSystemModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.ParticleSystemModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.Physics2DModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.Physics2DModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.Physics2DModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.PhysicsModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.PhysicsModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.TextRenderingModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.TextRenderingModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.TextRenderingModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UI">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UI.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.UI.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UIModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UIModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.UIModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.UnityWebRequestModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-            <HintPath>$(GamePath)\unstripped_corlib\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+            <HintPath>$(CorlibPath)\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro">
-            <HintPath>$(GamePath)\valheim_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+            <HintPath>$(CorlibPath)\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=13.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>packages\YamlDotNet.13.7.1\lib\net45\YamlDotNet.dll</HintPath>

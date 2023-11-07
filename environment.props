@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ValheimGamePath>C:\Program Files (x86)\Steam\steamapps\common\Valheim</ValheimGamePath>
         <BepInExPath>$(ValheimGamePath)\BepInEx</BepInExPath>
-        <CorlibPath>$(ValheimGamePath)\unstripped_corelibs</CorlibPath>
+        <CorlibPath>$(ValheimGamePath)\valheim_Data\Managed</CorlibPath>
         <PublicizedAssembliesPath>$(ValheimGamePath)\valheim_Data\Managed\publicized_assemblies</PublicizedAssembliesPath>
         <CopyOutputDLLPath>C:\Users\crypt\AppData\Roaming\r2modmanPlus-local\Valheim\profiles\PTB 0.217.22\BepInEx\plugins</CopyOutputDLLPath>
     </PropertyGroup>
