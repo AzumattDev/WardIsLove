@@ -33,7 +33,7 @@ namespace WardIsLove.Util.RPCShit
             string str = pkg.ReadString();
             if (str == "")
                 return;
-            Chat.m_instance.AddString("Server", "<color=\"red\">" + str + "</color>", Talker.Type.Normal);
+            Chat.m_instance.AddString("Server", $"<color=\"red\">{str}</color>", Talker.Type.Normal);
         }
 
         public static void RPC_RequestDropdownPlayers(long sender, ZPackage pkg)

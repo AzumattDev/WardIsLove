@@ -1,4 +1,13 @@
 > # Update Information (Latest listed first)
+> ### v3.5.0
+> - Fix Ward Limit issue and also have it periodically update the file based on actual ward count in the world, just in case.
+> - Fix missing script warnings
+> - Fix possible issues with Ships, Carts, and Tames with saddles when they enter wards. (Hopefully)
+> - Other stuff I can't remember. Next update will have some configuration value additions for ward limits and charges.
+> ### v3.4.5
+> - Compile against latest game version
+> ### v3.4.4
+> - Update to latest PieceManager to fix some issues
 > ### v3.4.3
 > - Forgot, needed to update ServerSync in the last update.
 > ### v3.4.2

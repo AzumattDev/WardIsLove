@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection.Emit;
 using BepInEx;
 using fastJSON;
@@ -32,6 +34,67 @@ namespace WardIsLove
             Admin,
             VIP,
             User
+        }
+
+        public static string NormalizeID(string platformUserId)
+        {
+            PrivilegeManager.User user = PrivilegeManager.ParseUser(platformUserId);
+            return user.id.ToString();
+        }
+
+        private IEnumerator WardCountUpdateCoroutine()
+        {
+            while (true)
+            {
+                UpdateWardCounts();
+                yield return new WaitForSeconds(60); // Wait for 60 seconds before next update
+            }
+        }
+
+        public static ZDO[] GetZDOs(int hash)
+        {
+            return ZDOMan.instance.m_objectsByID.Values.Where(zdo => hash == zdo.m_prefab).ToArray();
+        }
+
+        private void UpdateWardCounts()
+        {
+            int wardPrefabHash = "Thorward".GetStableHashCode();
+            ZDO[] wardZDOs = GetZDOs(wardPrefabHash);
+
+            var playerWardCounts = new Dictionary<string, int>();
+
+            foreach (var zdo in wardZDOs)
+            {
+                string steamId = NormalizeID(zdo.GetString(ZdoInternalExtensions.steamID));
+                if (!string.IsNullOrEmpty(steamId))
+                {
+                    if (!playerWardCounts.ContainsKey(steamId))
+                    {
+                        playerWardCounts[steamId] = 0;
+                    }
+
+                    playerWardCounts[steamId]++;
+                }
+            }
+
+            var playerPeers = new Dictionary<string, ZNetPeer>();
+            foreach (ZNetPeer? player in ZNet.instance.m_peers)
+            {
+                playerPeers[player.m_socket.GetHostName()] = player;
+            }
+
+            // Update the file with the new counts
+            foreach (var kvp in playerWardCounts)
+            {
+                _manager.PlayersWardData[kvp.Key] = kvp.Value;
+                if (playerPeers.ContainsKey(kvp.Key))
+                {
+                    ZRoutedRpc.instance.InvokeRoutedRPC(playerPeers[kvp.Key].m_uid, "WILLimitWard GetServerInfo", kvp.Value);
+                }
+            }
+
+
+            _manager.Save();
         }
 
 
@@ -66,6 +129,7 @@ namespace WardIsLove
             {
                 _path = path;
                 ReadWardData:
+                WILLogger.LogInfo($"Initializing WardManager with path: {_path}");
                 if (!File.Exists(_path))
                 {
                     File.Create(_path).Dispose();
@@ -90,20 +154,25 @@ namespace WardIsLove
                     if (!string.IsNullOrEmpty(data))
                         PlayersWardData = JSON.ToObject<Dictionary<string, int>>(data);
                 }
+
+                WILLogger.LogInfo($"Ward data loaded. Total entries: {PlayersWardData.Count}");
             }
 
             public void IncrementWardCount(string steamId)
             {
-                if (PlayersWardData.ContainsKey(steamId))
+                string normalizedId = NormalizeID(steamId);
+                WILLogger.LogInfo($"Incrementing ward count for SteamID: {normalizedId}");
+                if (PlayersWardData.ContainsKey(normalizedId))
                 {
-                    PlayersWardData[steamId]++;
+                    PlayersWardData[normalizedId]++;
                 }
                 else
                 {
-                    PlayersWardData[steamId] = 1;
+                    PlayersWardData[normalizedId] = 1;
                 }
 
                 Save();
+                WILLogger.LogInfo($"New ward count for SteamID {normalizedId}: {PlayersWardData[normalizedId]}");
             }
 
             public int GetWardCount(string steamId)
@@ -113,12 +182,14 @@ namespace WardIsLove
 
             public void Save()
             {
+                WILLogger.LogInfo("Saving ward data to file.");
                 var serializer = new SerializerBuilder().Build();
 
                 var yaml = serializer.Serialize(PlayersWardData);
 
                 using var writer = new StreamWriter(_path);
                 writer.Write(yaml);
+                WILLogger.LogInfo("Ward data saved successfully.");
             }
 
             public static void ConvertJsonToYamlAndDelete(string jsonFilePath)
@@ -165,8 +236,9 @@ namespace WardIsLove
 
         private static void GetClientInfo(long sender)
         {
+            WILLogger.LogInfo($"GetClientInfo called by sender: {sender}");
             ZNetPeer peer = ZNet.instance.GetPeer(sender);
-            string steam = peer.m_socket.GetHostName();
+            string steam = NormalizeID(peer.m_socket.GetHostName());
             _manager.IncrementWardCount(steam);
             WILLogger.LogInfo($"Player (Ward Creator) {peer.m_playerName} : {steam} placed ward. Ward amount: {_manager.GetWardCount(steam)}");
             ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
@@ -199,7 +271,7 @@ namespace WardIsLove
                 if (zdo == null) return;
                 if (zdo.GetBool(ZdoInternalExtensions.WILLimitedWard))
                 {
-                    string steam = zdo.GetString(ZdoInternalExtensions.steamID);
+                    string steam = NormalizeID(zdo.GetString(ZdoInternalExtensions.steamID));
                     if (_manager.PlayersWardData.ContainsKey(steam))
                     {
                         _manager.PlayersWardData[steam]--;
@@ -253,7 +325,7 @@ namespace WardIsLove
             {
                 if (piece.gameObject.name == "Thorward" && !CanPlaceWard)
                 {
-                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "<color=#FF0000>Ward Limit</color>");
+                    MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"<color=#FF0000>Ward Limit</color>\nMax: ({_maxWardCount}) You Placed: {_wardCount}");
                     return false;
                 }
 
@@ -265,10 +337,7 @@ namespace WardIsLove
                 List<CodeInstruction> list = new(instructions);
                 CodeInstruction[] NewInstructions =
                 {
-                    new(OpCodes.Ldloc_3),
-                    new(OpCodes.Call,
-                        AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard),
-                            new[] { typeof(GameObject) }))
+                    new(OpCodes.Ldloc_3), new(OpCodes.Call, AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard), new[] { typeof(GameObject) }))
                 };
                 for (int i = 0; i < list.Count; i++)
                 {

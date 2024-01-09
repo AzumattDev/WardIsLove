@@ -146,7 +146,7 @@ namespace WardIsLove.Extensions
                 if (mat == null)
                     continue;
 
-                mat = new Material(mat) { name = mat.name + " (Instance)" };
+                mat = new Material(mat) { name = $"{mat.name} (Instance)" };
                 rend.trailMaterial = mat;
                 foreach (string? colorProperty in colorProperties)
                     if (mat != null && mat.HasProperty(colorProperty))
@@ -173,7 +173,7 @@ namespace WardIsLove.Extensions
             foreach (Projector? proj in projectors)
             {
                 if (!proj.material.name.EndsWith("(Instance)"))
-                    proj.material = new Material(proj.material) { name = proj.material.name + " (Instance)" };
+                    proj.material = new Material(proj.material) { name = $"{proj.material.name} (Instance)" };
                 Material? mat = proj.material;
                 if (mat == null)
                     continue;

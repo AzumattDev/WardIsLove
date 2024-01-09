@@ -51,7 +51,7 @@ namespace WardIsLove.Util
             {
                 __instance.m_connectionFailedError.fontSizeMax = 25;
                 __instance.m_connectionFailedError.fontSizeMin = 15;
-                __instance.m_connectionFailedError.text += "\n" + WardIsLovePlugin.ConnectionError;
+                __instance.m_connectionFailedError.text += $"\n{WardIsLovePlugin.ConnectionError}";
             }
         }
     }

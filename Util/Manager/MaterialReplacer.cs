@@ -89,7 +89,7 @@ namespace PieceManager
                     }
                     else
                     {
-                        Debug.LogWarning("No suitable material found to replace: " + matNames);
+                        Debug.LogWarning($"No suitable material found to replace: {matNames}");
                         // Skip over this material in future
                         originalMaterials[matNames] = newMats[i];
                     }
@@ -100,7 +100,7 @@ namespace PieceManager
                     }
                     else
                     {
-                        Debug.LogWarning("No suitable material found to replace: " + matName);
+                        Debug.LogWarning($"No suitable material found to replace: {matName}");
                         // Skip over this material in future
                         originalMaterials[matName] = renderer.material;
                     }
