@@ -63,9 +63,7 @@ namespace WardIsLove.Util
 
         public void Awake()
         {
-            m_nview = (bool)(Object)m_rootObjectOverride
-                ? m_rootObjectOverride.GetComponent<ZNetView>()
-                : GetComponent<ZNetView>();
+            m_nview = (bool)(Object)m_rootObjectOverride ? m_rootObjectOverride.GetComponent<ZNetView>() : GetComponent<ZNetView>();
             if (m_nview.GetZDO() == null)
                 return;
             if (!m_nview.IsValid())
@@ -146,8 +144,7 @@ namespace WardIsLove.Util
 
                 gradient.SetKeys(gradientKeys, gradientAlphaKeys);
                 m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp = gradient;
-                m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
-                    gradient.colorKeys[1].color;
+                m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint = gradient.colorKeys[1].color;
             }
         }
 
@@ -300,8 +297,7 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=#FFFF00><b>" + WardIsLovePlugin.WardHotKey.Value +
-                                    $"</b></color>] • $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
+                    _ = text.Append($"\n[<color=#FFFF00><b>{WardIsLovePlugin.WardHotKey.Value}</b></color>] • $piece_guardstone_deactivate {Localization.instance.Localize("$piece_guardstone")}");
                     if (WardIsLovePlugin.WardHotKey.Value.IsDown())
                     {
                         //SetEnabled(!IsEnabled());
@@ -318,8 +314,7 @@ namespace WardIsLove.Util
                 {
                     AppendNameText(text);
                     AdminAppend(text);
-                    _ = text.Append("\n[<color=#FFFF00><b>" + WardIsLovePlugin.WardHotKey.Value +
-                                    $"</b></color>] • $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
+                    _ = text.Append($"\n[<color=#FFFF00><b>{WardIsLovePlugin.WardHotKey.Value}</b></color>] • $piece_guardstone_activate {Localization.instance.Localize("$piece_guardstone")}");
                     _ = text.Append("\n[<color=#FFFF00><b>$KEY_Use</b></color>] • $piece_guardstone_remove");
                     if (WardIsLovePlugin.WardHotKey.Value.IsDown())
                     {
@@ -638,7 +633,7 @@ namespace WardIsLove.Util
             }
             else
             {
-                _ = text.Append("\n$piece_guardstone_owner • " + GetCreatorName());
+                _ = text.Append($"\n$piece_guardstone_owner • {GetCreatorName()}");
             }
         }
 
@@ -652,31 +647,23 @@ namespace WardIsLove.Util
             {
                 if (WardIsLovePlugin.WardControl.Value || WardIsLovePlugin.Admin)
                 {
-                    text.Append(Localization.instance.Localize(
-                        "\n[<color=#FFFF00><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
+                    text.Append(Localization.instance.Localize("\n[<color=#FFFF00><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
                 }
 
-                text.Append(Localization.instance.Localize(
-                    $"\n$betterwards_accessMode $betterwards_accessMode_{accessMode}"));
-                text.Append(Localization.instance.Localize(
-                    $"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
-                text.Append(Localization.instance.Localize(
-                    $"\nRadius • {this.GetWardRadius().ToString()}"));
+                text.Append(Localization.instance.Localize($"\n$betterwards_accessMode $betterwards_accessMode_{accessMode}"));
+                text.Append(Localization.instance.Localize($"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
+                text.Append(Localization.instance.Localize($"\nRadius • {this.GetWardRadius().ToString()}"));
             }
             else
             {
                 if (WardIsLovePlugin.Admin && !WardIsLovePlugin.DisableGUI.Value)
                 {
-                    text.Append(Localization.instance.Localize(
-                        "\n[<color=#FFFF00><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
+                    text.Append(Localization.instance.Localize("\n[<color=#FFFF00><b>SHIFT + $KEY_Use</b></color>] • Toggle Ward GUI"));
                 }
 
-                text.Append(Localization.instance.Localize(
-                    $"\n$betterwards_accessMode $betterwards_accessMode_{accessMode}"));
-                text.Append(Localization.instance.Localize(
-                    $"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
-                text.Append(Localization.instance.Localize(
-                    $"\nRadius • {this.GetWardRadius().ToString()}"));
+                text.Append(Localization.instance.Localize($"\n$betterwards_accessMode $betterwards_accessMode_{accessMode}"));
+                text.Append(Localization.instance.Localize($"\n$betterwards_bubbleMode $betterwards_bubbleMode_{bubbleMode}"));
+                text.Append(Localization.instance.Localize($"\nRadius • {this.GetWardRadius().ToString()}"));
             }
         }
 
@@ -776,8 +763,8 @@ namespace WardIsLove.Util
             for (int index = 0; index < users.Count; ++index)
             {
                 KeyValuePair<long, string> user = users[index];
-                m_nview.GetZDO().Set("pu_id" + index, user.Key);
-                m_nview.GetZDO().Set("pu_name" + index, user.Value);
+                m_nview.GetZDO().Set($"pu_id{index}", user.Key);
+                m_nview.GetZDO().Set($"pu_name{index}", user.Value);
             }
         }
 
@@ -787,8 +774,8 @@ namespace WardIsLove.Util
             int num = m_nview.GetZDO().GetInt(ZDOVars.s_permitted);
             for (int index = 0; index < num; ++index)
             {
-                long key = m_nview.GetZDO().GetLong("pu_id" + index);
-                string str = m_nview.GetZDO().GetString("pu_name" + index);
+                long key = m_nview.GetZDO().GetLong($"pu_id{index}");
+                string str = m_nview.GetZDO().GetString($"pu_name{index}");
                 if (key != 0L)
                     keyValuePairList.Add(new KeyValuePair<long, string>(key, str));
             }
@@ -865,8 +852,7 @@ namespace WardIsLove.Util
 
         public void PokeAllAreasInRange()
         {
-            foreach (WardMonoscript allArea in m_allAreas.Where(allArea =>
-                         !(allArea == this) && IsInside(allArea.transform.position, 0.0f)))
+            foreach (WardMonoscript allArea in m_allAreas.Where(allArea => !(allArea == this) && IsInside(allArea.transform.position, 0.0f)))
                 allArea.StartInRangeEffect();
         }
 
@@ -1141,12 +1127,7 @@ namespace WardIsLove.Util
                     : $"{ward.GetCreatorName()} Your ward is being damaged! Get in there and defend it!";
                 print(link);
                 string json =
-                    $@"{{""username"":""WardIsLove v{WardIsLovePlugin.version}"",""avatar_url"":""https://i.imgur.com/CzwaEed.png""," +
-                    $@"""embeds"":[{{""title"":""{ward.GetCreatorName()}"",""description"":""" + detection +
-                    @""",""color"":15258703,""fields"":[{""name"":""Attacker"",""value"":""" + playerName +
-                    @""",""inline"":true},{""name"":""Permitted"",""value"":""" + ward.IsPermitted(playerID) +
-                    @""",""inline"":true},{""name"":""CALL TO ARMS!"",""value"":""" + messageSent +
-                    @""",""inline"":false}]}]}";
+                    $@"{{""username"":""WardIsLove v{WardIsLovePlugin.version}"",""avatar_url"":""https://i.imgur.com/CzwaEed.png"",""embeds"":[{{""title"":""{ward.GetCreatorName()}"",""description"":""{detection}"",""color"":15258703,""fields"":[{{""name"":""Attacker"",""value"":""{playerName}"",""inline"":true}},{{""name"":""Permitted"",""value"":""{ward.IsPermitted(playerID)}"",""inline"":true}},{{""name"":""CALL TO ARMS!"",""value"":""{messageSent}"",""inline"":false}}]}}]}}";
                 WardGUIUtil.SendMSG(link, json);
             });
         }
@@ -1178,7 +1159,7 @@ namespace WardIsLove.Util
             {
                 if (m_model.gameObject.activeSelf)
                 {
-                    _ = text.Append(m_name + " ($piece_guardstone_active)");
+                    _ = text.Append($"{m_name} ($piece_guardstone_active)");
                 }
                 else if (m_modelDefault.gameObject.activeSelf)
                 {
@@ -1202,7 +1183,7 @@ namespace WardIsLove.Util
             {
                 if (m_model.gameObject.activeSelf)
                 {
-                    _ = text.Append(m_name + " ($piece_guardstone_inactive)");
+                    _ = text.Append($"{m_name} ($piece_guardstone_inactive)");
                 }
                 else if (m_modelDefault.gameObject.activeSelf)
                 {

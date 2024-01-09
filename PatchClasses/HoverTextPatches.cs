@@ -14,10 +14,8 @@ namespace WardIsLove.PatchClasses
                 return __result;
             string hoverText = __result;
             string localize = !WardMonoscript.CheckAccess(__instance.transform.position, flash: false)
-                ? "\"" + __instance.GetText() + "\""
-                : "\"" + __instance.GetText() + "\"\n" +
-                  Localization.instance.Localize(__instance.m_name +
-                                                 "\n[<color=#FFFF00><b>$KEY_Use</b></color>] $piece_use");
+                ? $"\"{__instance.GetText()}\""
+                : $"\"{__instance.GetText()}\"\n{Localization.instance.Localize($"{__instance.m_name}\n[<color=#FFFF00><b>$KEY_Use</b></color>] $piece_use")}";
             return localize;
         }
     }
@@ -36,7 +34,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetItemStandInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -56,8 +54,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (!pa.GetNoTeleportOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -77,7 +74,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetDoorInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -97,8 +94,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetChestInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -118,8 +114,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (!pa.GetPickableInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -139,8 +134,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetItemInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -160,8 +154,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetShipInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -181,8 +174,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetCraftingStationInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -202,7 +194,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetSmelterInteractOn()) return;
-                __result = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                __result = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
             }
         }
     }
@@ -219,7 +211,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetSmelterInteractOn()) return;
-                __result = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                __result = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
             }
         }
     }
@@ -237,7 +229,7 @@ namespace WardIsLove.PatchClasses
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetSmelterInteractOn()) return;
                 if (__instance.m_emptyOreSwitch && __instance.m_spawnStack)
-                    __result = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                    __result = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
             }
         }
     }
@@ -254,8 +246,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetBeehiveInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.GetHoverName() +
-                                                           "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.GetHoverName()}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -275,7 +266,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetMapTableInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 
@@ -295,7 +286,7 @@ namespace WardIsLove.PatchClasses
             {
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 if (pa.GetMapTableInteractOn()) return __result;
-                hoverText = Localization.instance.Localize(__instance.m_name + "\n<color=#FF0000>$piece_noaccess</color>");
+                hoverText = Localization.instance.Localize($"{__instance.m_name}\n<color=#FF0000>$piece_noaccess</color>");
                 return hoverText;
             }
 

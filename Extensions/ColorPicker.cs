@@ -84,7 +84,7 @@ public class ColorPicker : MonoBehaviour
             instance.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = message;
             instance.aComponent.gameObject.SetActive(useAlpha);
             instance.RecalculateMenu(true);
-            instance.hexaComponent.placeholder.GetComponent<Text>().text = "RRGGBB" + (useAlpha ? "AA" : "");
+            instance.hexaComponent.placeholder.GetComponent<Text>().text = $"RRGGBB{(useAlpha ? "AA" : "")}";
             return true;
         }
 
@@ -255,7 +255,7 @@ public class ColorPicker : MonoBehaviour
     {
         if (interact)
         {
-            if (ColorUtility.TryParseHtmlString("#" + value, out Color c))
+            if (ColorUtility.TryParseHtmlString($"#{value}", out Color c))
             {
                 if (!useA) c.a = 1;
                 modifiedColor = c;

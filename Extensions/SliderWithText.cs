@@ -10,7 +10,7 @@ namespace WardIsLove.Extensions
         {
             Text lbl = GetComponent<Text>();
             if (lbl != null)
-                lbl.text = "Repair Amount :" + Mathf.RoundToInt(value);
+                lbl.text = $"Repair Amount :{Mathf.RoundToInt(value)}";
         }
     }
 }

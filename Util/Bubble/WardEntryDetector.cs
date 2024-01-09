@@ -99,8 +99,7 @@ namespace WardIsLove.Util.Bubble
             if (component == null || Player.m_localPlayer != component)
                 return;
             if (m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
-                Player.m_localPlayer.Message(MessageHud.MessageType.Center,
-                    string.Format(m_wardEntered.GetWardExitNotifyMessage(), component.GetPlayerName()));
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, string.Format(m_wardEntered.GetWardExitNotifyMessage(), component.GetPlayerName()));
             if (Heal != null)
             {
                 StopCoroutine(Heal);
@@ -332,15 +331,12 @@ namespace WardIsLove.Util.Bubble
         {
             if (ward.GetBubbleOn())
             {
-                if (collision.collider.transform.root.gameObject.name.ToLower().Contains("ship") ||
-                    collision.collider.transform.root.gameObject.name.ToLower().Contains("karve") ||
-                    collision.collider.transform.root.gameObject.name.ToLower().Contains("raft") ||
-                    collision.collider.transform.root.gameObject.name.ToLower().Contains("cart") ||
-                    collision.collider.transform.root.gameObject.name.ToLower().Contains("saddle"))
+                if (collision.collider.transform.root.gameObject.GetComponentInChildren<Ship>() ||
+                    collision.collider.transform.root.gameObject.GetComponentInChildren<Sadle>() ||
+                    collision.collider.transform.root.gameObject.GetComponentInChildren<Vagon>())
                 {
                     Physics.IgnoreCollision(collision.collider, COL, true);
-                    Collider[]? colliders =
-                        collision.collider.transform.root.gameObject.GetComponentsInChildren<Collider>();
+                    Collider[]? colliders = collision.collider.transform.root.gameObject.GetComponentsInChildren<Collider>();
                     foreach (Collider collider in colliders)
                     {
                         Physics.IgnoreCollision(collider, COL, true); // Have to do this, or it glitches for ships.

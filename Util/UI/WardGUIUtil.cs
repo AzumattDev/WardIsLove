@@ -365,8 +365,7 @@ namespace WardIsLove.Util.UI
                 .AddField("Feedback Type", $"{WardGUI.FeedbackDropdownValue}")
                 .AddField("Message", $"{Escaper(m_text.text)}")
                 .Build()
-                .SendMessageAsync(
-                    "redacted");
+                .SendMessageAsync("redacted");
             Hide();
         }
 
@@ -681,7 +680,7 @@ namespace WardIsLove.Util.UI
 
         private void BubbleColorFinished(Color finishedColor)
         {
-            WardIsLovePlugin.WILLogger.LogDebug("You chose the color " + ColorUtility.ToHtmlStringRGBA(finishedColor));
+            WardIsLovePlugin.WILLogger.LogDebug($"You chose the color {ColorUtility.ToHtmlStringRGBA(finishedColor)}");
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.m_nview.GetZDO().Set(ZdoInternalExtensions.wardColorCount,
                 paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
@@ -690,7 +689,7 @@ namespace WardIsLove.Util.UI
             foreach (GradientColorKey colorKey in paArea.m_bubble.GetComponent<ForceFieldController>()
                          .procedrualGradientRamp.colorKeys)
             {
-                paArea.m_nview.GetZDO().Set($"wardColor{i}", "#" + ColorUtility.ToHtmlStringRGBA(colorKey.color));
+                paArea.m_nview.GetZDO().Set($"wardColor{i}", $"#{ColorUtility.ToHtmlStringRGBA(colorKey.color)}");
                 paArea.m_nview.GetZDO().Set($"wardColorTime{i}", colorKey.time);
                 ++i;
             }
@@ -724,15 +723,14 @@ namespace WardIsLove.Util.UI
 
         private void BubbleGradientFinished(Gradient finishedGradient)
         {
-            WardIsLovePlugin.WILLogger.LogDebug("You chose a Gradient with " + finishedGradient.colorKeys.Length +
-                                                " Color keys");
+            WardIsLovePlugin.WILLogger.LogDebug($"You chose a Gradient with {finishedGradient.colorKeys.Length} Color keys");
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.m_nview.GetZDO().Set(ZdoInternalExtensions.wardColorCount, finishedGradient.colorKeys.Length);
 
             int i = 0;
             foreach (GradientColorKey colorKey in finishedGradient.colorKeys)
             {
-                paArea.m_nview.GetZDO().Set($"wardColor{i}", "#" + ColorUtility.ToHtmlStringRGBA(colorKey.color));
+                paArea.m_nview.GetZDO().Set($"wardColor{i}", $"#{ColorUtility.ToHtmlStringRGBA(colorKey.color)}");
                 paArea.m_nview.GetZDO().Set($"wardColorTime{i}", colorKey.time);
                 ++i;
             }

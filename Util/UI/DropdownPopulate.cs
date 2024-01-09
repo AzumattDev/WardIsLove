@@ -127,7 +127,7 @@ namespace WardIsLove.Util.UI
                 if (index != permittedPlayers.Count - 1)
                 {
                     wardPermittedText += ", ";
-                    wardPermittedListText += Environment.NewLine + " ";
+                    wardPermittedListText += $"{Environment.NewLine} ";
                 }
             }
 

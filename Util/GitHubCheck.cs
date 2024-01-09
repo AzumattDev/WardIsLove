@@ -45,21 +45,18 @@ namespace WardIsLove.Util
         internal static IEnumerator CheckForNewVersion()
         {
             System.Version currentVersion = ParseVersion(version);
-            UnityWebRequest unityWebRequest =
-                UnityWebRequest.Get(ApiRepositoryLatestRelease);
+            UnityWebRequest unityWebRequest = UnityWebRequest.Get(ApiRepositoryLatestRelease);
             yield return unityWebRequest.SendWebRequest();
 
             if (unityWebRequest.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError
                 or UnityWebRequest.Result.DataProcessingError)
             {
-                Debug.Log("Error While Sending: " + unityWebRequest.error);
+                WILLogger.LogDebug($"Error While Sending: {unityWebRequest.error}");
             }
             else
             {
                 bool coolKidVersion = false;
-                string githubversion =
-                    unityWebRequest.downloadHandler.text.Split(new[] { "," }, StringSplitOptions.None)[25]
-                        .Trim().Replace("\"", "").Replace("tag_name: ", "");
+                string githubversion = unityWebRequest.downloadHandler.text.Split(new[] { "," }, StringSplitOptions.None)[25].Trim().Replace("\"", "").Replace("tag_name: ", "");
                 WILLogger.LogDebug(githubversion);
 
                 System.Version githubParseVersion = ParseVersion(githubversion);
@@ -70,15 +67,13 @@ namespace WardIsLove.Util
                 }
                 else if (githubParseVersion < currentVersion)
                 {
-                    WILLogger.LogWarning(
-                        $"You seem to be running a test version of {ModName}, congrats...you're one of the cool kids. Remember to ask {Author} for a new version every now and then.");
+                    WILLogger.LogWarning($"You seem to be running a test version of {ModName}, congrats...you're one of the cool kids. Remember to ask {Author} for a new version every now and then.");
                     coolKidVersion = true;
                     IsUpToDate = true;
                 }
                 else if (githubParseVersion != currentVersion)
                 {
-                    WILLogger.LogWarning(
-                        $"Received GitHub version is not equal: GitHub version = {githubversion}; local version = {version}");
+                    WILLogger.LogWarning($"Received GitHub version is not equal: GitHub version = {githubversion}; local version = {version}");
                 }
                 else if (githubParseVersion == currentVersion)
                 {
@@ -86,10 +81,10 @@ namespace WardIsLove.Util
                 }
 
                 if (!IsUpToDate && !coolKidVersion)
-                    WILLogger.LogWarning(
-                        $"There is a newer version available of {ModName}. The latest version is v{githubversion}. Please visit the Thunderstore page https://valheim.thunderstore.io/package/Azumatt/{ModName}/ to download the latest");
+                    WILLogger.LogWarning($"There is a newer version available of {ModName}. The latest version is v{githubversion}. Please visit the Thunderstore page https://valheim.thunderstore.io/package/Azumatt/{ModName}/ to download the latest");
                 else
-                    WILLogger.LogInfo($"{ModName} [" + version + "] is up to date.");
+                    WILLogger.LogInfo($"{ModName} [{version}] is up to date.");
+                VersionGrabbed = true;
             }
         }
     }

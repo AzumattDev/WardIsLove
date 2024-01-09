@@ -198,7 +198,7 @@ public class BuildPiece
             }
             else
             {
-                string key = "$piece_" + Prefab.name.Replace(" ", "_");
+                string key = $"$piece_{Prefab.name.Replace(" ", "_")}";
                 _name = new LocalizeKey(key).English(data.m_name);
                 data.m_name = key;
             }
@@ -225,7 +225,7 @@ public class BuildPiece
             }
             else
             {
-                string key = "$piece_" + Prefab.name.Replace(" ", "_") + "_description";
+                string key = $"$piece_{Prefab.name.Replace(" ", "_")}_description";
                 _description = new LocalizeKey(key).English(data.m_description);
                 data.m_description = key;
             }
@@ -866,7 +866,7 @@ public class BuildPiece
             if (_configSync != null || !hasConfigSync) return _configSync;
             if (Assembly.GetExecutingAssembly().GetType("ServerSync.ConfigSync") is { } configSyncType)
             {
-                _configSync = Activator.CreateInstance(configSyncType, plugin.Info.Metadata.GUID + " PieceManager");
+                _configSync = Activator.CreateInstance(configSyncType, $"{plugin.Info.Metadata.GUID} PieceManager");
                 configSyncType.GetField("CurrentVersion")
                     .SetValue(_configSync, plugin.Info.Metadata.Version.ToString());
                 configSyncType.GetProperty("IsLocked")!.SetValue(_configSync, true);
@@ -1038,11 +1038,11 @@ public class AdminSyncing
         {
             if (isServer)
             {
-                ZRoutedRpc.instance.Register<ZPackage>(BuildPiece._plugin.Info.Metadata.Name + " PMAdminStatusSync", RPC_AdminPieceAddRemove);
+                ZRoutedRpc.instance.Register<ZPackage>($"{BuildPiece._plugin.Info.Metadata.Name} PMAdminStatusSync", RPC_AdminPieceAddRemove);
             }
             else if (!registeredOnClient)
             {
-                ZRoutedRpc.instance.Register<ZPackage>(BuildPiece._plugin.Info.Metadata.Name + " PMAdminStatusSync", RPC_AdminPieceAddRemove);
+                ZRoutedRpc.instance.Register<ZPackage>($"{BuildPiece._plugin.Info.Metadata.Name} PMAdminStatusSync", RPC_AdminPieceAddRemove);
                 registeredOnClient = true;
             }
         }
@@ -1124,7 +1124,7 @@ public class AdminSyncing
 
         void SendPackage(ZPackage pkg)
         {
-            string method = BuildPiece._plugin?.Info.Metadata.Name + " PMAdminStatusSync";
+            string method = $"{BuildPiece._plugin?.Info.Metadata.Name} PMAdminStatusSync";
             if (isServer)
             {
                 peer.m_rpc.Invoke(method, pkg);
@@ -1152,12 +1152,12 @@ public class AdminSyncing
         if (isServer)
         {
             ZRoutedRpc.instance.InvokeRoutedRPC(ZRoutedRpc.Everybody,
-                BuildPiece._plugin?.Info.Metadata.Name + " PMAdminStatusSync", new ZPackage());
+                $"{BuildPiece._plugin?.Info.Metadata.Name} PMAdminStatusSync", new ZPackage());
             if (ZNet.instance.ListContainsId(ZNet.instance.m_adminList, currentPeer.m_rpc.GetSocket().GetHostName()))
             {
                 ZPackage pkg = new();
                 pkg.Write(true);
-                currentPeer.m_rpc.Invoke(BuildPiece._plugin?.Info.Metadata.Name + " PMAdminStatusSync", pkg);
+                currentPeer.m_rpc.Invoke($"{BuildPiece._plugin?.Info.Metadata.Name} PMAdminStatusSync", pkg);
             }
         }
         else
@@ -1213,7 +1213,7 @@ class RegisterClientRPCPatch
     {
         if (!__instance.IsServer())
         {
-            peer.m_rpc.Register<ZPackage>(BuildPiece._plugin?.Info.Metadata.Name + " PMAdminStatusSync",
+            peer.m_rpc.Register<ZPackage>($"{BuildPiece._plugin?.Info.Metadata.Name} PMAdminStatusSync",
                 RPC_InitialAdminSync);
         }
         else
@@ -1221,7 +1221,7 @@ class RegisterClientRPCPatch
             ZPackage packge = new();
             packge.Write(__instance.ListContainsId(__instance.m_adminList, peer.m_rpc.GetSocket().GetHostName()));
 
-            peer.m_rpc.Invoke(BuildPiece._plugin?.Info.Metadata.Name + " PMAdminStatusSync", packge);
+            peer.m_rpc.Invoke($"{BuildPiece._plugin?.Info.Metadata.Name} PMAdminStatusSync", packge);
         }
     }
 
@@ -1273,8 +1273,7 @@ public static class PiecePrefabManager
             assets = bundleCache[id] =
                 Resources.FindObjectsOfTypeAll<AssetBundle>().FirstOrDefault(a => a.name == assetBundleFileName) ??
                 AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream(Assembly.GetExecutingAssembly().GetName().Name + $".{folderName}." +
-                                               assetBundleFileName));
+                    .GetManifestResourceStream($"{Assembly.GetExecutingAssembly().GetName().Name}.{folderName}.{assetBundleFileName}"));
         }
 
         return assets;
