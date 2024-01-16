@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.1
+> - Fix issue on server boots. (Hopefully)
 > ### v3.5.0
 > - Fix Ward Limit issue and also have it periodically update the file based on actual ward count in the world, just in case.
 > - Fix missing script warnings

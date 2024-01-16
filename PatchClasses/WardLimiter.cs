@@ -58,7 +58,9 @@ namespace WardIsLove
 
         private void UpdateWardCounts()
         {
+            if (ZDOMan.instance == null) return;
             int wardPrefabHash = "Thorward".GetStableHashCode();
+
             ZDO[] wardZDOs = GetZDOs(wardPrefabHash);
 
             var playerWardCounts = new Dictionary<string, int>();
