@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Groups;
 using HarmonyLib;
-using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -845,7 +844,7 @@ namespace WardIsLove.Util
         public void Setup(string name)
         {
             m_nview.GetZDO().Set(ZDOVars.s_creatorName, name);
-            m_nview.GetZDO().Set(ZdoInternalExtensions.steamName, PrivilegeManager.GetCurrentPlatform() == PrivilegeManager.Platform.Steam ? SteamFriends.GetPersonaName() : UserInfo.GetLocalPlayerGamertag());
+            m_nview.GetZDO().Set(ZdoInternalExtensions.steamName, UserInfo.GetLocalPlayerGamertag());
             m_nview.GetZDO().Set(ZdoInternalExtensions.steamID, PrivilegeManager.GetNetworkUserId().ToString());
             m_nview.GetZDO().Set(ZdoInternalExtensions.wardFresh, true);
         }

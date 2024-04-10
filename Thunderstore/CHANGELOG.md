@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.2
+> - Update for Valheim 0.217.46 and add incompatibility with BetterNetworking as I'm kinda over hearing issues when using it and this mod at the same time.
 > ### v3.5.1
 > - Fix issue on server boots. (Hopefully)
 > ### v3.5.0
