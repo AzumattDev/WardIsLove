@@ -693,13 +693,13 @@ namespace WardIsLove.Util
                     return true;
                 case WardIsLovePlugin.WardInteractBehaviorEnums.Group:
                 {
-                    if (API.IsLoaded())
+                    if (Groups.API.IsLoaded())
                     {
-                        bool sameGroupAsCreator = API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null;
+                        bool sameGroupAsCreator = Groups.API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null;
                         bool sameGroupAsPermitted;
                         try
                         {
-                            sameGroupAsPermitted = permittedPlayers.Any(permittedPlayer => API.GroupPlayers().Contains(PlayerReference.fromPlayerId(permittedPlayer.Key)));
+                            sameGroupAsPermitted = permittedPlayers.Any(permittedPlayer => Groups.API.GroupPlayers().Contains(PlayerReference.fromPlayerId(permittedPlayer.Key)));
                         }
                         catch
                         {

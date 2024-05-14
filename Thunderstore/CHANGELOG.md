@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.3
+> - Update for Ashlands, bubble effect will likely change in the coming updates.
 > ### v3.5.2
 > - Update for Valheim 0.217.46 and add incompatibility with BetterNetworking as I'm kinda over hearing issues when using it and this mod at the same time.
 > ### v3.5.1
