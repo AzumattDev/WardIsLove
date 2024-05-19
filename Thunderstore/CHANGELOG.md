@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.4
+> - Fix possible JIT issue
 > ### v3.5.3
 > - Update for Ashlands, bubble effect will likely change in the coming updates.
 > ### v3.5.2
