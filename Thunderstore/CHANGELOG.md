@@ -1,4 +1,7 @@
 > # Update Information (Latest listed first)
+> ### v3.5.5
+> - Fix NRE when placing ward
+> - Possible fix to ward count issue
 > ### v3.5.4
 > - Fix possible JIT issue
 > ### v3.5.3

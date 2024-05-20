@@ -90,7 +90,7 @@ namespace WardIsLove.Util
             if (m_inRangeEffect)
                 m_inRangeEffect.SetActive(false);
             m_allAreas.Add(this);
-            string? creatorName = Player.GetPlayer(m_piece.GetCreator()).GetPlayerName();
+            string? creatorName = Player.m_localPlayer.GetPlayerName();
             /* Set up Ward */
             if (string.IsNullOrWhiteSpace(m_nview.GetZDO().GetString(ZDOVars.s_creatorName)))
             {

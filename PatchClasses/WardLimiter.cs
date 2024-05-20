@@ -281,7 +281,7 @@ namespace WardIsLove
                         WILLogger.LogInfo($"Player's Ward {zdo.GetString(ZDOVars.s_creatorName)}({steam}) destroyed. Player wards count: {_manager.GetWardCount(steam)}");
                         foreach (ZNetPeer? player in ZNet.instance.m_peers)
                         {
-                            if (player.m_socket.GetHostName() == steam)
+                            if (player.m_socket.GetHostName().Contains(steam))
                             {
                                 ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
                             }
