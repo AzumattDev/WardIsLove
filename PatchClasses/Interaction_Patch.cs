@@ -344,7 +344,7 @@ namespace WardIsLove.PatchClasses
         }
     }
 
-    [HarmonyPatch(typeof(MapTable), nameof(MapTable.OnRead))]
+    [HarmonyPatch(typeof(MapTable), nameof(MapTable.OnRead), typeof(Switch), typeof(Humanoid), typeof(ItemDrop.ItemData))]
     static class MapTableOnReadPatch
     {
         static bool Prefix(MapTable __instance)

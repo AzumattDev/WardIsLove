@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Groups;
 using HarmonyLib;
-using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -91,7 +90,13 @@ namespace WardIsLove.Util
             if (m_inRangeEffect)
                 m_inRangeEffect.SetActive(false);
             m_allAreas.Add(this);
-
+            string? creatorName = Player.GetPlayer(m_piece.GetCreator()).GetPlayerName();
+            /* Set up Ward */
+            if (string.IsNullOrWhiteSpace(m_nview.GetZDO().GetString(ZDOVars.s_creatorName)))
+            {
+                Setup(creatorName);
+            }
+            
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
             /* TODO Get This working again */
             //StartCoroutine(DelayRepairRoutine());
@@ -118,10 +123,8 @@ namespace WardIsLove.Util
 
             if (m_nview.GetZDO().GetBool(ZdoInternalExtensions.wardFresh, true) == false)
             {
-                int colorNumbers = m_nview.GetZDO().GetInt(ZdoInternalExtensions.wardColorCount,
-                    m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
-                int colorAlphaNumbers = m_nview.GetZDO().GetInt(ZdoInternalExtensions.wardAlphaCount,
-                    m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
+                int colorNumbers = m_nview.GetZDO().GetInt(ZdoInternalExtensions.wardColorCount, m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.colorKeys.Length);
+                int colorAlphaNumbers = m_nview.GetZDO().GetInt(ZdoInternalExtensions.wardAlphaCount, m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp.alphaKeys.Length);
 
                 WardIsLovePlugin.WILLogger.LogDebug($"Color Number values has a value of {colorNumbers}");
                 Gradient gradient = new();
@@ -694,13 +697,13 @@ namespace WardIsLove.Util
                     return true;
                 case WardIsLovePlugin.WardInteractBehaviorEnums.Group:
                 {
-                    if (API.IsLoaded())
+                    if (Groups.API.IsLoaded())
                     {
-                        bool sameGroupAsCreator = API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null;
+                        bool sameGroupAsCreator = Groups.API.FindGroupMemberByPlayerId(m_piece.GetCreator()) != null;
                         bool sameGroupAsPermitted;
                         try
                         {
-                            sameGroupAsPermitted = permittedPlayers.Any(permittedPlayer => API.GroupPlayers().Contains(PlayerReference.fromPlayerId(permittedPlayer.Key)));
+                            sameGroupAsPermitted = permittedPlayers.Any(permittedPlayer => Groups.API.GroupPlayers().Contains(PlayerReference.fromPlayerId(permittedPlayer.Key)));
                         }
                         catch
                         {
@@ -845,7 +848,7 @@ namespace WardIsLove.Util
         public void Setup(string name)
         {
             m_nview.GetZDO().Set(ZDOVars.s_creatorName, name);
-            m_nview.GetZDO().Set(ZdoInternalExtensions.steamName, PrivilegeManager.GetCurrentPlatform() == PrivilegeManager.Platform.Steam ? SteamFriends.GetPersonaName() : UserInfo.GetLocalPlayerGamertag());
+            m_nview.GetZDO().Set(ZdoInternalExtensions.steamName, UserInfo.GetLocalPlayerGamertag());
             m_nview.GetZDO().Set(ZdoInternalExtensions.steamID, PrivilegeManager.GetNetworkUserId().ToString());
             m_nview.GetZDO().Set(ZdoInternalExtensions.wardFresh, true);
         }

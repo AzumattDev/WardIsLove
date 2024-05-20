@@ -655,8 +655,7 @@ namespace WardIsLove.Util.UI
             m_GradientPicker.SetActive(true);
             m_ColorPicker.SetActive(true);
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
-            GradientPicker.Create(paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp,
-                "Choose the Gradient", BubbleSetGradient, BubbleGradientFinished);
+            GradientPicker.Create(paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp, "Choose the Gradient", BubbleSetGradient, BubbleGradientFinished);
             /*ColorPicker.Create(paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint,
                 "Choose the bubble Color", BubbleSetColor, BubbleColorFinished, true);*/
             paArea.m_nview.m_zdo.Set(ZdoInternalExtensions.wardFresh, false);
@@ -713,8 +712,7 @@ namespace WardIsLove.Util.UI
         {
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp = currentGradient;
-            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint =
-                currentGradient.colorKeys[1].color;
+            paArea.m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint = currentGradient.colorKeys[1].color;
 
 
             WardIsLovePlugin.WILLogger.LogDebug($"Color key length being set to  {currentGradient.colorKeys.Length}");

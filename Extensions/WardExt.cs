@@ -55,8 +55,7 @@ namespace WardIsLove.Extensions
             return null!;
         }
 
-        public static WardIsLovePlugin.WardInteractBehaviorEnums GetAccessMode(
-            this WardMonoscript WardMonoscript)
+        public static WardIsLovePlugin.WardInteractBehaviorEnums GetAccessMode(this WardMonoscript WardMonoscript)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 return (WardIsLovePlugin.WardInteractBehaviorEnums)WardMonoscript.m_nview.m_zdo.GetInt(ZdoInternalExtensions.accessMode);
@@ -64,8 +63,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.WardInteractBehaviorEnums.OwnerOnly;
         }
 
-        public static void SetAccessMode(this WardMonoscript WardMonoscript,
-            WardIsLovePlugin.WardInteractBehaviorEnums accessMode)
+        public static void SetAccessMode(this WardMonoscript WardMonoscript, WardIsLovePlugin.WardInteractBehaviorEnums accessMode)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 WardMonoscript.m_nview.m_zdo.Set(ZdoInternalExtensions.accessMode, (int)accessMode);
@@ -80,8 +78,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.WardBehaviorEnums.Default;
         }
 
-        public static void SetBubbleMode(this WardMonoscript WardMonoscript,
-            WardIsLovePlugin.WardBehaviorEnums bubbleMode)
+        public static void SetBubbleMode(this WardMonoscript WardMonoscript, WardIsLovePlugin.WardBehaviorEnums bubbleMode)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 WardMonoscript.m_nview.m_zdo.Set(ZdoInternalExtensions.bubbleMode, (int)bubbleMode);
@@ -96,8 +93,7 @@ namespace WardIsLove.Extensions
         }
 
 
-        public static void SetDamageType(this WardMonoscript WardMonoscript,
-            WardIsLovePlugin.WardDamageTypes damageType)
+        public static void SetDamageType(this WardMonoscript WardMonoscript, WardIsLovePlugin.WardDamageTypes damageType)
         {
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 WardMonoscript.m_nview.m_zdo.Set(ZdoInternalExtensions.damageType, (int)damageType);
@@ -351,8 +347,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.WardNotify.Value;
         }
 
-        public static void SetWardNotificationsOn(this WardMonoscript WardMonoscript,
-            bool wardNotificationsOnVal)
+        public static void SetWardNotificationsOn(this WardMonoscript WardMonoscript, bool wardNotificationsOnVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.wardNotificationsOn, wardNotificationsOnVal);
         }
@@ -377,8 +372,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.WardNotifyMessageExit.Value;
         }
 
-        public static void SetWardExitNotifyMessage(this WardMonoscript WardMonoscript,
-            string wardNotifyMessageExitVal)
+        public static void SetWardExitNotifyMessage(this WardMonoscript WardMonoscript, string wardNotifyMessageExitVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.wardNotifyMessageExit, wardNotifyMessageExitVal);
         }
@@ -402,8 +396,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.ItemStandInteraction.Value;
         }
 
-        public static void SetItemStandInteractOn(this WardMonoscript WardMonoscript,
-            bool itemStandInteractionOnVal)
+        public static void SetItemStandInteractOn(this WardMonoscript WardMonoscript, bool itemStandInteractionOnVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.itemstandInteractOn, itemStandInteractionOnVal);
         }
@@ -439,8 +432,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.WardDamageIncrease.Value;
         }
 
-        public static void SetCreatureDamageIncrease(this WardMonoscript WardMonoscript,
-            float creatureDamageIncreaseAmountVal)
+        public static void SetCreatureDamageIncrease(this WardMonoscript WardMonoscript, float creatureDamageIncreaseAmountVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.CreatDamageIncreaseAmount, creatureDamageIncreaseAmountVal);
         }
@@ -452,8 +444,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.WardDamageReduction.Value;
         }
 
-        public static void SetStructDamageReduc(this WardMonoscript WardMonoscript,
-            float structDamageReducAmountVal)
+        public static void SetStructDamageReduc(this WardMonoscript WardMonoscript, float structDamageReducAmountVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.structDamageReducAmount, structDamageReducAmountVal);
         }
@@ -549,8 +540,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.CraftingStationInteraction.Value;
         }
 
-        public static void SetCraftingStationInteractOn(this WardMonoscript WardMonoscript,
-            bool craftingStationInteractionOnVal)
+        public static void SetCraftingStationInteractOn(this WardMonoscript WardMonoscript, bool craftingStationInteractionOnVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.craftingStationInteractOn, craftingStationInteractionOnVal);
         }
@@ -682,8 +672,7 @@ namespace WardIsLove.Extensions
             return WardIsLovePlugin.RaidablePlayersNeeded.Value;
         }
 
-        public static void SetRaidProtectionPlayerNeeded(this WardMonoscript WardMonoscript,
-            int raidablePlayersNeededVal)
+        public static void SetRaidProtectionPlayerNeeded(this WardMonoscript WardMonoscript, int raidablePlayersNeededVal)
         {
             WardMonoscript.m_nview.GetZDO().Set(ZdoInternalExtensions.raidablePlayersNeeded, raidablePlayersNeededVal);
         }

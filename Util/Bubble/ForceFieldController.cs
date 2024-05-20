@@ -16,7 +16,7 @@ public class ForceFieldController : MonoBehaviour
 
     public static float openCloseValue;
 
-    public FFstate forceFieldMode = FFstate.SingleSpheres;
+    public FFstate forceFieldMode = FFstate.MultipleSpheres;
 
     public int affectorCount = 20;
     [Range(-2, 2)] public float openCloseProgress = 2;
