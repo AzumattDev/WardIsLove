@@ -9,34 +9,6 @@ namespace WardIsLove.PatchClasses
     [HarmonyPatch]
     internal class StructureWearNTear
     {
-        // Since I am using a custom monoscript for wards...vanilla doesn't pick up on the creator for some reason. Patch it.
-        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.OnPlaced))]
-        [HarmonyPostfix]
-        private static void WardCreatorNameUpdate(WearNTear __instance)
-        {
-            Piece? pieceComp = __instance.GetComponent<Piece>();
-            long creatorLong = pieceComp.GetCreator();
-            WardMonoscript ward;
-            try
-            {
-                ward = pieceComp.gameObject.GetComponent<WardMonoscript>();
-                if (ward)
-                {
-                    ward.Setup(Player.GetPlayer(creatorLong).GetPlayerName());
-                }
-            }
-            catch
-            {
-                // ignored
-            }
-        }
-
-        [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
-        [HarmonyPostfix]
-        private static void WardCreatorNameUpdates(Player __instance)
-        {
-        }
-
         // Alter damage to structure inside of ward
         [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.ApplyDamage))]
         public static class StructureDamage
