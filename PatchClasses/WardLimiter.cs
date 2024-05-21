@@ -316,6 +316,14 @@ namespace WardIsLove
                 try
                 {
                     ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard GetClientInfo", Player.m_localPlayer.GetPlayerID());
+                    string steam = NormalizeID(PrivilegeManager.GetNetworkUserId());
+                    foreach (ZNetPeer? player in ZNet.instance.m_peers)
+                    {
+                        if (player.m_socket.GetHostName().Contains(steam))
+                        {
+                            ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
+                        }
+                    }
                 }
                 catch
                 {

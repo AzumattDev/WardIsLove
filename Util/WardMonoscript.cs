@@ -90,13 +90,16 @@ namespace WardIsLove.Util
             if (m_inRangeEffect)
                 m_inRangeEffect.SetActive(false);
             m_allAreas.Add(this);
-            string? creatorName = Player.m_localPlayer.GetPlayerName();
             /* Set up Ward */
             if (string.IsNullOrWhiteSpace(m_nview.GetZDO().GetString(ZDOVars.s_creatorName)))
             {
-                Setup(creatorName);
+                if (Player.m_localPlayer != null)
+                {
+                    string? creatorName = Player.m_localPlayer.GetPlayerName();
+                    Setup(creatorName);
+                }
             }
-            
+
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
             /* TODO Get This working again */
             //StartCoroutine(DelayRepairRoutine());

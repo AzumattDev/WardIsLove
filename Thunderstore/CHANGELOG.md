@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.6
+> - Fix NRE when ward loads in
 > ### v3.5.5
 > - Fix NRE when placing ward
 > - Possible fix to ward count issue
