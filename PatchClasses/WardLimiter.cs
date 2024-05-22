@@ -184,14 +184,14 @@ namespace WardIsLove
 
             public void Save()
             {
-                WILLogger.LogInfo("Saving ward data to file.");
+                WILLogger.LogDebug("Saving ward data to file.");
                 var serializer = new SerializerBuilder().Build();
 
                 var yaml = serializer.Serialize(PlayersWardData);
 
                 using var writer = new StreamWriter(_path);
                 writer.Write(yaml);
-                WILLogger.LogInfo("Ward data saved successfully.");
+                WILLogger.LogDebug("Ward data saved successfully.");
             }
 
             public static void ConvertJsonToYamlAndDelete(string jsonFilePath)

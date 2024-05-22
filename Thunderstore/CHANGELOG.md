@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.7
+> - Reduce logs about saving the file by moving them to debug printing only.
 > ### v3.5.6
 > - Fix NRE when ward loads in
 > ### v3.5.5
