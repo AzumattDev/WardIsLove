@@ -72,7 +72,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.5.7";
+        public const string version = "3.5.8";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = $"{Author}.WardIsLove";
@@ -184,7 +184,7 @@ namespace WardIsLove
             CookingUnlimited = config("Fire", "OvenUnlimited", false, "Infinite oven fuel, who doesn't want this? Enable to allow your oven to never run out of fuel inside a warded area");
             BathingUnlimited = config("Fire", "BathingUnlimited", false, "Infinite bath fuel, who doesn't want this? Enable to allow your bath to never run out of fuel inside a warded area");
             FireplaceUnlimited = config("Fire", "FireplaceUnlimited", false, "Fireplaces inside a ward no longer need constant fueling\nThis might conflict with other mods that fuel fires.\nDisable this feature if you are having problems.");
-            FireSources = config("Fire", "FireSources", "piece_walltorch,piece_sconce,piece_groundtorch,piece_groundtorch_wood,piece_groundtorch_green,piece_groundtorch_blue,piece_brazierceiling01,fire_pit,bonfire,hearth", "The fire sources inside a ward you want to never run out of fuel.\nUses Prefab Name.\nIf the Prefab Name contains the string, it will no longer require fuel.");
+            FireSources = config("Fire", "FireSources", "piece_walltorch,piece_sconce,piece_groundtorch,piece_groundtorch_wood,piece_groundtorch_green,piece_groundtorch_blue,piece_brazierceiling01,piece_brazierfloor01,piece_brazierfloor02,fire_pit,bonfire,hearth", "The fire sources inside a ward you want to never run out of fuel.\nUses Prefab Name.\nIf the Prefab Name contains the string, it will no longer require fuel.");
             /* Ward Range */
             WardRange = config<float>("WardRange", "WardRange", 20, new ConfigDescription("Range of the ward", new AcceptableValueRange<float>(0.0f, 100f)));
             /*Health Regen */
