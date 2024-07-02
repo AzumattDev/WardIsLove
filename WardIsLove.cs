@@ -72,7 +72,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.5.5";
+        public const string version = "3.5.9";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = $"{Author}.WardIsLove";
@@ -175,8 +175,7 @@ namespace WardIsLove
             NoFoodDrain = config("General", "NoFoodDrain", false, "Prevent food loss inside ward for permitted players");
             WardDamageAmount = config("General", "WardDamageAmount", 0f, new ConfigDescription("Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are direct values, not percents."));
             WardDamageRepeatRate = config("General", "WardDamageRepeatRate", 2f, new ConfigDescription("Amount of seconds to wait between damage ticks."));
-
-
+            
             /* Show Flash */
             ShowFlash = config("General", "ShowFLASH", true, "Show the ward flash when something is damaged");
 
@@ -184,7 +183,7 @@ namespace WardIsLove
             CookingUnlimited = config("Fire", "OvenUnlimited", false, "Infinite oven fuel, who doesn't want this? Enable to allow your oven to never run out of fuel inside a warded area");
             BathingUnlimited = config("Fire", "BathingUnlimited", false, "Infinite bath fuel, who doesn't want this? Enable to allow your bath to never run out of fuel inside a warded area");
             FireplaceUnlimited = config("Fire", "FireplaceUnlimited", false, "Fireplaces inside a ward no longer need constant fueling\nThis might conflict with other mods that fuel fires.\nDisable this feature if you are having problems.");
-            FireSources = config("Fire", "FireSources", "piece_walltorch,piece_sconce,piece_groundtorch,piece_groundtorch_wood,piece_groundtorch_green,piece_groundtorch_blue,piece_brazierceiling01,fire_pit,bonfire,hearth", "The fire sources inside a ward you want to never run out of fuel.\nUses Prefab Name.\nIf the Prefab Name contains the string, it will no longer require fuel.");
+            FireSources = config("Fire", "FireSources", "piece_walltorch,piece_sconce,piece_groundtorch,piece_groundtorch_wood,piece_groundtorch_green,piece_groundtorch_blue,piece_brazierceiling01,piece_brazierfloor01,piece_brazierfloor02,fire_pit,bonfire,hearth", "The fire sources inside a ward you want to never run out of fuel.\nUses Prefab Name.\nIf the Prefab Name contains the string, it will no longer require fuel.");
             /* Ward Range */
             WardRange = config<float>("WardRange", "WardRange", 20, new ConfigDescription("Range of the ward", new AcceptableValueRange<float>(0.0f, 100f)));
             /*Health Regen */

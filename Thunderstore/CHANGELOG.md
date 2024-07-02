@@ -1,4 +1,13 @@
 > # Update Information (Latest listed first)
+> ### v3.5.9
+> - Recompiled against latest game version to fix missing field due to IG code regression.
+> - Github project TestingBuild configuration and water pushout code added for future plans. Also updated .NET target.
+> ### v3.5.8
+> - Add piece_brazierfloor01,piece_brazierfloor02 to default configurations. By request.
+> ### v3.5.7
+> - Reduce logs about saving the file by moving them to debug printing only.
+> ### v3.5.6
+> - Fix NRE when ward loads in
 > ### v3.5.5
 > - Fix NRE when placing ward
 > - Possible fix to ward count issue

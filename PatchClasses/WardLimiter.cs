@@ -184,14 +184,14 @@ namespace WardIsLove
 
             public void Save()
             {
-                WILLogger.LogInfo("Saving ward data to file.");
+                WILLogger.LogDebug("Saving ward data to file.");
                 var serializer = new SerializerBuilder().Build();
 
                 var yaml = serializer.Serialize(PlayersWardData);
 
                 using var writer = new StreamWriter(_path);
                 writer.Write(yaml);
-                WILLogger.LogInfo("Ward data saved successfully.");
+                WILLogger.LogDebug("Ward data saved successfully.");
             }
 
             public static void ConvertJsonToYamlAndDelete(string jsonFilePath)
@@ -316,6 +316,14 @@ namespace WardIsLove
                 try
                 {
                     ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard GetClientInfo", Player.m_localPlayer.GetPlayerID());
+                    string steam = NormalizeID(PrivilegeManager.GetNetworkUserId());
+                    foreach (ZNetPeer? player in ZNet.instance.m_peers)
+                    {
+                        if (player.m_socket.GetHostName().Contains(steam))
+                        {
+                            ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
+                        }
+                    }
                 }
                 catch
                 {
