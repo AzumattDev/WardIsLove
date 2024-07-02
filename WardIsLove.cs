@@ -72,7 +72,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.5.8";
+        public const string version = "3.5.9";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = $"{Author}.WardIsLove";
@@ -175,8 +175,7 @@ namespace WardIsLove
             NoFoodDrain = config("General", "NoFoodDrain", false, "Prevent food loss inside ward for permitted players");
             WardDamageAmount = config("General", "WardDamageAmount", 0f, new ConfigDescription("Amount of damage, per tick, to creatures while they are inside the ward. Does not apply to tames\nValues are direct values, not percents."));
             WardDamageRepeatRate = config("General", "WardDamageRepeatRate", 2f, new ConfigDescription("Amount of seconds to wait between damage ticks."));
-
-
+            
             /* Show Flash */
             ShowFlash = config("General", "ShowFLASH", true, "Show the ward flash when something is damaged");
 

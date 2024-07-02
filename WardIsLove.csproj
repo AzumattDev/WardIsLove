@@ -10,9 +10,9 @@
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <RootNamespace>WardIsLove</RootNamespace>
         <AssemblyName>WardIsLove</AssemblyName>
-        <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
+        <LangVersion>preview</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -32,6 +32,17 @@
         <Optimize>true</Optimize>
         <OutputPath>bin\Release\</OutputPath>
         <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'TestingBuild|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\TestingBuild\</OutputPath>
+        <DefineConstants>TESTINGBUILD;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -115,6 +126,7 @@
         <Compile Include="Util\GitHubCheck.cs" />
         <Compile Include="Util\Manager\MaterialReplacer.cs" />
         <Compile Include="Util\Manager\PieceManager.cs" />
+        <Compile Include="Util\Manager\WaterSurfaceManager.cs" />
         <Compile Include="Util\ObjectDB.cs" />
         <Compile Include="Util\OfflineStatus.cs" />
         <Compile Include="Util\RPCShit\ClientSystem.cs" />
@@ -124,7 +136,9 @@
         <Compile Include="Util\UI\WardGUI.cs" />
         <Compile Include="Util\UI\WardGUIUtil.cs" />
         <Compile Include="Util\VersionHandshake.cs" />
+        <Compile Include="Util\WardBubbbleExclusionZone.cs" />
         <Compile Include="Util\WardMonoscript.cs" />
+        <Compile Include="Util\WaterVolumePatch.cs" />
         <Compile Include="WardIsLove.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

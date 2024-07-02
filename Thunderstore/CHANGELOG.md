@@ -1,4 +1,7 @@
 > # Update Information (Latest listed first)
+> ### v3.5.9
+> - Recompiled against latest game version to fix missing field due to IG code regression.
+> - Github project TestingBuild configuration and water pushout code added for future plans. Also updated .NET target.
 > ### v3.5.8
 > - Add piece_brazierfloor01,piece_brazierfloor02 to default configurations. By request.
 > ### v3.5.7

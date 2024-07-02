@@ -59,6 +59,10 @@ namespace WardIsLove.Util
         public bool m_tempChecked;
         public float m_updateConnectionsInterval = 5f;
 
+#if TESTINGBUILD
+        public WardBubbleExclusionZone m_bubbleExclusionZone;
+#endif
+
 
         public void Awake()
         {
@@ -72,6 +76,14 @@ namespace WardIsLove.Util
             GetComponent<WearNTear>().m_onDamaged += OnDamaged;
             m_enabledNMAEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
             m_enabledBurningEffect.GetComponent<SphereCollider>().radius = this.GetWardRadius();
+
+#if TESTINGBUILD
+            m_bubbleExclusionZone = m_bubble.GetComponent<WardBubbleExclusionZone>();
+            if (m_bubbleExclusionZone == null)
+            {
+                m_bubbleExclusionZone = m_bubble.AddComponent<WardBubbleExclusionZone>();
+            }
+#endif
 
             m_radius = this.GetWardRadius();
             m_playerBase.GetComponent<SphereCollider>().radius = this.GetWardRadius();
@@ -101,6 +113,10 @@ namespace WardIsLove.Util
             }
 
             InvokeRepeating(nameof(UpdateStatus), 0.0f, 1f);
+#if TESTINGBUILD
+            InvokeRepeating(nameof(UpdateWater), 0.0f, 5f);
+#endif
+
             /* TODO Get This working again */
             //StartCoroutine(DelayRepairRoutine());
             m_nview.Register("ToggleEnabled", new Action<long, long>(RPC_ToggleEnabled));
@@ -522,6 +538,23 @@ namespace WardIsLove.Util
         {
             return false;
         }
+
+#if TESTINGBUILD
+        public void UpdateWater()
+        {
+            if (this.GetBubbleOn() && IsEnabled())
+            {
+                m_bubbleExclusionZone.radius = this.GetWardRadius();
+                m_bubbleExclusionZone.enabled = true;
+                m_bubbleExclusionZone.UpdateWaterMesh();
+            }
+            else
+            {
+                m_bubble.SetActive(false);
+                m_bubbleExclusionZone.enabled = false;
+            }
+        }
+#endif
 
         public void UpdateStatus()
         {
