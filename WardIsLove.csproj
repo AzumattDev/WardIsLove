@@ -87,6 +87,7 @@
         <Compile Include="Extensions\ZDOInternalExtensions.cs" />
         <Compile Include="PatchClasses\AutoPickup.cs" />
         <Compile Include="PatchClasses\ChatWindow.cs" />
+        <Compile Include="PatchClasses\CinderCleanup.cs" />
         <Compile Include="PatchClasses\ConsoleWindow.cs" />
         <Compile Include="PatchClasses\Creatures.cs" />
         <Compile Include="PatchClasses\Doors.cs" />

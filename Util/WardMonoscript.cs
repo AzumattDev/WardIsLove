@@ -1141,7 +1141,8 @@ namespace WardIsLove.Util
         {
             if (!IsEnabled())
                 return;
-            FlashShield(false);
+            if (Heightmap.FindBiome(this.transform.position) != Heightmap.Biome.AshLands)
+                FlashShield(false);
             if (m_nview.GetZDO().GetFloat(ZDOVars.s_health, GetComponent<WearNTear>().m_health) < (GetComponent<WearNTear>().m_health / 2))
             {
                 this.SetBubbleOn(false);

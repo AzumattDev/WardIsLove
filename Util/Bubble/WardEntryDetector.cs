@@ -37,6 +37,8 @@ namespace WardIsLove.Util.Bubble
         private void OnTriggerEnter(Collider collider)
         {
             if (collider == null) { return; }
+            
+            ControlParticlesSpawner.OnProjectileHit(collider.gameObject, gameObject.GetComponentInParent<WardMonoscript>());
 
             Player component = collider.GetComponent<Player>();
             Humanoid component2 = collider.GetComponent<Humanoid>();
@@ -60,8 +62,7 @@ namespace WardIsLove.Util.Bubble
 
             if (m_wardEntered != null && m_wardEntered.IsEnabled() && m_wardEntered.GetWardNotificationsOn())
             {
-                Player.m_localPlayer.Message(MessageHud.MessageType.Center,
-                    string.Format(m_wardEntered.GetWardEnterNotifyMessage(), m_wardEntered.GetCreatorName()));
+                Player.m_localPlayer.Message(MessageHud.MessageType.Center, string.Format(m_wardEntered.GetWardEnterNotifyMessage(), m_wardEntered.GetCreatorName()));
             }
 
             // Send the player a message about the raidable status on entry as well

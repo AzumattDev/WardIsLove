@@ -134,8 +134,7 @@ public class ForceFieldController : MonoBehaviour
         for (int i = 0; i < affectorCount; ++i)
         {
             controlParticlesPositions[i] = controlParticles[i].position;
-            controlParticlesSizes[i] = controlParticles[i].GetCurrentSize(controlParticleSystem) *
-                                       controlParticleSystem.transform.lossyScale.x;
+            controlParticlesSizes[i] = controlParticles[i].GetCurrentSize(controlParticleSystem) * controlParticleSystem.transform.lossyScale.x;
         }
 
         OpenCloseProgress();
@@ -170,8 +169,7 @@ public class ForceFieldController : MonoBehaviour
     private void OpenCloseProgress()
     {
         if (!getRenderersInChildren.gameObject.GetComponentInParent<WardMonoscript>().GetBubbleOn())
-            openCloseValue =
-                0f; // Reversing of the bubble when being turned off is in WardEx.cs SetBubbleOn, was easier there.
+            openCloseValue = 0f; // Reversing of the bubble when being turned off is in WardEx.cs SetBubbleOn, was easier there.
 
         if (openCloseValue < 1f)
             openCloseValue += Time.deltaTime * openSpeed;
