@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.10
+> - Temp "fix" for massive FPS loss when in the Ashlands. This is temporary until I basically rewrite the bubble code to use their bubble instead of mine.
 > ### v3.5.9
 > - Recompiled against latest game version to fix missing field due to IG code regression.
 > - Github project TestingBuild configuration and water pushout code added for future plans. Also updated .NET target.
