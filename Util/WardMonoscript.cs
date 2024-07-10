@@ -58,6 +58,9 @@ namespace WardIsLove.Util
         public EffectList m_removedPermittedEffect = new();
         public bool m_tempChecked;
         public float m_updateConnectionsInterval = 5f;
+        
+        public ParticleSystemForceField psf = null!;
+        public Demister demister = null!;
 
 #if TESTINGBUILD
         public WardBubbleExclusionZone m_bubbleExclusionZone;
@@ -168,6 +171,11 @@ namespace WardIsLove.Util
                 m_bubble.GetComponent<ForceFieldController>().procedrualGradientRamp = gradient;
                 m_bubble.GetComponent<ForceFieldController>().procedrualRampColorTint = gradient.colorKeys[1].color;
             }
+
+            psf = gameObject.AddComponent<ParticleSystemForceField>();
+            psf.shape = ParticleSystemForceFieldShape.Sphere;
+            demister = gameObject.AddComponent<Demister>();
+            this.ToggleMistClear();
         }
 
         private void SwapWardModel(long sender, int index)
@@ -846,10 +854,12 @@ namespace WardIsLove.Util
                     //var newScale = this.m_bubble.transform.root.localScale * this.GetWardRadius() * 0.08f;
                     Vector3 newScale = m_bubble.transform.root.localScale * this.GetWardRadius() * 2f;
                     m_bubble.transform.localScale = newScale;
+                    this.ToggleMistClear();
                 }
                 else
                 {
                     m_bubble.SetActive(false);
+                    this.ToggleMistClear();
                 }
             }
             else

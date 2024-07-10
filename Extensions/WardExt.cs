@@ -98,6 +98,23 @@ namespace WardIsLove.Extensions
             if (WardMonoscript.m_nview && WardMonoscript.m_nview.m_zdo != null)
                 WardMonoscript.m_nview.m_zdo.Set(ZdoInternalExtensions.damageType, (int)damageType);
         }
+        
+        public static void ToggleMistClear(this WardMonoscript WardMonoscript)
+        {
+            if (!WardMonoscript.m_nview || WardMonoscript.m_nview.m_zdo == null || !WardMonoscript.m_nview.IsValid()) return;
+            // If the bubble is on, set the psf to have the radius of the ward, if it's off, set to 0
+            if (WardMonoscript.GetBubbleOn() && WardMonoscript.m_bubble.activeSelf && WardMonoscript.IsEnabled())
+            {
+                WardMonoscript.psf.startRange = WardMonoscript.GetWardRadius();
+                WardMonoscript.psf.endRange = WardMonoscript.GetWardRadius();
+                    
+            }
+            else
+            {
+                WardMonoscript.psf.startRange = 0f;
+                WardMonoscript.psf.endRange = 0f;
+            }
+        }
 
 
         public static float GetWardRadius(this WardMonoscript WardMonoscript)
