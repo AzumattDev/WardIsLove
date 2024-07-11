@@ -867,11 +867,10 @@ namespace WardIsLove.Util
 #if DEBUG
                 WardIsLovePlugin.WILLogger.LogDebug($"Toggle enabled from {playerID}  creator is {m_piece.GetCreator()}");
 #endif
-                if (m_nview.IsOwner() &&
-                    (IsPermitted(playerID) &&
-                     this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Default ||
-                     this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Everyone ||
-                     m_piece.IsCreator()))
+                if (m_nview.IsOwner() && (IsPermitted(playerID) 
+                                          && this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Default 
+                                          || this.GetAccessMode() == WardIsLovePlugin.WardInteractBehaviorEnums.Everyone 
+                                          || m_piece.IsCreator()))
                     SetEnabled(!IsEnabled());
             }
         }

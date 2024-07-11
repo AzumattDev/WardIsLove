@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.12
+> - Don't block owners of tombstones from getting their tombstones inside wards. (Requested)
 > ### v3.5.11
 > - Wards now push away the mist inside their radius. (When the bubble is on and ward active)
 > ### v3.5.10
