@@ -232,6 +232,8 @@ namespace WardIsLove.Util.UI
         {
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetWardRadius(m_wardradius.value);
+            paArea.psf.startRange = m_wardradius.value;
+            paArea.psf.endRange = m_wardradius.value;
         }
 
         public void StaminaSlider()
@@ -316,6 +318,8 @@ namespace WardIsLove.Util.UI
         {
             WardMonoscript paArea = WardGUI.PassInWardMonoscriptToGui();
             paArea.SetBubbleOn(m_bubbleToggle.isOn);
+            // if the bubble is off, reduce the radius of the psf
+            paArea.ToggleMistClear();
         }
 
         public void WeatherDmgToggle()

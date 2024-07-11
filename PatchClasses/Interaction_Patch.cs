@@ -100,11 +100,12 @@ namespace WardIsLove.PatchClasses
             if (hold)
                 return false;
             bool flag = false;
-            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
-                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) return !flag;
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) 
+                return !flag;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
             if (pa.GetChestInteractOn()) return true;
-            if (__instance.m_piece.m_name.Contains("yuleklapp"))
+            TombStone? tombstone = __instance.GetComponent<TombStone>();
+            if (__instance.m_piece.m_name.Contains("yuleklapp") || tombstone != null && tombstone.IsOwner())
             {
                 return true;
             }
@@ -124,8 +125,8 @@ namespace WardIsLove.PatchClasses
             if (hold)
                 return false;
             bool flag = false;
-            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
-                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) return !flag;
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) 
+                return !flag;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
             if (pa.GetChestInteractOn()) return true;
 
@@ -141,9 +142,8 @@ namespace WardIsLove.PatchClasses
         {
             if (!WardEnabled.Value)
                 return true;
-            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(
-                    Player.m_localPlayer.GetPlayerID(), __instance.transform.position,
-                    flash: false)) return true;
+            if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || CustomCheck.CheckAccess(Player.m_localPlayer.GetPlayerID(), __instance.transform.position, flash: false)) 
+                return true;
             WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
             if (!pa.GetPickableInteractOn()) return true;
             MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, "$msg_privatezone");
