@@ -2,6 +2,7 @@
 using PieceManager;
 using UnityEngine;
 using UnityEngine.UI;
+using WardIsLove.PatchClasses;
 using WardIsLove.Util.Bubble;
 using Object = UnityEngine.Object;
 
@@ -17,6 +18,7 @@ namespace WardIsLove.Util.UI
         public static Text EffectAreaDropdownText = null!;
         public static Text FeedbackDropdownText = null!;
         public static string FeedbackDropdownValue = null!;
+        public static bool setUILit = false;
 
         public static bool IsPanelVisible()
         {
@@ -26,8 +28,8 @@ namespace WardIsLove.Util.UI
         public static void Init()
         {
             AssetBundle wardMenuBundle = WardIsLovePlugin.GetAssetBundle("wardislove");
-            
-            WardIsLovePlugin.Thorward = new BuildPiece(wardMenuBundle,"Thorward");
+
+            WardIsLovePlugin.Thorward = new BuildPiece(wardMenuBundle, "Thorward");
             WardIsLovePlugin.Thorward.Name.English("Thorward");
             WardIsLovePlugin.Thorward.Description.English("The power of Thor stored in order to protect you.");
             WardIsLovePlugin.Thorward.RequiredItems.Add("FineWood", 10, true);
@@ -42,17 +44,13 @@ namespace WardIsLove.Util.UI
             try
             {
                 WardIsLovePlugin.Thorward.Prefab.GetComponent<WardMonoscript>().m_bubble.AddComponent<CollisionBubble>();
-                
+
                 wardGUI = Object.Instantiate(go);
                 Object.DontDestroyOnLoad(wardGUI);
                 wardGUINoAdmin = Object.Instantiate(go2);
                 Object.DontDestroyOnLoad(wardGUINoAdmin);
-                FeedbackDropdown = wardGUI.transform
-                    .Find("Canvas/UI/panel/Tabs/FeedbackPanel/FeedbackType/FeedbackTypeDropdown")
-                    .GetComponent<Dropdown>();
-                FeedbackDropdownText = wardGUI.transform
-                    .Find("Canvas/UI/panel/Tabs/FeedbackPanel/FeedbackType/FeedbackTypeDropdown/Label")
-                    .GetComponent<Text>();
+                FeedbackDropdown = wardGUI.transform.Find("Canvas/UI/panel/Tabs/FeedbackPanel/FeedbackType/FeedbackTypeDropdown").GetComponent<Dropdown>();
+                FeedbackDropdownText = wardGUI.transform.Find("Canvas/UI/panel/Tabs/FeedbackPanel/FeedbackType/FeedbackTypeDropdown/Label").GetComponent<Text>();
                 FeedbackDropdown.onValueChanged.AddListener(DropdownSelection);
 
                 FeedbackDropdown.ClearOptions();
@@ -69,7 +67,7 @@ namespace WardIsLove.Util.UI
                 FeedbackDropdown.options.Add(new Dropdown.OptionData { text = en });
             }
 
-            /////Here initialize UI (write the data you want to text, etc.
+            /////Here initialize UI (write the data you want to text, etc.)
             wardGUI.SetActive(false);
             wardGUINoAdmin.SetActive(false);
         }
@@ -86,8 +84,7 @@ namespace WardIsLove.Util.UI
         {
             return me switch
             {
-                WardIsLovePlugin.WardGUIFeedbackEnums.Feedback => Localization.instance.Localize(
-                    "$wardmenu_optionfeedback"),
+                WardIsLovePlugin.WardGUIFeedbackEnums.Feedback => Localization.instance.Localize("$wardmenu_optionfeedback"),
                 WardIsLovePlugin.WardGUIFeedbackEnums.Bug => Localization.instance.Localize("$wardmenu_optionbug"),
                 WardIsLovePlugin.WardGUIFeedbackEnums.Idea => Localization.instance.Localize("$wardmenu_optionidea"),
                 _ => "ERROR"
@@ -103,11 +100,17 @@ namespace WardIsLove.Util.UI
 
         public static void Show(WardMonoscript ward)
         {
-            Utils.FindChild(wardGUINoAdmin.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode =
-                WardIsLovePlugin.CanvasScaleMode.Value;
-            Utils.FindChild(wardGUI.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode =
-                WardIsLovePlugin.CanvasScaleMode.Value;
+            Utils.FindChild(wardGUINoAdmin.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode = WardIsLovePlugin.CanvasScaleMode.Value;
+            Utils.FindChild(wardGUI.transform, "Canvas").GetComponent<CanvasScaler>().uiScaleMode = WardIsLovePlugin.CanvasScaleMode.Value;
             SetInteractedPa(ward);
+            if (!setUILit)
+            {
+                Image? wardGuiBkg = Utils.FindChild(wardGUI.transform, "panel").GetComponent<Image>();
+                Image? wardGuiNoAdminBkg = Utils.FindChild(wardGUINoAdmin.transform, "panel").GetComponent<Image>();
+                wardGuiBkg.material = GetLitPanelMaterial.originalMaterial;
+                wardGuiNoAdminBkg.material = GetLitPanelMaterial.originalMaterial;
+                setUILit = true;
+            }
 
             if (ward.m_piece.IsCreator() && !WardIsLovePlugin.Admin)
             {

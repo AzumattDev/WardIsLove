@@ -73,8 +73,7 @@ namespace WardIsLove.PatchClasses
                     }
                 }
 
-                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || ___m_nview == null ||
-                    !WardEnabled.Value) return true;
+                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position) || ___m_nview == null || !WardEnabled.Value) return true;
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
                 hit.ApplyModifier((float)(1.0 - pa.GetStructDamageReduc() / 100.0));
                 return true;
@@ -89,8 +88,19 @@ namespace WardIsLove.PatchClasses
             {
                 if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
                 WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
-                if (!WardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null ||
-                    !__instance.m_nview.IsOwner()) return;
+                if (!WardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null || !__instance.m_nview.IsOwner()) return;
+                __result = true;
+            }
+        }
+        
+        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.HaveAshRoof))]
+        public static class WILDisableAshlandsDamagePatch
+        {
+            private static void Postfix(WearNTear __instance, ref bool __result)
+            {
+                if (!WardMonoscript.CheckInWardMonoscript(__instance.transform.position)) return;
+                WardMonoscript pa = WardMonoscriptExt.GetWardMonoscript(__instance.transform.position);
+                if (!WardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null || !__instance.m_nview.IsOwner()) return;
                 __result = true;
             }
         }
