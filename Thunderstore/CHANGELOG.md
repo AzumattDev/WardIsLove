@@ -1,4 +1,7 @@
 > # Update Information (Latest listed first)
+> ### v3.5.13
+> - Fix Ward GUI lit panel material
+> - Ward bubble now counts as a roof
 > ### v3.5.12
 > - Don't block owners of tombstones from getting their tombstones inside wards. (Requested)
 > ### v3.5.11

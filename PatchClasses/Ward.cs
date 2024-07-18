@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 using WardIsLove.Extensions;
@@ -108,6 +110,41 @@ namespace WardIsLove.PatchClasses
 
                             __instance.m_placementStatus = Player.PlacementStatus.PrivateZone;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(FejdStartup), nameof(FejdStartup.Awake))]
+    public static class GetLitPanelMaterial
+    {
+        public static Material? originalMaterial = null;
+
+        static void Postfix(FejdStartup __instance)
+        {
+            AssetBundle[]? assetBundles = Resources.FindObjectsOfTypeAll<AssetBundle>();
+            foreach (AssetBundle? bundle in assetBundles)
+            {
+                IEnumerable<Material>? bundleMaterials;
+                try
+                {
+                    bundleMaterials = bundle.isStreamedSceneAssetBundle && bundle
+                        ? bundle.GetAllAssetNames().Select(bundle.LoadAsset<Material>).Where(shader => shader != null)
+                        : bundle.LoadAllAssets<Material>();
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                if (bundleMaterials == null) continue;
+                foreach (Material? mat in bundleMaterials)
+                {
+                    if (mat && mat.name == "litpanel")
+                    {
+                        // Hold onto the original material
+                        originalMaterial = mat;
                     }
                 }
             }
