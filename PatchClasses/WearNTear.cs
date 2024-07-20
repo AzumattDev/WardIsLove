@@ -93,7 +93,7 @@ namespace WardIsLove.PatchClasses
             }
         }
         
-        [HarmonyPatch(typeof(WearNTear), nameof(WearNTear.HaveAshRoof))]
+        /*[HarmonyPatch(typeof(WearNTear), nameof(WearNTear.HaveAshRoof))]
         public static class WILDisableAshlandsDamagePatch
         {
             private static void Postfix(WearNTear __instance, ref bool __result)
@@ -103,6 +103,6 @@ namespace WardIsLove.PatchClasses
                 if (!WardEnabled.Value || !pa.GetWeatherDmgOn() || __instance.m_nview.GetZDO() == null || !__instance.m_nview.IsOwner()) return;
                 __result = true;
             }
-        }
+        }*/
     }
 }

@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.5.14
+> - Remove previous roof changes. They were causing issues. Will revisit later.
 > ### v3.5.13
 > - Fix Ward GUI lit panel material
 > - Ward bubble now counts as a roof
