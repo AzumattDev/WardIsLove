@@ -178,13 +178,13 @@ namespace WardIsLove.Util
             this.ToggleMistClear();
             
             
-            m_bubble.transform.gameObject.layer = LayerMask.NameToLayer("piece");
+            /*m_bubble.transform.gameObject.layer = LayerMask.NameToLayer("piece");
             m_bubble.transform.tag = "roof";
             foreach (Transform child in m_bubble.transform)
             {
                 child.gameObject.layer = LayerMask.NameToLayer("piece");
                 child.tag = "roof";
-            }
+            }*/
         }
 
         private void SwapWardModel(long sender, int index)
