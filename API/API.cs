@@ -1,6 +1,8 @@
 ﻿using System;
 using JetBrains.Annotations;
 using UnityEngine;
+using WardIsLove.Extensions;
+using WardIsLove.Util;
 
 namespace WardIsLove.API
 {
@@ -16,6 +18,7 @@ namespace WardIsLove.API
 
         // Delegate to check ward presence, allowing other parts of the game or mods to query ward status
         public delegate bool WardCheckHandler(Vector3 location);
+
         public static event WardCheckHandler? CheckWardPresence;
 
         /// <summary>
@@ -40,7 +43,61 @@ namespace WardIsLove.API
         {
             return CheckWardPresence?.Invoke(point) ?? false;
         }
-        
+
+        public void DisableWardPlayerIsIn(Vector3 point, bool destroyPiece = false)
+        {
+#if !API
+            WardMonoscript.CheckInWardOutWard(point, out WardMonoscript wardout);
+            if (wardout != null)
+            {
+                wardout.SetEnabled(false);
+                if (destroyPiece)
+                {
+                    DestroyWard(wardout.m_piece);
+                }
+            }
+#endif
+        }
+
+        public GameObject GetWardObject(Vector3 point)
+        {
+#if !API
+            WardMonoscript.CheckInWardOutWard(point, out WardMonoscript ward);
+            return ward?.gameObject;
+#endif
+            return null!;
+        }
+
+        public GameObject GetWardBubble(Vector3 point)
+        {
+#if !API
+            WardMonoscript.CheckInWardOutWard(point, out WardMonoscript ward);
+            return ward?.m_bubble.gameObject;
+#endif
+            return null!;
+        }
+
+        public void DestroyWard(Piece piece)
+        {
+            ZNetView component = piece.GetComponent<ZNetView>();
+            if (component != null)
+            {
+                WearNTear component2 = piece.GetComponent<WearNTear>();
+                if ((bool)component2)
+                {
+                    component2.Remove();
+                }
+                else
+                {
+                    ZLog.Log("Removing non WNT object with hammer " + piece.name);
+                    component.ClaimOwnership();
+                    piece.DropResources();
+                    piece.m_placeEffect.Create(piece.transform.position, piece.transform.rotation, piece.gameObject.transform);
+                    Player.m_localPlayer.m_removeEffects.Create(piece.transform.position, Quaternion.identity);
+                    ZNetScene.instance.Destroy(piece.gameObject);
+                }
+            }
+        }
 #if !API
         internal static void WardEntered(Vector3 position)
         {

@@ -1,4 +1,6 @@
 > # Update Information (Latest listed first)
+> ### v3.6.0
+> - Bog witch update fixes.
 > ### v3.5.14
 > - Remove previous roof changes. They were causing issues. Will revisit later.
 > ### v3.5.13

@@ -293,7 +293,7 @@ namespace WardIsLove
             }
         }
 
-        [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece), typeof(Piece))]
+        [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
         static class PlacePiece_Patch
         {
             static void WriteDataInWard(GameObject go)
