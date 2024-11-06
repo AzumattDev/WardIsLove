@@ -220,8 +220,8 @@ namespace WardIsLove
 
             harmony.PatchAll();
 
-            //check for new versions, notify client
-            VersionCheckRoutine = StartCoroutine(GitHubCheck.CheckForNewVersion());
+           // //check for new versions, notify client
+           // VersionCheckRoutine = StartCoroutine(GitHubCheck.CheckForNewVersion());
 
             _timeSave = DateTime.Now.Ticks;
             Local.Localize();

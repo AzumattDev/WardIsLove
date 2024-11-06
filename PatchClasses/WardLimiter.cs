@@ -298,6 +298,7 @@ namespace WardIsLove
         {
             static void WriteDataInWard(GameObject go)
             {
+                if (go == null) return;
                 if (!go.name.Contains("Thorward")) return;
                 Piece piece = go.GetComponent<Piece>();
                 _wardCount = 999;
@@ -345,16 +346,32 @@ namespace WardIsLove
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 List<CodeInstruction> list = new(instructions);
-                CodeInstruction[] NewInstructions =
-                {
-                    new(OpCodes.Ldloc_3), new(OpCodes.Call, AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard), new[] { typeof(GameObject) }))
-                };
-                for (int i = 0; i < list.Count; i++)
+                int insertionIndex = -1;
+
+                for (int i = 0; i < list.Count; ++i)
                 {
                     if (list[i].opcode == OpCodes.Stloc_3)
                     {
-                        list.InsertRange(i + 1, NewInstructions);
+                        insertionIndex = i + 1;
+                        break;
                     }
+                }
+
+                if (insertionIndex >= 0)
+                {
+                    // Prepare the instructions to insert
+                    CodeInstruction[] NewInstructions =
+                    [
+                        new CodeInstruction(OpCodes.Ldloc_0), // load `gameObject2`
+                        new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(PlacePiece_Patch), nameof(WriteDataInWard)))
+                    ];
+                    
+                    list.InsertRange(insertionIndex, NewInstructions);
+                }
+                else
+                {
+                    // Log an error if the injection point wasn't found
+                    WardIsLovePlugin.WILLogger.LogError("Failed to find injection point for WriteDataInWard");
                 }
 
                 return list;
