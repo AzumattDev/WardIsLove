@@ -11,13 +11,11 @@ namespace WardIsLove.PatchClasses
         {
             if (!__instance.InPlaceMode()) return false;
             Piece hoveringPiece = __instance.GetHoveringPiece();
-            if (!(bool)(Object)hoveringPiece || !__instance.CheckCanRemovePiece(hoveringPiece) ||
-                !WardMonoscript.CheckAccess(hoveringPiece.transform.position))
+            if (!(bool)(Object)hoveringPiece || !__instance.CheckCanRemovePiece(hoveringPiece) || !WardMonoscript.CheckAccess(hoveringPiece.transform.position))
                 return false;
             if (hoveringPiece.GetComponentInParent<WardMonoscript>())
             {
-                if (Vector3.Distance(Player.m_localPlayer.transform.position,
-                        hoveringPiece.GetComponentInParent<WardMonoscript>().transform.position) <= 5)
+                if (Vector3.Distance(Player.m_localPlayer.transform.position, hoveringPiece.GetComponentInParent<WardMonoscript>().transform.position) <= 5)
                 {
                     return true;
                 }

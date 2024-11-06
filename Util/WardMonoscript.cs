@@ -977,8 +977,7 @@ namespace WardIsLove.Util
 
         public static bool CheckInWardMonoscript(Vector3 point, bool flash = false)
         {
-            foreach (WardMonoscript allArea in m_allAreas.Where(allArea =>
-                         allArea.IsEnabled() && allArea.IsInside(point, 0.0f)))
+            foreach (WardMonoscript allArea in m_allAreas.Where(allArea => allArea.IsEnabled() && allArea.IsInside(point, 0.0f)))
             {
                 if (flash)
                     allArea.FlashShield(false);
@@ -990,8 +989,7 @@ namespace WardIsLove.Util
 
         public static bool CheckInWardOutWard(Vector3 point, out WardMonoscript wardout, bool flash = false)
         {
-            foreach (WardMonoscript allArea in m_allAreas.Where(allArea =>
-                         allArea.IsEnabled() && allArea.IsInside(point, 0.0f)))
+            foreach (WardMonoscript allArea in m_allAreas.Where(allArea => allArea.IsEnabled() && allArea.IsInside(point, 0.0f)))
             {
                 if (flash)
                     allArea.FlashShield(false);
@@ -1063,9 +1061,7 @@ namespace WardIsLove.Util
             while (WardMonoscriptQueue.Count > 0)
             {
                 WardMonoscript WardMonoscript = WardMonoscriptQueue.Dequeue();
-                foreach (WardMonoscript allArea in m_allAreas.Where(allArea =>
-                             !allArea.m_tempChecked && allArea.IsEnabled() &&
-                             allArea.IsInside(WardMonoscript.transform.position, 0.0f)))
+                foreach (WardMonoscript allArea in m_allAreas.Where(allArea => !allArea.m_tempChecked && allArea.IsEnabled() && allArea.IsInside(WardMonoscript.transform.position, 0.0f)))
                 {
                     allArea.m_tempChecked = true;
                     WardMonoscriptQueue.Enqueue(allArea);
@@ -1084,8 +1080,7 @@ namespace WardIsLove.Util
                 m_nview.InvokeRPC(ZNetView.Everybody, nameof(FlashShield), Array.Empty<object>());
                 if (!flashConnected)
                     return;
-                foreach (WardMonoscript connectedArea in GetConnectedAreas()
-                             .Where(connectedArea => connectedArea.m_nview.IsValid()))
+                foreach (WardMonoscript connectedArea in GetConnectedAreas().Where(connectedArea => connectedArea.m_nview.IsValid()))
                     connectedArea.m_nview.InvokeRPC(ZNetView.Everybody, nameof(FlashShield), Array.Empty<object>());
             }
             else

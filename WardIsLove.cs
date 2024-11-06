@@ -72,7 +72,7 @@ namespace WardIsLove
             Stagger
         }
 
-        public const string version = "3.5.14";
+        public const string version = "3.6.0";
         public const string ModName = "WardIsLove";
         internal const string Author = "Azumatt";
         internal const string HGUID = $"{Author}.WardIsLove";
@@ -220,8 +220,8 @@ namespace WardIsLove
 
             harmony.PatchAll();
 
-            //check for new versions, notify client
-            VersionCheckRoutine = StartCoroutine(GitHubCheck.CheckForNewVersion());
+           // //check for new versions, notify client
+           // VersionCheckRoutine = StartCoroutine(GitHubCheck.CheckForNewVersion());
 
             _timeSave = DateTime.Now.Ticks;
             Local.Localize();

@@ -70,15 +70,14 @@ namespace WardIsLove.PatchClasses
                 return !flag;
             }
 
-            [HarmonyPatch(typeof(Player), nameof(Player.PlacePiece))]
+            [HarmonyPatch(typeof(Player), nameof(Player.TryPlacePiece))]
             [HarmonyPrefix]
             private static bool PlacePieceOverlapCheck(ref Player __instance, ref Piece piece)
             {
                 if (piece == null) return true;
                 WardMonoscript component5 = piece.GetComponent<WardMonoscript>();
                 float radius = component5 ? component5.GetWardRadius() : 0.0f;
-                if (WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, radius, flash: false,
-                        wardCheck: true)) return true;
+                if (WardMonoscript.CheckAccess(__instance.m_placementGhost.transform.position, radius, flash: false, wardCheck: true)) return true;
                 __instance.Message(MessageHud.MessageType.Center, "$msg_privatezone");
                 return false;
             }
