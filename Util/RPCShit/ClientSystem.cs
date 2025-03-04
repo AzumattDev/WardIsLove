@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using Splatform;
 using WardIsLove.Util.UI;
 
 namespace WardIsLove.Util.RPCShit
@@ -71,12 +72,10 @@ namespace WardIsLove.Util.RPCShit
             long playerID;
             for (int index = 0; index < num; ++index)
             {
-                ZNet.PlayerInfo playerInfo = new()
-                {
-                    m_name = pkg.ReadString(),
-                    m_host = pkg.ReadString(),
-                    m_characterID = pkg.ReadZDOID()
-                };
+                ZNet.PlayerInfo playerInfo = new();
+                playerInfo.m_name = pkg.ReadString();
+                playerInfo.m_userInfo.m_id = new PlatformUserID(pkg.ReadString());
+                playerInfo.m_characterID = pkg.ReadZDOID();
                 playerID = pkg.ReadLong();
                 playerInfo.m_publicPosition = pkg.ReadBool();
                 if (playerInfo.m_publicPosition)
@@ -104,7 +103,7 @@ namespace WardIsLove.Util.RPCShit
                         });
                 }
 
-                WardIsLovePlugin.WILLogger.LogDebug($"Dropdown data from server:\nName:{playerInfo.m_name}\nCharacterID:{playerInfo.m_characterID}\nHost:{playerInfo.m_host}\nPosition:{playerInfo.m_position}\nPlayerID:{playerID}");
+                WardIsLovePlugin.WILLogger.LogDebug($"Dropdown data from server:\nName:{playerInfo.m_name}\nCharacterID:{playerInfo.m_characterID}\nHost:{playerInfo.m_userInfo.m_id.ToString()}\nPosition:{playerInfo.m_position}\nPlayerID:{playerID}");
             }
         }
 

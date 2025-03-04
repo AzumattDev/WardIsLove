@@ -91,7 +91,7 @@ namespace WardIsLove.Util.RPCShit
             foreach (ZNet.PlayerInfo player in ZNet.instance.m_players)
             {
                 zpackage.Write(player.m_name);
-                zpackage.Write(player.m_host);
+                zpackage.Write(player.m_userInfo.m_id.ToString());
                 zpackage.Write(player.m_characterID);
                 zpackage.Write(ZDOMan.instance.GetZDO(player.m_characterID).GetLong(ZDOVars.s_playerID));
                 zpackage.Write(player.m_publicPosition);
@@ -99,7 +99,7 @@ namespace WardIsLove.Util.RPCShit
                     zpackage.Write(player.m_position);
 
                 WardIsLovePlugin.WILLogger.LogDebug(
-                    $"Server Data being sent to Dropdown list:\nName:{player.m_name}\nCharacterID:{player.m_characterID}\nHost:{player.m_host}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong(ZDOVars.s_playerID)}");
+                    $"Server Data being sent to Dropdown list:\nName:{player.m_name}\nCharacterID:{player.m_characterID}\nHost:{player.m_userInfo.m_id.ToString()}\nPosition:{player.m_position}\nPlayerID:{ZDOMan.instance.GetZDO(player.m_characterID).GetLong(ZDOVars.s_playerID)}");
             }
 
             ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILDropdownListEvent", zpackage);
