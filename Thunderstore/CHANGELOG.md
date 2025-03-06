@@ -1,7 +1,9 @@
 > # Update Information (Latest listed first)
+> ### v3.6.2
+> - Update ServerSync internally for Crossplay
+> - Shelved some WIP changes for the next update
 > ### v3.6.1
 > - Update for Valheim latest update (0.220.3)
-> - Shelved some WIP changes for the next update
 > ### v3.6.0
 > - Bog witch update fixes.
 > ### v3.5.14
