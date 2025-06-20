@@ -1,7 +1,8 @@
 > # Update Information (Latest listed first)
+> ### v3.6.3
+> - Small fix for destroyed ZDOs on the server. Sometimes this would cause errors that might "bring the ward back" since it was destroyed properly.
 > ### v3.6.2
 > - Update ServerSync internally for Crossplay
-> - Shelved some WIP changes for the next update
 > ### v3.6.1
 > - Update for Valheim latest update (0.220.3)
 > ### v3.6.0

@@ -266,9 +266,9 @@ public partial class WardIsLovePlugin
             if (!IsServer) return;
             ZDO zdo = __instance.GetZDO(uid);
             if (zdo == null) return;
-            if (zdo.GetBool(ZdoInternalExtensions.WILLimitedWard))
+            if (zdo.GetBool(ZdoInternalExtensions.WILLimitedWard) && zdo.m_prefab == "Thorward".GetStableHashCode())
             {
-                string steam = new PlatformUserID(zdo.GetString(ZdoInternalExtensions.steamID)).m_userID;
+                string steam = zdo.GetString(ZdoInternalExtensions.steamID);
                 if (_manager.PlayersWardData.ContainsKey(steam))
                 {
                     _manager.PlayersWardData[steam]--;
