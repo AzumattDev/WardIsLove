@@ -1,4 +1,13 @@
 > # Update Information (Latest listed first)
+> ### v3.7.1
+> - Remove the chat message about mod updates. I fixed this in another branch of my code and will add it back later, but for now just commented it out.
+> ### v3.7.0
+> - **Ward Limiter System Changes**
+>   - Completely rewrote the ward limiting system for better reliability and performance (hopefully)
+>   - Fixed critical issues with ward count tracking and client-server synchronization (hopefully)
+>   - Simplified RPC communication system with automatic Steam_ prefix fallback for missing platform prefixes, handle malformed data more gracefully as well
+>   - Ward limits now update immediately when wards are placed or destroyed
+>   - No, this doesn't require changes on your end. Just keep an eye out for bugs, I'm a bit burnt out and have been trying to play games more than code lately, but I will fix as needed should this cause more issues instead of fixing.
 > ### v3.6.3
 > - Small fix for destroyed ZDOs on the server. Sometimes this would cause errors that might "bring the ward back" since it was destroyed properly.
 > ### v3.6.2
