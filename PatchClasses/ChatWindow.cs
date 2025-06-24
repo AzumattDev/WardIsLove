@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+﻿/*using HarmonyLib;
 using static WardIsLove.WardIsLovePlugin;
 
 namespace WardIsLove.PatchClasses
@@ -15,4 +15,4 @@ namespace WardIsLove.PatchClasses
                 Talker.Type.Normal);
         }
     }
-}
+}*/

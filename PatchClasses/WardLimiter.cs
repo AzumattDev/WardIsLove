@@ -20,15 +20,10 @@ namespace WardIsLove;
 
 public partial class WardIsLovePlugin
 {
-    private static int _maxWardCount = 99999;
-
-    private static int _wardCount;
-    public static int MaxDaysDifference = 99999;
-    private static WardManager _manager = null!;
-
-    private static bool CanPlaceWard => _wardCount < _maxWardCount;
     internal static bool IsServer;
     internal static bool IsSinglePlayer;
+    public static int MaxDaysDifference = 99999;
+    private static WardManager _manager = null!;
 
     public enum PlayerStatus
     {
@@ -36,6 +31,61 @@ public partial class WardIsLovePlugin
         VIP,
         User
     }
+
+    // Helper method to safely extract just the user ID part (without platform prefix)
+    private static string SafeExtractUserID(string platformUserIdString)
+    {
+        if (string.IsNullOrEmpty(platformUserIdString))
+            return string.Empty;
+
+        // Try to parse as PlatformUserID first
+        if (PlatformUserID.TryParse(platformUserIdString, out PlatformUserID platformUserId))
+        {
+            return platformUserId.m_userID ?? string.Empty;
+        }
+
+        // If parsing fails, check if it's already just a user ID (no platform prefix)
+        if (!platformUserIdString.Contains('_'))
+        {
+            // Already a clean user ID
+            return platformUserIdString;
+        }
+
+        // If it contains underscore but failed to parse, try to extract the part after the first underscore
+        int underscoreIndex = platformUserIdString.IndexOf('_');
+        if (underscoreIndex >= 0 && underscoreIndex < platformUserIdString.Length - 1)
+        {
+            return platformUserIdString.Substring(underscoreIndex + 1);
+        }
+
+        // Last resort: return the original string
+        WILLogger.LogWarning($"Failed to extract user ID from: {platformUserIdString}");
+        return platformUserIdString;
+    }
+
+    // Helper method to safely get normalized platform user ID string with Steam_ prefix fallback
+    private static string SafeGetNormalizedUserID(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return string.Empty;
+
+        // If it already has a platform prefix, try to parse it
+        if (input.Contains('_'))
+        {
+            if (PlatformUserID.TryParse(input, out PlatformUserID platformUserId))
+            {
+                // Return the full platform_userID format
+                return platformUserId.ToString();
+            }
+
+            // If parsing failed but has underscore, assume it's malformed but usable
+            return input;
+        }
+
+        // If no platform prefix found, assume it's a Steam ID and add Steam_ prefix
+        return $"Steam_{input}";
+    }
+
 
     private IEnumerator WardCountUpdateCoroutine()
     {
@@ -62,7 +112,8 @@ public partial class WardIsLovePlugin
 
         foreach (var zdo in wardZDOs)
         {
-            string steamId = new PlatformUserID(zdo.GetString(ZdoInternalExtensions.steamID)).m_userID.ToString();
+            string rawSteamId = zdo.GetString(ZdoInternalExtensions.steamID);
+            string steamId = SafeGetNormalizedUserID(rawSteamId);
             if (!string.IsNullOrEmpty(steamId))
             {
                 if (!playerWardCounts.ContainsKey(steamId))
@@ -77,16 +128,22 @@ public partial class WardIsLovePlugin
         var playerPeers = new Dictionary<string, ZNetPeer>();
         foreach (ZNetPeer? player in ZNet.instance.m_peers)
         {
-            playerPeers[player.m_socket.GetHostName()] = player;
+            string hostName = player.m_socket.GetHostName();
+            string userId = SafeGetNormalizedUserID(hostName);
+            if (!string.IsNullOrEmpty(userId))
+            {
+                playerPeers[userId] = player;
+            }
         }
 
-        // Update the file with the new counts
+        // Update the file with the new counts and sync to clients
         foreach (var kvp in playerWardCounts)
         {
             _manager.PlayersWardData[kvp.Key] = kvp.Value;
             if (playerPeers.ContainsKey(kvp.Key))
             {
-                ZRoutedRpc.instance.InvokeRoutedRPC(playerPeers[kvp.Key].m_uid, "WILLimitWard GetServerInfo", kvp.Value);
+                bool canPlace = _manager.CanPlaceWard(kvp.Key);
+                ZRoutedRpc.instance.InvokeRoutedRPC(playerPeers[kvp.Key].m_uid, "WILLimitWard UpdatePermission", canPlace);
             }
         }
 
@@ -155,10 +212,26 @@ public partial class WardIsLovePlugin
             WILLogger.LogInfo($"Ward data loaded. Total entries: {PlayersWardData.Count}");
         }
 
+        public bool CanPlaceWard(string steamId)
+        {
+            string normalizedId = SafeGetNormalizedUserID(steamId);
+            string userIdOnly = SafeExtractUserID(steamId);
+            int currentCount = GetWardCount(normalizedId);
+
+            return GetPlayerStatus(userIdOnly) switch
+            {
+                PlayerStatus.Admin => true,
+                PlayerStatus.VIP => currentCount < _maxWardCountVipConfig.Value,
+                PlayerStatus.User => currentCount < _maxWardCountConfig.Value,
+                _ => false
+            };
+        }
+
         public void IncrementWardCount(string steamId)
         {
-            string normalizedId = new PlatformUserID(steamId).m_userID;
-            WILLogger.LogInfo($"Incrementing ward count for SteamID: {normalizedId}");
+            string normalizedId = SafeGetNormalizedUserID(steamId);
+            WILLogger.LogInfo($"Incrementing ward count for normalized ID: {normalizedId}");
+
             if (PlayersWardData.ContainsKey(normalizedId))
             {
                 PlayersWardData[normalizedId]++;
@@ -169,12 +242,28 @@ public partial class WardIsLovePlugin
             }
 
             Save();
-            WILLogger.LogInfo($"New ward count for SteamID {normalizedId}: {PlayersWardData[normalizedId]}");
+            WILLogger.LogInfo($"New ward count for ID {normalizedId}: {PlayersWardData[normalizedId]}");
+        }
+
+        public void DecrementWardCount(string steamId)
+        {
+            string normalizedId = SafeGetNormalizedUserID(steamId);
+
+            if (PlayersWardData.ContainsKey(normalizedId))
+            {
+                PlayersWardData[normalizedId]--;
+                if (PlayersWardData[normalizedId] < 0)
+                    PlayersWardData[normalizedId] = 0;
+
+                Save();
+                WILLogger.LogInfo($"Decremented ward count for ID {normalizedId}: {PlayersWardData[normalizedId]}");
+            }
         }
 
         public int GetWardCount(string steamId)
         {
-            return PlayersWardData.TryGetValue(steamId, out int value) ? value : 0;
+            string normalizedId = SafeGetNormalizedUserID(steamId);
+            return PlayersWardData.TryGetValue(normalizedId, out int value) ? value : 0;
         }
 
         public void Save()
@@ -219,26 +308,27 @@ public partial class WardIsLovePlugin
         }
     }
 
-    private static void GetServerInitialData(long sender, int maxwards, int days)
+    // Client-side variables
+    private static bool _canPlaceWard = true;
+
+    private static void UpdatePermission(long server, bool canPlace)
     {
-        _maxWardCount = maxwards;
-        _wardCount = 9999;
-        MaxDaysDifference = days;
+        _canPlaceWard = canPlace;
     }
 
-    private static void GetServerInfo(long server, int currentWards)
+    private static void WardPlaced(long sender)
     {
-        _wardCount = currentWards;
-    }
-
-    private static void GetClientInfo(long sender)
-    {
-        WILLogger.LogInfo($"GetClientInfo called by sender: {sender}");
+        WILLogger.LogInfo($"WardPlaced called by sender: {sender}");
         ZNetPeer peer = ZNet.instance.GetPeer(sender);
-        string steam = new PlatformUserID(peer.m_socket.GetHostName()).m_userID;
+        if (peer == null) return;
+
+        string hostName = peer.m_socket.GetHostName();
+        string steam = SafeExtractUserID(hostName);
         _manager.IncrementWardCount(steam);
         WILLogger.LogInfo($"Player (Ward Creator) {peer.m_playerName} : {steam} placed ward. Ward amount: {_manager.GetWardCount(steam)}");
-        ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
+
+        bool canPlace = _manager.CanPlaceWard(steam);
+        ZRoutedRpc.instance.InvokeRoutedRPC(sender, "WILLimitWard UpdatePermission", canPlace);
     }
 
     [HarmonyPatch(typeof(ZNetScene), nameof(ZNetScene.Awake))]
@@ -248,12 +338,11 @@ public partial class WardIsLovePlugin
         {
             if (IsServer)
             {
-                ZRoutedRpc.instance.Register("WILLimitWard GetClientInfo", GetClientInfo);
+                ZRoutedRpc.instance.Register("WILLimitWard WardPlaced", WardPlaced);
             }
             else
             {
-                ZRoutedRpc.instance.Register("WILLimitWard GetServerInfo", new Action<long, int>(GetServerInfo));
-                ZRoutedRpc.instance.Register("WILLimitWard GetServerInitialData", new Action<long, int, int>(GetServerInitialData));
+                ZRoutedRpc.instance.Register("WILLimitWard UpdatePermission", new Action<long, bool>(UpdatePermission));
             }
         }
     }
@@ -268,22 +357,22 @@ public partial class WardIsLovePlugin
             if (zdo == null) return;
             if (zdo.GetBool(ZdoInternalExtensions.WILLimitedWard) && zdo.m_prefab == "Thorward".GetStableHashCode())
             {
-                string steam = zdo.GetString(ZdoInternalExtensions.steamID);
-                if (_manager.PlayersWardData.ContainsKey(steam))
+                string rawSteamId = zdo.GetString(ZdoInternalExtensions.steamID);
+                string steam = SafeExtractUserID(rawSteamId);
+                if (!string.IsNullOrEmpty(steam))
                 {
-                    _manager.PlayersWardData[steam]--;
-                    if (_manager.GetWardCount(steam) < 0) _manager.PlayersWardData[steam] = 0;
+                    _manager.DecrementWardCount(steam);
                     WILLogger.LogInfo($"Player's Ward {zdo.GetString(ZDOVars.s_creatorName)}({steam}) destroyed. Player wards count: {_manager.GetWardCount(steam)}");
                     foreach (ZNetPeer? player in ZNet.instance.m_peers)
                     {
                         if (player.m_socket.GetHostName().Contains(steam))
                         {
-                            ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
+                            bool canPlace = _manager.CanPlaceWard(steam);
+                            ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard UpdatePermission", canPlace);
+                            break;
                         }
                     }
                 }
-
-                _manager.Save();
             }
         }
     }
@@ -295,9 +384,10 @@ public partial class WardIsLovePlugin
         {
             if (go == null) return;
             if (!go.name.Contains("Thorward")) return;
+            
             Piece piece = go.GetComponent<Piece>();
-            _wardCount = 999;
             piece.m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWard, true);
+            
             if (Admin)
             {
                 piece.m_nview.m_zdo.Set(ZdoInternalExtensions.WILLimitedWardTime, -1);
@@ -309,17 +399,14 @@ public partial class WardIsLovePlugin
             }
 
             go.GetComponent<WardMonoscript>().SetEnabled(true);
+            
             try
             {
-                ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard GetClientInfo", Player.m_localPlayer.GetPlayerID());
-                string steam = PlatformManager.DistributionPlatform.LocalUser.PlatformUserID.m_userID;
-                foreach (ZNetPeer? player in ZNet.instance.m_peers)
-                {
-                    if (player.m_socket.GetHostName().Contains(steam))
-                    {
-                        ZRoutedRpc.instance.InvokeRoutedRPC(player.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
-                    }
-                }
+                string rawUserId = PlatformManager.DistributionPlatform.LocalUser.PlatformUserID.ToString();
+                string normalizedId = SafeGetNormalizedUserID(rawUserId);
+                piece.m_nview.m_zdo.Set(ZdoInternalExtensions.steamID, normalizedId);
+                
+                ZRoutedRpc.instance.InvokeRoutedRPC(ZNet.instance.GetServerPeer().m_uid, "WILLimitWard WardPlaced", Player.m_localPlayer.GetPlayerID());
             }
             catch
             {
@@ -329,9 +416,21 @@ public partial class WardIsLovePlugin
 
         static bool Prefix(Piece piece)
         {
-            if (piece.gameObject.name == "Thorward" && !CanPlaceWard)
+            if (piece.gameObject.name == "Thorward" && !_canPlaceWard)
             {
-                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"<color=#FF0000>Ward Limit</color>\nMax: ({_maxWardCount}) You Placed: {_wardCount}");
+                // This runs on client side, so PlatformManager is available
+                string rawUserId = PlatformManager.DistributionPlatform.LocalUser.PlatformUserID.ToString();
+                string userId = SafeExtractUserID(rawUserId);
+
+                int maxWards = GetPlayerStatus(userId) switch
+                {
+                    PlayerStatus.Admin => 99999,
+                    PlayerStatus.VIP => _maxWardCountVipConfig?.Value ?? 5,
+                    PlayerStatus.User => _maxWardCountConfig?.Value ?? 3,
+                    _ => 3
+                };
+
+                MessageHud.instance.ShowMessage(MessageHud.MessageType.Center, $"<color=#FF0000>Ward Limit Reached</color>\nMax: {maxWards}");
                 return false;
             }
 
@@ -379,26 +478,17 @@ public partial class WardIsLovePlugin
         private static void Postfix(ZRpc rpc)
         {
             if (!(ZNet.instance.IsServer() && ZNet.instance.IsDedicated())) return;
+
             ZNetPeer peer = ZNet.instance.GetPeer(rpc);
-            string steam = peer.m_socket.GetHostName();
-            int wardCount = GetPlayerStatus(steam) switch
-            {
-                PlayerStatus.Admin => 99999,
-                PlayerStatus.VIP => _maxWardCountVipConfig.Value,
-                PlayerStatus.User => _maxWardCountConfig.Value,
-                _ => _maxWardCountConfig.Value
-            };
-            ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInitialData", wardCount, MaxDaysDifferenceConfig.Value);
-            if (_manager.PlayersWardData.ContainsKey(steam))
-            {
-                WILLogger.LogInfo($"Sending info to {peer.m_playerName}({steam}) about his wards Wards count: {_manager.GetWardCount(steam)}");
-                ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo", _manager.GetWardCount(steam));
-            }
-            else
-            {
-                WILLogger.LogDebug("Sending info to player about his wards (not existing in database)");
-                ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard GetServerInfo", 0);
-            }
+            if (peer == null) return;
+
+            string hostName = peer.m_socket.GetHostName();
+            string steam = SafeExtractUserID(hostName);
+            bool canPlace = _manager.CanPlaceWard(steam);
+
+            ZRoutedRpc.instance.InvokeRoutedRPC(peer.m_uid, "WILLimitWard UpdatePermission", canPlace);
+
+            WILLogger.LogInfo($"Sending ward permission to {peer.m_playerName}({steam}): Can place = {canPlace}, Current wards: {_manager.GetWardCount(steam)}");
         }
     }
 }
